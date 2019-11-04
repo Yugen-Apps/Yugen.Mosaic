@@ -25,8 +25,14 @@
                    Width="120"
                    Source="{x:Bind ViewModel.MasterImageSource, Mode=OneWay}" />
 
-            <ListView x:Name="tileListView" 
-                      ItemsSource="{x:Bind ViewModel.TileList, Mode=OneWay}"/>
+            <ListView x:Name="tileListView"
+                      ItemsSource="{x:Bind ViewModel.TileList, Mode=OneWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Image Source="{x:Bind}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
 
         <StackPanel Grid.Column="1">

@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Uwp.ViewModels;
+using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Toolkit.Uwp.Helpers;
+using Windows.Storage;
+using System.IO;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -11,8 +16,8 @@ namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel
     {
-        private string masterImageSource = "ms-appx:///";
-        public string MasterImageSource
+        private WriteableBitmap masterImageSource;
+        public WriteableBitmap MasterImageSource
         {
             get { return masterImageSource; }
             set { Set(ref masterImageSource, value); }
@@ -32,8 +37,8 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref tileList, value); }
         }
 
-        private Windows.UI.Xaml.Media.Imaging.WriteableBitmap outputImageSource;
-        public Windows.UI.Xaml.Media.Imaging.WriteableBitmap OutputImageSource
+        private WriteableBitmap outputImageSource;
+        public WriteableBitmap OutputImageSource
         {
             get { return outputImageSource; }
             set { Set(ref outputImageSource, value); }
@@ -46,9 +51,14 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref isLoading, value); }
         }
 
-        public void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            MasterImageSource = "ms-appx:///Assets/Images/master.png";
+            var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
+            using (var inputStream = await masterFile.OpenReadAsync())
+            using (var stream = inputStream.AsStreamForRead())
+            {
+                MasterImageSource = await BitmapFactory.FromStream(stream);
+            }
         }
 
         public void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -73,10 +83,7 @@ namespace Yugen.Mosaic.Uwp
             OutputImageSource = test.output;
             IsLoading = false;
 
-            //outputImage.Source = outputImageSource;
-
-            //image.Source = mosaicClass.OutputBmp;
-            //image.Source = mosaicClass.InputBmpList[0];
+            //await FilePickerHelper.SaveFile("filename", "Image", ".jpg");
         }
     }
 }

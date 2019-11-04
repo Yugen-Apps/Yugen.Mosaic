@@ -15,9 +15,9 @@ namespace Yugen.Mosaic.Uwp
 
         public WriteableBitmap OutputBmp { get; set; }
 
-        public async Task<LockBitmap> GenerateMosaic(string fMaster, List<string> tileList, Size tileSize, bool bAdjustHue = false)
+        public async Task<LockBitmap> GenerateMosaic(WriteableBitmap fMaster, List<string> tileList, Size tileSize, bool bAdjustHue = false)
         {
-            MasterBmp = await LoadBitmap(fMaster);
+            MasterBmp = fMaster;
 
             /// Average Master Image Phase
             int tX = MasterBmp.PixelWidth / tileSize.Width;
