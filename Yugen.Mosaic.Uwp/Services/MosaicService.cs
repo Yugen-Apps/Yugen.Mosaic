@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
-using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Mosaic.Uwp.Models;
 using Color = System.Drawing.Color;
+using ColorHelper = Yugen.Mosaic.Uwp.Helpers.ColorHelper;
 
-namespace Yugen.Mosaic.Uwp
+namespace Yugen.Mosaic.Uwp.Services
 {
-    public class MosaicClass
+    public class MosaicService
     {
         public WriteableBitmap MasterBmp { get; set; }
         public List<Tile> TileBmpList { get; set; } = new List<Tile>();
 
-        public WriteableBitmap OutputBmp { get; set; }
-
-        public async Task<LockBitmap> GenerateMosaic(WriteableBitmap fMaster, List<string> tileList, Size tileSize, bool bAdjustHue = false)
+        public LockBitmap GenerateMosaic(WriteableBitmap fMaster, List<WriteableBitmap> tileList, Size tileSize, bool bAdjustHue = false)
         {
             MasterBmp = fMaster;
 
@@ -32,16 +30,12 @@ namespace Yugen.Mosaic.Uwp
                 }
             }
 
-            OutputBmp = BitmapFactory.New(tileSize.Width, tileSize.Height);
-            OutputBmp.Clear(Colors.White);
-
             var bOut = new LockBitmap(MasterBmp);
 
             /// Tile Load And Resize Phase
             foreach (var file in tileList)
             {
-                var bmp = await LoadBitmap(file);
-                bmp = bmp.Resize(tileSize.Width, tileSize.Height, WriteableBitmapExtensions.Interpolation.Bilinear);
+                var bmp = file.Resize(tileSize.Width, tileSize.Height, WriteableBitmapExtensions.Interpolation.Bilinear);
                 var color = GetTileAverage(bmp, 0, 0, bmp.PixelWidth, bmp.PixelHeight);
                 TileBmpList.Add(new Tile(bmp, color));
             }
@@ -74,7 +68,7 @@ namespace Yugen.Mosaic.Uwp
 
                             // Add to the 'queue'
                             tFound = TileBmpList[index];
-                            if ((tileQueue.Count >= maxQueueLength) && (tileQueue.Count > 0)) { tileQueue.RemoveAt(0); }
+                            if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0) { tileQueue.RemoveAt(0); }
                             tileQueue.Add(tFound);
 
                             // Adjust the hue
@@ -131,18 +125,11 @@ namespace Yugen.Mosaic.Uwp
                         }
                     }
                 }
-             }
+            }
 
             return bOut;
         }
-
-        private async Task<WriteableBitmap> LoadBitmap(string path)
-        {
-            var imageUri = new Uri(path);
-            var bmp = await BitmapFactory.FromContent(imageUri);
-            return bmp;
-        }
-
+        
         public static Color GetTileAverage(WriteableBitmap bSource, int x, int y, int width, int height)
         {
             long aR = 0;
@@ -163,9 +150,9 @@ namespace Yugen.Mosaic.Uwp
                 }
             }
 
-            aR /= (width * height);
-            aG /= (width * height);
-            aB /= (width * height);
+            aR /= width * height;
+            aG /= width * height;
+            aB /= width * height;
 
             return Color.FromArgb(255, Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
@@ -190,9 +177,9 @@ namespace Yugen.Mosaic.Uwp
                 {
                     // Get current output color
                     var clSource = bSource.GetPixel(w, h);
-                    int R = Math.Min(255, Math.Max(0, ((clSource.R + targetColor.R) / 2)));
-                    int G = Math.Min(255, Math.Max(0, ((clSource.G + targetColor.G) / 2)));
-                    int B = Math.Min(255, Math.Max(0, ((clSource.B + targetColor.B) / 2)));
+                    int R = Math.Min(255, Math.Max(0, (clSource.R + targetColor.R) / 2));
+                    int G = Math.Min(255, Math.Max(0, (clSource.G + targetColor.G) / 2));
+                    int B = Math.Min(255, Math.Max(0, (clSource.B + targetColor.B) / 2));
                     Color clAvg = Color.FromArgb(R, G, B);
 
                     var newColor = ColorHelper.Convert(clAvg);

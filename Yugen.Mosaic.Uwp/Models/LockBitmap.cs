@@ -1,10 +1,9 @@
-﻿// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
-using System;
+﻿using System;
 using System.Drawing;
 using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Mosaic.Uwp.Helpers;
 
-namespace Yugen.Mosaic.Uwp
+namespace Yugen.Mosaic.Uwp.Models
 {
     public class LockBitmap
     {
@@ -20,7 +19,7 @@ namespace Yugen.Mosaic.Uwp
 
         public LockBitmap(WriteableBitmap masterBmp)
         {
-            this.source = masterBmp.Clone();
+            source = masterBmp.Clone();
             LockBits();
         }
 
@@ -83,7 +82,7 @@ namespace Yugen.Mosaic.Uwp
             int cCount = Depth / 8;
 
             // Get start index of the specified pixel
-            int i = ((y * Width) + x) * cCount;
+            int i = (y * Width + x) * cCount;
 
             if (i > Pixels.Length - cCount)
                 throw new IndexOutOfRangeException();
@@ -124,7 +123,7 @@ namespace Yugen.Mosaic.Uwp
             int cCount = Depth / 8;
 
             // Get start index of the specified pixel
-            int i = ((y * Width) + x) * cCount;
+            int i = (y * Width + x) * cCount;
 
             if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
             {

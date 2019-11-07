@@ -1,4 +1,4 @@
-﻿namespace Yugen.Mosaic.Uwp
+﻿namespace Yugen.Mosaic.Uwp.Helpers
 {
     public static class ColorHelper
     {

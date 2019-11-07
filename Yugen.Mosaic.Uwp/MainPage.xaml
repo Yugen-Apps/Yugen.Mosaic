@@ -4,6 +4,7 @@
       xmlns:local="using:Yugen.Mosaic.Uwp"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:imaging="using:Windows.UI.Xaml.Media.Imaging"
       mc:Ignorable="d"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -28,19 +29,24 @@
             <ListView x:Name="tileListView"
                       ItemsSource="{x:Bind ViewModel.TileList, Mode=OneWay}">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="x:String">
+                    <DataTemplate x:DataType="imaging:WriteableBitmap">
                         <Image Source="{x:Bind}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </StackPanel>
 
-        <StackPanel Grid.Column="1">
+        <Grid Grid.Column="1">
             <Image x:Name="outputImage"
-                   Source="{x:Bind ViewModel.OutputImageSource, Mode=OneWay}" />
+                   Source="{x:Bind ViewModel.OutputImageSource, Mode=OneWay}" 
+                   Width="400"
+                   Height="400"/>
             
-            <ProgressRing Height="200"
-                          Width="200"
+        </Grid>
+
+        <StackPanel Grid.Row="1">
+            <ProgressRing Height="40"
+                          Width="40"
                           IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
         </StackPanel>
@@ -53,7 +59,9 @@
             <Button Content="Add Tiles"
                     Click="{x:Bind ViewModel.AddTilesButton_Click}" />
             <Button Content="Generate"
-                    Click="{x:Bind ViewModel.GenerateButton_Click}"/>
+                    Click="{x:Bind ViewModel.GenerateButton_Click}" />
+            <Button Content="Save"
+                    Click="{x:Bind ViewModel.SaveButton_Click}" />
         </StackPanel>
 
     </Grid>

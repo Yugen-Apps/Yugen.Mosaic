@@ -1,7 +1,7 @@
 ﻿using Windows.UI.Xaml.Media.Imaging;
 using Color = System.Drawing.Color;
 
-namespace Yugen.Mosaic.Uwp
+namespace Yugen.Mosaic.Uwp.Models
 {
     public class Tile
     {
