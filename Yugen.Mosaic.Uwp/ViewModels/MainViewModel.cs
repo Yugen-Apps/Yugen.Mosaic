@@ -97,6 +97,13 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref isLoading, value); }
         }
 
+        private bool isAdjustHue;
+        public bool IsAdjustHue
+        {
+            get { return isAdjustHue; }
+            set { Set(ref isAdjustHue, value); }
+        }
+
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
@@ -132,8 +139,7 @@ namespace Yugen.Mosaic.Uwp
             var resizedMaster = masterImageSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
 
             MosaicService mosaicClass = new MosaicService();
-            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize);
-            //LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize, true);
+            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize, isAdjustHue);
 
             OutputImageSource = mosaicBmp.Output;
             IsLoading = false;

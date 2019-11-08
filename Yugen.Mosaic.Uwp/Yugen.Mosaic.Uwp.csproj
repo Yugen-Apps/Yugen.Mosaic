@@ -126,6 +126,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BenchmarkHelper.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Services\MosaicService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

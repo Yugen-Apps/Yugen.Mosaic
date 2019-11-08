@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Services
@@ -12,19 +12,39 @@ namespace Yugen.Mosaic.Uwp.Services
     {
         public List<Tile> TileBmpList { get; set; } = new List<Tile>();
 
-        BenchmarkHelper benchmarkHelper = new BenchmarkHelper();
+        private int tileSizeWidth;
+        private int tileSizeHeight;
 
-        public LockBitmap GenerateMosaic(WriteableBitmap masterBmp, Size outputSize, List<WriteableBitmap> tileBmpList, Size tileSize, bool isAdjustHue = false)
+        private int tX;
+        private int tY;
+        private Color[,] avgsMaster;
+
+        private readonly BenchmarkHelper benchmarkHelper = new BenchmarkHelper();
+
+        public LockBitmap GenerateMosaic(WriteableBitmap masterBmp, Size outputSize, List<WriteableBitmap> tileBmpList, Size tileSize, bool isAdjustHue)
         {
-            /// Average Master Image Phase
-            int tileSizeWidth = (int)tileSize.Width;
-            int tileSizeHeight = (int)tileSize.Height;
+            tileSizeWidth = (int)tileSize.Width;
+            tileSizeHeight = (int)tileSize.Height;
 
-            int tX = masterBmp.PixelWidth / tileSizeWidth;
-            int tY = masterBmp.PixelHeight / tileSizeHeight;
-            Color[,] avgsMaster = new Color[tX, tY];
+            tX = masterBmp.PixelWidth / tileSizeWidth;
+            tY = masterBmp.PixelHeight / tileSizeHeight;
+            avgsMaster = new Color[tX, tY];
 
+            GetTilesAverage(masterBmp);
+
+            var outputBmp = new LockBitmap(outputSize);
+
+            LoadTilesAndResize(tileBmpList);
+
+            SearchAndReplace(isAdjustHue, tileSize, outputBmp);
+
+            return outputBmp;
+        }
+
+        private void GetTilesAverage(WriteableBitmap masterBmp)
+        {
             benchmarkHelper.Start();
+
             for (int x = 0; x < tX; x++)
             {
                 for (int y = 0; y < tY; y++)
@@ -32,105 +52,122 @@ namespace Yugen.Mosaic.Uwp.Services
                     avgsMaster[x, y] = GetTileAverage(masterBmp, x * tileSizeWidth, y * tileSizeHeight, tileSizeWidth, tileSizeHeight);
                 }
             }
+
             benchmarkHelper.Stop("2");
+        }             
 
-            var outputBmp = new LockBitmap(outputSize);
 
-            /// Tile Load And Resize Phase
+        private void LoadTilesAndResize(List<WriteableBitmap> tileBmpList)
+        {
             foreach (var file in tileBmpList)
             {
                 var bmp = file.Resize(tileSizeWidth, tileSizeHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
                 var color = GetTileAverage(bmp, 0, 0, bmp.PixelWidth, bmp.PixelHeight);
                 TileBmpList.Add(new Tile(bmp, color));
             }
+        }
+
+
+        private void SearchAndReplace(bool isAdjustHue, Size tileSize, LockBitmap outputBmp)
+        {
+            if (TileBmpList.Count < 1)
+                return;
 
             benchmarkHelper.Start();
-            /// Iterative Replacement Phase / Search Phase
-            if (TileBmpList.Count > 0)
+
+            if (isAdjustHue)
             {
-                Random r = new Random();
-                if (isAdjustHue)
+                SearchAndReplaceAdjustHue(tileSize, outputBmp);
+            }
+            else
+            {
+                SearchAndReplace(tileSize, outputBmp);
+            }
+
+            benchmarkHelper.Stop("5");
+        }
+
+        private void SearchAndReplace(Size tileSize, LockBitmap outputBmp)
+        {
+            Random r = new Random();
+            // Don't adjust hue - keep searching for a tile close enough
+            for (int x = 0; x < tX; x++)
+            {
+                for (int y = 0; y < tY; y++)
                 {
-                    // Adjust hue - get the first (random) tile found and adjust its colours
-                    // to suit the average
-                    List<Tile> tileQueue = new List<Tile>();
-                    int maxQueueLength = Math.Min(1000, Math.Max(0, TileBmpList.Count - 50));
-
-                    for (int x = 0; x < tX; x++)
+                    // Reset searching threshold
+                    int threshold = 0;
+                    int searchCounter = 0;
+                    Tile tFound = null;
+                    while (tFound == null)
                     {
-                        for (int y = 0; y < tY; y++)
+                        int index = r.Next(TileBmpList.Count);
+                        if (GetDifference(avgsMaster[x, y], TileBmpList[index].color) < threshold)
                         {
-                            int index = 0;
-                            // Check if it's the same as the last (X)?
-                            if (tileQueue.Count > 1)
-                            {
-                                while (tileQueue.Contains(TileBmpList[index]))
-                                {
-                                    index = r.Next(TileBmpList.Count);
-                                }
-                            }
-
-                            // Add to the 'queue'
-                            Tile tFound = TileBmpList[index];
-                            if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0) { tileQueue.RemoveAt(0); }
-                            tileQueue.Add(tFound);
-
-                            // Adjust the hue
-                            WriteableBitmap bAdjusted = AdjustHue(tFound.bitmap, avgsMaster[x, y]);
-
-                            // Apply found tile to section
-                            for (int w = 0; w < tileSize.Width; w++)
-                            {
-                                for (int h = 0; h < tileSize.Height; h++)
-                                {
-                                    var color = bAdjusted.GetPixel(w, h);
-                                    outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
-                                }
-                            }
+                            tFound = TileBmpList[index];
+                        }
+                        else
+                        {
+                            searchCounter++;
+                            if (searchCounter >= TileBmpList.Count) { threshold += 5; }
                         }
                     }
-                }
-                else
-                {
-                    // Don't adjust hue - keep searching for a tile close enough
-                    for (int x = 0; x < tX; x++)
+                    // Apply found tile to section
+                    for (int w = 0; w < tileSize.Width; w++)
                     {
-                        for (int y = 0; y < tY; y++)
+                        for (int h = 0; h < tileSize.Height; h++)
                         {
-                            // Reset searching threshold
-                            int threshold = 0;
-                            int searchCounter = 0;
-                            Tile tFound = null;
-                            while (tFound == null)
-                            {
-                                int index = r.Next(TileBmpList.Count);
-                                if (GetDifference(avgsMaster[x, y], TileBmpList[index].color) < threshold)
-                                {
-                                    tFound = TileBmpList[index];
-                                }
-                                else
-                                {
-                                    searchCounter++;
-                                    if (searchCounter >= TileBmpList.Count) { threshold += 5; }
-                                }
-                            }
-                            // Apply found tile to section
-                            for (int w = 0; w < tileSize.Width; w++)
-                            {
-                                for (int h = 0; h < tileSize.Height; h++)
-                                {
-                                    var color = tFound.bitmap.GetPixel(w, h);
-                                    outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
-                                }
-                            }
+                            var color = tFound.bitmap.GetPixel(w, h);
+                            outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
                         }
                     }
                 }
             }
-            benchmarkHelper.Stop("5");
-
-            return outputBmp;
         }
+
+        private void SearchAndReplaceAdjustHue(Size tileSize, LockBitmap outputBmp)
+        {
+            Random r = new Random();
+            // Adjust hue - get the first (random) tile found and adjust its colours
+            // to suit the average
+            List<Tile> tileQueue = new List<Tile>();
+            int maxQueueLength = Math.Min(1000, Math.Max(0, TileBmpList.Count - 50));
+
+            for (int x = 0; x < tX; x++)
+            {
+                for (int y = 0; y < tY; y++)
+                {
+                    int index = 0;
+                    // Check if it's the same as the last (X)?
+                    if (tileQueue.Count > 1)
+                    {
+                        while (tileQueue.Contains(TileBmpList[index]))
+                        {
+                            index = r.Next(TileBmpList.Count);
+                        }
+                    }
+
+                    // Add to the 'queue'
+                    Tile tFound = TileBmpList[index];
+                    if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0) { tileQueue.RemoveAt(0); }
+                    tileQueue.Add(tFound);
+
+                    // Adjust the hue
+                    WriteableBitmap bAdjusted = AdjustHue(tFound.bitmap, avgsMaster[x, y]);
+
+                    // Apply found tile to section
+                    for (int w = 0; w < tileSize.Width; w++)
+                    {
+                        for (int h = 0; h < tileSize.Height; h++)
+                        {
+                            var color = bAdjusted.GetPixel(w, h);
+                            outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
+                        }
+                    }
+                }
+            }
+        }
+
 
         public static Color GetTileAverage(WriteableBitmap bSource, int x, int y, int width, int height)
         {
@@ -166,8 +203,7 @@ namespace Yugen.Mosaic.Uwp.Services
             diff = Math.Max(diff, dB);
             return diff;
         }
-
-
+        
         public static WriteableBitmap AdjustHue(WriteableBitmap bSource, Color targetColor)
         {
             WriteableBitmap result = BitmapFactory.New(bSource.PixelWidth, bSource.PixelHeight);
@@ -187,28 +223,6 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
             }
             return result;
-        }
-    }
-
-    /// <summary>
-    /// 50x50 200x200
-    /// -2 Elapsed: 00:00:09.4523085
-    /// -5 Elapsed: 00:00:21.7696783
-    /// </summary>
-    public class BenchmarkHelper
-    {
-        private readonly Stopwatch _sw = new Stopwatch();
-
-        public void Start()
-        {
-            _sw.Restart();
-            //_sw.Start();
-        }
-
-        public void Stop(string text)
-        {
-            _sw.Stop();
-            Debug.WriteLine($"-{text} Elapsed: {_sw.Elapsed}");
         }
     }
 }
