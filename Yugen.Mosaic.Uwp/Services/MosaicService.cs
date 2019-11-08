@@ -19,6 +19,9 @@ namespace Yugen.Mosaic.Uwp.Services
         private int tY;
         private Color[,] avgsMaster;
 
+        private int progressBarMaximum;
+        private int progressBarValue;
+
         private readonly BenchmarkHelper benchmarkHelper = new BenchmarkHelper();
 
         public LockBitmap GenerateMosaic(WriteableBitmap masterBmp, Size outputSize, List<WriteableBitmap> tileBmpList, Size tileSize, bool isAdjustHue)
@@ -45,11 +48,15 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             benchmarkHelper.Start();
 
+            progressBarMaximum = tX * tY;
+            progressBarValue = 0;
+
             for (int x = 0; x < tX; x++)
             {
                 for (int y = 0; y < tY; y++)
                 {
                     avgsMaster[x, y] = GetTileAverage(masterBmp, x * tileSizeWidth, y * tileSizeHeight, tileSizeWidth, tileSizeHeight);
+                    progressBarValue++;
                 }
             }
 
@@ -59,11 +66,15 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private void LoadTilesAndResize(List<WriteableBitmap> tileBmpList)
         {
+            progressBarMaximum = tileBmpList.Count;
+            progressBarValue = 0;
+
             foreach (var file in tileBmpList)
             {
                 var bmp = file.Resize(tileSizeWidth, tileSizeHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
                 var color = GetTileAverage(bmp, 0, 0, bmp.PixelWidth, bmp.PixelHeight);
                 TileBmpList.Add(new Tile(bmp, color));
+                progressBarValue++;
             }
         }
 
@@ -74,6 +85,9 @@ namespace Yugen.Mosaic.Uwp.Services
                 return;
 
             benchmarkHelper.Start();
+
+            progressBarMaximum = tX * tY;
+            progressBarValue = 0;
 
             if (isAdjustHue)
             {
@@ -112,6 +126,7 @@ namespace Yugen.Mosaic.Uwp.Services
                             if (searchCounter >= TileBmpList.Count) { threshold += 5; }
                         }
                     }
+
                     // Apply found tile to section
                     for (int w = 0; w < tileSize.Width; w++)
                     {
@@ -121,6 +136,8 @@ namespace Yugen.Mosaic.Uwp.Services
                             outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
                         }
                     }
+
+                    progressBarValue++;
                 }
             }
         }
@@ -164,6 +181,8 @@ namespace Yugen.Mosaic.Uwp.Services
                             outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
                         }
                     }
+
+                    progressBarValue++;
                 }
             }
         }
