@@ -1,4 +1,6 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -110,15 +112,7 @@ namespace Yugen.Mosaic.Uwp
         private Image masterImage;
         private List<Image> tileImageList = new List<Image>();
 
-
-        private async Task<WriteableBitmap> ImageToWriteableBitmap(Image masterImage)
-        {
-            InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
-            masterImage.SaveAsBmp(outputStream.AsStreamForWrite());
-            return await BitmapFactory.FromStream(outputStream);
-        }
-
-
+               
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
@@ -132,7 +126,7 @@ namespace Yugen.Mosaic.Uwp
                 //MasterBpmSource = await BitmapFactory.FromStream(stream);
             }
 
-            MasterBpmSource = await ImageToWriteableBitmap(masterImage);
+            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(masterImage);
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -153,7 +147,7 @@ namespace Yugen.Mosaic.Uwp
                     //tileBmpList.Add(bmp);
                 }
 
-                var bmp = await ImageToWriteableBitmap(image);
+                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
                 tileBmpList.Add(bmp);
             }
         }
@@ -161,12 +155,15 @@ namespace Yugen.Mosaic.Uwp
         public void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             IsLoading = true;
-            var resizedMaster = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
+
+            var resizedMasterBmp = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
+            Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
 
             MosaicService mosaicClass = new MosaicService();
-            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue);
+            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMasterBmp, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue);
 
             OutputBmpSource = mosaicBmp.Output;
+
             IsLoading = false;
         }
 

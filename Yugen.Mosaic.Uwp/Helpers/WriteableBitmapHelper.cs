@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -64,6 +65,13 @@ namespace Yugen.Mosaic.Uwp.Helpers
             }
 
             return file;
+        }
+
+        public static async Task<WriteableBitmap> ImageToWriteableBitmap(Image masterImage)
+        {
+            InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+            masterImage.SaveAsBmp(outputStream.AsStreamForWrite());
+            return await BitmapFactory.FromStream(outputStream);
         }
     }
 }
