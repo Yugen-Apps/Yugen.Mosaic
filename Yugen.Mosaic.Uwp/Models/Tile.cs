@@ -1,5 +1,5 @@
 ﻿using Windows.UI.Xaml.Media.Imaging;
-using Color = System.Drawing.Color;
+using Windows.UI;
 
 namespace Yugen.Mosaic.Uwp.Models
 {

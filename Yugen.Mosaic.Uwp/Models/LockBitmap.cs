@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Drawing;
+using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
-using Yugen.Mosaic.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
@@ -22,8 +22,8 @@ namespace Yugen.Mosaic.Uwp.Models
             try
             {
                 // Set width and height of bitmap
-                width = outputSize.Width;
-                height = outputSize.Height;
+                width = (int)outputSize.Width;
+                height = (int)outputSize.Height;
 
                 // get total locked pixels count
                 int PixelCount = width * height;
@@ -69,7 +69,7 @@ namespace Yugen.Mosaic.Uwp.Models
         /// <returns></returns>
         public Color GetPixel(int x, int y)
         {
-            Color clr = Color.Empty;
+            Color clr = new Color();
 
             // Get color components count
             int cCount = depth / 8;
@@ -93,13 +93,13 @@ namespace Yugen.Mosaic.Uwp.Models
                 byte b = pixels[i];
                 byte g = pixels[i + 1];
                 byte r = pixels[i + 2];
-                clr = Color.FromArgb(r, g, b);
+                clr = Color.FromArgb(255, r, g, b);
             }
             if (depth == 8)
             // For 8 bpp get color value (Red, Green and Blue values are the same)
             {
                 byte c = pixels[i];
-                clr = Color.FromArgb(c, c, c);
+                clr = Color.FromArgb(255, c, c, c);
             }
             return clr;
         }
@@ -137,8 +137,7 @@ namespace Yugen.Mosaic.Uwp.Models
                 pixels[i] = color.B;
             }
 
-            var newColor = ColorHelper.Convert(color);
-            Output.SetPixel(x, y, newColor);
+            Output.SetPixel(x, y, color);
         }
     }
 }

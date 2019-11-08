@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using Yugen.Toolkit.Uwp.ViewModels;
-using Windows.UI.Xaml.Media.Imaging;
-using Yugen.Toolkit.Uwp.Helpers;
 using System.IO;
-using Yugen.Mosaic.Uwp.Services;
-using Yugen.Mosaic.Uwp.Models;
-using Yugen.Mosaic.Uwp.Helpers;
+using System.Linq;
+using Windows.Foundation;
+using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
+using Yugen.Mosaic.Uwp.Helpers;
+using Yugen.Mosaic.Uwp.Models;
+using Yugen.Mosaic.Uwp.Services;
+using Yugen.Toolkit.Uwp.Helpers;
+using Yugen.Toolkit.Uwp.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 

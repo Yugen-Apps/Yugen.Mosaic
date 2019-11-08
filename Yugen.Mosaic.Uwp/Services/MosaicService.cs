@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
+using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Models;
-using Color = System.Drawing.Color;
-using ColorHelper = Yugen.Mosaic.Uwp.Helpers.ColorHelper;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -18,8 +17,11 @@ namespace Yugen.Mosaic.Uwp.Services
         public LockBitmap GenerateMosaic(WriteableBitmap masterBmp, Size outputSize, List<WriteableBitmap> tileBmpList, Size tileSize, bool isAdjustHue = false)
         {
             /// Average Master Image Phase
-            int tX = masterBmp.PixelWidth / tileSize.Width;
-            int tY = masterBmp.PixelHeight / tileSize.Height;
+            int tileSizeWidth = (int)tileSize.Width;
+            int tileSizeHeight = (int)tileSize.Height;
+
+            int tX = masterBmp.PixelWidth / tileSizeWidth;
+            int tY = masterBmp.PixelHeight / tileSizeHeight;
             Color[,] avgsMaster = new Color[tX, tY];
 
             benchmarkHelper.Start();
@@ -27,7 +29,7 @@ namespace Yugen.Mosaic.Uwp.Services
             {
                 for (int y = 0; y < tY; y++)
                 {
-                    avgsMaster[x, y] = GetTileAverage(masterBmp, x * tileSize.Width, y * tileSize.Height, tileSize.Width, tileSize.Height);
+                    avgsMaster[x, y] = GetTileAverage(masterBmp, x * tileSizeWidth, y * tileSizeHeight, tileSizeWidth, tileSizeHeight);
                 }
             }
             benchmarkHelper.Stop("2");
@@ -37,7 +39,7 @@ namespace Yugen.Mosaic.Uwp.Services
             /// Tile Load And Resize Phase
             foreach (var file in tileBmpList)
             {
-                var bmp = file.Resize(tileSize.Width, tileSize.Height, WriteableBitmapExtensions.Interpolation.Bilinear);
+                var bmp = file.Resize(tileSizeWidth, tileSizeHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
                 var color = GetTileAverage(bmp, 0, 0, bmp.PixelWidth, bmp.PixelHeight);
                 TileBmpList.Add(new Tile(bmp, color));
             }
@@ -82,8 +84,7 @@ namespace Yugen.Mosaic.Uwp.Services
                                 for (int h = 0; h < tileSize.Height; h++)
                                 {
                                     var color = bAdjusted.GetPixel(w, h);
-                                    var newColor = ColorHelper.Convert(color);
-                                    outputBmp.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, newColor);
+                                    outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
                                 }
                             }
                         }
@@ -119,8 +120,7 @@ namespace Yugen.Mosaic.Uwp.Services
                                 for (int h = 0; h < tileSize.Height; h++)
                                 {
                                     var color = tFound.bitmap.GetPixel(w, h);
-                                    var newColor = ColorHelper.Convert(color);
-                                    outputBmp.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, newColor);
+                                    outputBmp.SetPixel(x * tileSizeWidth + w, y * tileSizeHeight + h, color);
                                 }
                             }
                         }
@@ -143,12 +143,10 @@ namespace Yugen.Mosaic.Uwp.Services
                 for (int h = y; h < y + height; h++)
                 {
                     var color = bSource.GetPixel(w, h);
-                    var newColor = ColorHelper.Convert(color);
 
-                    Color cP = newColor;
-                    aR += cP.R;
-                    aG += cP.G;
-                    aB += cP.B;
+                    aR += color.R;
+                    aG += color.G;
+                    aB += color.B;
                 }
             }
 
@@ -183,10 +181,9 @@ namespace Yugen.Mosaic.Uwp.Services
                     int R = Math.Min(255, Math.Max(0, (clSource.R + targetColor.R) / 2));
                     int G = Math.Min(255, Math.Max(0, (clSource.G + targetColor.G) / 2));
                     int B = Math.Min(255, Math.Max(0, (clSource.B + targetColor.B) / 2));
-                    Color clAvg = Color.FromArgb(R, G, B);
+                    Color clAvg = Color.FromArgb(255, Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
 
-                    var newColor = ColorHelper.Convert(clAvg);
-                    result.SetPixel(w, h, newColor);
+                    result.SetPixel(w, h, clAvg);
                 }
             }
             return result;
@@ -195,12 +192,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
     /// <summary>
     /// 50x50 200x200
-    /// -1 Elapsed: 00:00:00.0000016
     /// -2 Elapsed: 00:00:09.4523085
-    /// -3 Elapsed: 00:00:00.0001369
-    /// -4 Elapsed: 00:00:00.0987448
     /// -5 Elapsed: 00:00:21.7696783
-    /// -6 Elapsed: 00:00:00.0000001
     /// </summary>
     public class BenchmarkHelper
     {
@@ -215,7 +208,7 @@ namespace Yugen.Mosaic.Uwp.Services
         public void Stop(string text)
         {
             _sw.Stop();
-            System.Diagnostics.Debug.WriteLine($"-{text} Elapsed: {_sw.Elapsed}");
+            Debug.WriteLine($"-{text} Elapsed: {_sw.Elapsed}");
         }
     }
 }
