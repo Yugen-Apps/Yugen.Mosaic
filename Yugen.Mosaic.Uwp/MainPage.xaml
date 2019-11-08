@@ -13,12 +13,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
 
         <StackPanel>
             <Image x:Name="masterImage"
@@ -36,32 +32,43 @@
             </ListView>
         </StackPanel>
 
-        <Grid Grid.Column="1">
+        <StackPanel Grid.Column="1">
             <Image x:Name="outputImage"
                    Source="{x:Bind ViewModel.OutputImageSource, Mode=OneWay}" 
-                   Width="400"
-                   Height="400"/>
-            
-        </Grid>
+                   Stretch="None"/>
+        </StackPanel>
 
-        <StackPanel Grid.Row="1">
+        <StackPanel Grid.Column="2">
+
+            <TextBox Header="Tile Width"
+                     Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}" />
+
+            <TextBox Header="Tile Height"
+                     Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}" />
+
+            <TextBox Header="Output Width"
+                     Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}" />
+
+            <TextBox Header="Output Height"
+                     Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
+
+            <Button Content="Add Master"
+                    Click="{x:Bind ViewModel.AddMasterButton_Click}" />
+
+            <Button Content="Add Tiles"
+                    Click="{x:Bind ViewModel.AddTilesButton_Click}" />
+
+            <Button Content="Generate"
+                    Click="{x:Bind ViewModel.GenerateButton_Click}" />
+
+            <Button Content="Save"
+                    Click="{x:Bind ViewModel.SaveButton_Click}" />
+
             <ProgressRing Height="40"
                           Width="40"
                           IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
-        </StackPanel>
 
-        <StackPanel Grid.Column="1"
-                    Grid.Row="1"
-                    Orientation="Horizontal">
-            <Button Content="Add Master"
-                    Click="{x:Bind ViewModel.AddMasterButton_Click}" />
-            <Button Content="Add Tiles"
-                    Click="{x:Bind ViewModel.AddTilesButton_Click}" />
-            <Button Content="Generate"
-                    Click="{x:Bind ViewModel.GenerateButton_Click}" />
-            <Button Content="Save"
-                    Click="{x:Bind ViewModel.SaveButton_Click}" />
         </StackPanel>
 
     </Grid>

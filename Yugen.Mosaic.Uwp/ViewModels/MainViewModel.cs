@@ -24,12 +24,30 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref masterImageSource, value); }
         }
 
-        private Size tileSize = new Size(40, 40);
-        public Size TileSize
+
+        private int tileWidth = 40;
+        public int TileWidth
         {
-            get { return tileSize; }
-            set { Set(ref tileSize, value); }
+            get { return tileWidth; }
+            set 
+            { 
+                Set(ref tileWidth, value);
+                tileSize.Width = tileWidth;
+            }
         }
+
+        private int tileHeight = 40;
+        public int TileHeight
+        {
+            get { return tileHeight; }
+            set 
+            { 
+                Set(ref tileHeight, value);
+                tileSize.Height = tileHeight;
+            }
+        }
+
+        private Size tileSize = new Size(40, 40);
 
         private ObservableCollection<WriteableBitmap> tileList = new ObservableCollection<WriteableBitmap>();
         public ObservableCollection<WriteableBitmap> TileList
@@ -38,12 +56,37 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref tileList, value); }
         }
 
+
         private WriteableBitmap outputImageSource;
         public WriteableBitmap OutputImageSource
         {
             get { return outputImageSource; }
             set { Set(ref outputImageSource, value); }
         }
+
+        private int outputWidth = 200;
+        public int OutputWidth
+        {
+            get { return outputWidth; }
+            set
+            {
+                Set(ref outputWidth, value);
+                outputSize.Width = outputWidth;
+            }
+        }
+
+        private int outputHeight = 200;
+        public int OutputHeight
+        {
+            get { return outputHeight; }
+            set
+            {
+                Set(ref outputHeight, value);
+                outputSize.Height = outputHeight;
+            }
+        }
+
+        private Size outputSize = new Size(200, 200);
 
         private bool isLoading;
         public bool IsLoading
@@ -86,8 +129,9 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = true;
             MosaicService mosaicClass = new MosaicService();
 
-            LockBitmap test = mosaicClass.GenerateMosaic(masterImageSource, tileList.ToList(), tileSize);
-            //LockBitmap test = await mosaicClass.GenerateMosaic(masterBmp, tileList, tileSize, true);
+            var resizedMaster = masterImageSource.Resize(200, 200, WriteableBitmapExtensions.Interpolation.Bilinear);
+            LockBitmap test = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize);
+            //LockBitmap test = await mosaicClass.GenerateMosaic(masterImageSource, outputSize, tileList, tileSize, true);
 
             OutputImageSource = test.output;
             IsLoading = false;

@@ -7,7 +7,7 @@ namespace Yugen.Mosaic.Uwp.Models
 {
     public class LockBitmap
     {
-        private WriteableBitmap source;
+        //private WriteableBitmap source;
         public WriteableBitmap output;
 
         public int Width { get; private set; }
@@ -17,22 +17,22 @@ namespace Yugen.Mosaic.Uwp.Models
 
         public byte[] Pixels { get; set; }
 
-        public LockBitmap(WriteableBitmap masterBmp)
-        {
-            source = masterBmp.Clone();
-            LockBits();
-        }
-
         /// <summary>
         /// Lock bitmap data
         /// </summary>
-        public void LockBits()
+        public LockBitmap(WriteableBitmap masterBmp, Size outputSize)
         {
+            Width = outputSize.Width;
+            Height = outputSize.Height;
+
+            //source = masterBmp.Clone();
+            //source = masterBmp.Resize(Width, Height, WriteableBitmapExtensions.Interpolation.Bilinear);
+
             try
             {
                 // Get width and height of bitmap
-                Width = source.PixelWidth;
-                Height = source.PixelHeight;
+                //Width = source.PixelWidth;
+                //Height = source.PixelHeight;
 
                 // get total locked pixels count
                 int PixelCount = Width * Height;

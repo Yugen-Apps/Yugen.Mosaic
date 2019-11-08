@@ -13,7 +13,7 @@ namespace Yugen.Mosaic.Uwp.Services
         public WriteableBitmap MasterBmp { get; set; }
         public List<Tile> TileBmpList { get; set; } = new List<Tile>();
 
-        public LockBitmap GenerateMosaic(WriteableBitmap fMaster, List<WriteableBitmap> tileList, Size tileSize, bool bAdjustHue = false)
+        public LockBitmap GenerateMosaic(WriteableBitmap fMaster, Size outputSize, List<WriteableBitmap> tileList, Size tileSize, bool bAdjustHue = false)
         {
             MasterBmp = fMaster;
 
@@ -30,7 +30,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
             }
 
-            var bOut = new LockBitmap(MasterBmp);
+            var bOut = new LockBitmap(MasterBmp, outputSize);
 
             /// Tile Load And Resize Phase
             foreach (var file in tileList)
