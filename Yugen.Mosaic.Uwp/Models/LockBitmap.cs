@@ -7,66 +7,59 @@ namespace Yugen.Mosaic.Uwp.Models
 {
     public class LockBitmap
     {
-        //private WriteableBitmap source;
-        public WriteableBitmap output;
+        public WriteableBitmap Output { get; set; }
 
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-
-        int Depth = 32;
-
-        public byte[] Pixels { get; set; }
+        private readonly int width;
+        private readonly int height;
+        private readonly int depth = 32;
+        private readonly byte[] pixels;
 
         /// <summary>
         /// Lock bitmap data
         /// </summary>
-        public LockBitmap(WriteableBitmap masterBmp, Size outputSize)
+        public LockBitmap(Size outputSize)
         {
-            Width = outputSize.Width;
-            Height = outputSize.Height;
-
-            //source = masterBmp.Clone();
-            //source = masterBmp.Resize(Width, Height, WriteableBitmapExtensions.Interpolation.Bilinear);
-
             try
             {
-                // Get width and height of bitmap
-                //Width = source.PixelWidth;
-                //Height = source.PixelHeight;
+                // Set width and height of bitmap
+                width = outputSize.Width;
+                height = outputSize.Height;
 
                 // get total locked pixels count
-                int PixelCount = Width * Height;
-
-                // Create rectangle to lock
-                //Rectangle rect = new Rectangle(0, 0, Width, Height);
-
-                // get source bitmap pixel format size
-                //Depth = System.Drawing.Bitmap.GetPixelFormatSize(source.PixelFormat);
-
-                // Check if bpp (Bits Per Pixel) is 8, 24, or 32
-                //if (Depth != 8 && Depth != 24 && Depth != 32)
-                //{
-                //    throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
-                //}
-
-                // Lock bitmap and return bitmap data
-                //bitmapData = source.LockBits(rect, ImageLockMode.ReadWrite, source.PixelFormat);
+                int PixelCount = width * height;
 
                 // create byte array to copy pixel values
-                int step = Depth / 8;
-                Pixels = new byte[PixelCount * step];
-                //Iptr = bitmapData.Scan0;
+                int step = depth / 8;
+                pixels = new byte[PixelCount * step];
 
-                // Copy data from pointer to array
-                //Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
-
-                output = BitmapFactory.New(Width, Height);
+                Output = BitmapFactory.New(width, height);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+        //private void Resize()
+        //{
+            //source = masterBmp.Clone();
+            //source = masterBmp.Resize(Width, Height, WriteableBitmapExtensions.Interpolation.Bilinear);
+            // Get width and height of bitmap
+            //Width = source.PixelWidth;
+            //Height = source.PixelHeight;
+        //}
+
+        //private void CalculateDeoth()
+        //{
+            // get source bitmap pixel format size
+            //Depth = System.Drawing.Bitmap.GetPixelFormatSize(source.PixelFormat);
+
+            // Check if bpp (Bits Per Pixel) is 8, 24, or 32
+            //if (Depth != 8 && Depth != 24 && Depth != 32)
+            //{
+            //    throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
+            //}
+        //}
 
         /// <summary>
         /// Get the color of the specified pixel
@@ -79,33 +72,33 @@ namespace Yugen.Mosaic.Uwp.Models
             Color clr = Color.Empty;
 
             // Get color components count
-            int cCount = Depth / 8;
+            int cCount = depth / 8;
 
             // Get start index of the specified pixel
-            int i = (y * Width + x) * cCount;
+            int i = (y * width + x) * cCount;
 
-            if (i > Pixels.Length - cCount)
+            if (i > pixels.Length - cCount)
                 throw new IndexOutOfRangeException();
 
-            if (Depth == 32) // For 32 bpp get Red, Green, Blue and Alpha
+            if (depth == 32) // For 32 bpp get Red, Green, Blue and Alpha
             {
-                byte b = Pixels[i];
-                byte g = Pixels[i + 1];
-                byte r = Pixels[i + 2];
-                byte a = Pixels[i + 3]; // a
+                byte b = pixels[i];
+                byte g = pixels[i + 1];
+                byte r = pixels[i + 2];
+                byte a = pixels[i + 3]; // a
                 clr = Color.FromArgb(a, r, g, b);
             }
-            if (Depth == 24) // For 24 bpp get Red, Green and Blue
+            if (depth == 24) // For 24 bpp get Red, Green and Blue
             {
-                byte b = Pixels[i];
-                byte g = Pixels[i + 1];
-                byte r = Pixels[i + 2];
+                byte b = pixels[i];
+                byte g = pixels[i + 1];
+                byte r = pixels[i + 2];
                 clr = Color.FromArgb(r, g, b);
             }
-            if (Depth == 8)
+            if (depth == 8)
             // For 8 bpp get color value (Red, Green and Blue values are the same)
             {
-                byte c = Pixels[i];
+                byte c = pixels[i];
                 clr = Color.FromArgb(c, c, c);
             }
             return clr;
@@ -120,32 +113,32 @@ namespace Yugen.Mosaic.Uwp.Models
         public void SetPixel(int x, int y, Color color)
         {
             // Get color components count
-            int cCount = Depth / 8;
+            int cCount = depth / 8;
 
             // Get start index of the specified pixel
-            int i = (y * Width + x) * cCount;
+            int i = (y * width + x) * cCount;
 
-            if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
+            if (depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
             {
-                Pixels[i] = color.B;
-                Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.R;
-                Pixels[i + 3] = color.A;
+                pixels[i] = color.B;
+                pixels[i + 1] = color.G;
+                pixels[i + 2] = color.R;
+                pixels[i + 3] = color.A;
             }
-            if (Depth == 24) // For 24 bpp set Red, Green and Blue
+            if (depth == 24) // For 24 bpp set Red, Green and Blue
             {
-                Pixels[i] = color.B;
-                Pixels[i + 1] = color.G;
-                Pixels[i + 2] = color.R;
+                pixels[i] = color.B;
+                pixels[i + 1] = color.G;
+                pixels[i + 2] = color.R;
             }
-            if (Depth == 8)
+            if (depth == 8)
             // For 8 bpp set color value (Red, Green and Blue values are the same)
             {
-                Pixels[i] = color.B;
+                pixels[i] = color.B;
             }
 
             var newColor = ColorHelper.Convert(color);
-            output.SetPixel(x, y, newColor);
+            Output.SetPixel(x, y, newColor);
         }
     }
 }

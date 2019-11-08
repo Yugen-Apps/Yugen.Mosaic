@@ -6,6 +6,7 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Mosaic.Uwp.Enums;
 
 namespace Yugen.Mosaic.Uwp.Helpers
 {
@@ -21,32 +22,27 @@ namespace Yugen.Mosaic.Uwp.Helpers
         
         public static async Task<StorageFile> WriteableBitmapToStorageFile(StorageFile file, WriteableBitmap WB, FileFormat fileFormat)
         {
-            string FileName = "MyFile.";
             Guid BitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
+
             switch (fileFormat)
             {
-                case FileFormat.Jpeg:
-                    FileName += "jpeg";
+                case FileFormat.Jpg:
                     BitmapEncoderGuid = BitmapEncoder.JpegEncoderId;
                     break;
 
                 case FileFormat.Png:
-                    FileName += "png";
                     BitmapEncoderGuid = BitmapEncoder.PngEncoderId;
                     break;
 
                 case FileFormat.Bmp:
-                    FileName += "bmp";
                     BitmapEncoderGuid = BitmapEncoder.BmpEncoderId;
                     break;
 
                 case FileFormat.Tiff:
-                    FileName += "tiff";
                     BitmapEncoderGuid = BitmapEncoder.TiffEncoderId;
                     break;
 
                 case FileFormat.Gif:
-                    FileName += "gif";
                     BitmapEncoderGuid = BitmapEncoder.GifEncoderId;
                     break;
             }
@@ -66,16 +62,8 @@ namespace Yugen.Mosaic.Uwp.Helpers
                                     pixels);
                 await encoder.FlushAsync();
             }
+
             return file;
         }
-    }
-
-    public enum FileFormat
-    {
-        Jpeg,
-        Png,
-        Bmp,
-        Tiff,
-        Gif
     }
 }

@@ -10,6 +10,8 @@ using System.IO;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Helpers;
+using Yugen.Mosaic.Uwp.Enums;
+using Yugen.Mosaic.Uwp.Extensions;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -25,29 +27,29 @@ namespace Yugen.Mosaic.Uwp
         }
 
 
-        private int tileWidth = 40;
+        private int tileWidth = 50;
         public int TileWidth
         {
             get { return tileWidth; }
-            set 
-            { 
+            set
+            {
                 Set(ref tileWidth, value);
                 tileSize.Width = tileWidth;
             }
         }
 
-        private int tileHeight = 40;
+        private int tileHeight = 50;
         public int TileHeight
         {
             get { return tileHeight; }
-            set 
-            { 
+            set
+            {
                 Set(ref tileHeight, value);
                 tileSize.Height = tileHeight;
             }
         }
 
-        private Size tileSize = new Size(40, 40);
+        private Size tileSize = new Size(50, 50);
 
         private ObservableCollection<WriteableBitmap> tileList = new ObservableCollection<WriteableBitmap>();
         public ObservableCollection<WriteableBitmap> TileList
@@ -64,7 +66,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref outputImageSource, value); }
         }
 
-        private int outputWidth = 200;
+        private int outputWidth = 100;
         public int OutputWidth
         {
             get { return outputWidth; }
@@ -75,7 +77,7 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        private int outputHeight = 200;
+        private int outputHeight = 100;
         public int OutputHeight
         {
             get { return outputHeight; }
@@ -86,7 +88,7 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        private Size outputSize = new Size(200, 200);
+        private Size outputSize = new Size(100, 100);
 
         private bool isLoading;
         public bool IsLoading
@@ -127,20 +129,24 @@ namespace Yugen.Mosaic.Uwp
         public void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             IsLoading = true;
+            var resizedMaster = masterImageSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
+
             MosaicService mosaicClass = new MosaicService();
+            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize);
+            //LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize, true);
 
-            var resizedMaster = masterImageSource.Resize(200, 200, WriteableBitmapExtensions.Interpolation.Bilinear);
-            LockBitmap test = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize);
-            //LockBitmap test = await mosaicClass.GenerateMosaic(masterImageSource, outputSize, tileList, tileSize, true);
-
-            OutputImageSource = test.output;
+            OutputImageSource = mosaicBmp.Output;
             IsLoading = false;
         }
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var file = await FilePickerHelper.SaveFile("filename", "Image", ".jpg");
-            await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputImageSource, FileFormat.Jpeg);
+            var fileFormat = FileFormat.Jpg;
+            var file = await FilePickerHelper.SaveFile("Mosaic", "Image", fileFormat.FileFormatToString());
+            if (file == null)
+                return;
+
+            await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputImageSource, fileFormat);
         }
 
     }

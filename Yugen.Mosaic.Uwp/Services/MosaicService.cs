@@ -10,30 +10,27 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class MosaicService
     {
-        public WriteableBitmap MasterBmp { get; set; }
         public List<Tile> TileBmpList { get; set; } = new List<Tile>();
 
-        public LockBitmap GenerateMosaic(WriteableBitmap fMaster, Size outputSize, List<WriteableBitmap> tileList, Size tileSize, bool bAdjustHue = false)
+        public LockBitmap GenerateMosaic(WriteableBitmap masterBmp, Size outputSize, List<WriteableBitmap> tileBmpList, Size tileSize, bool isAdjustHue = false)
         {
-            MasterBmp = fMaster;
-
             /// Average Master Image Phase
-            int tX = MasterBmp.PixelWidth / tileSize.Width;
-            int tY = MasterBmp.PixelHeight / tileSize.Height;
+            int tX = masterBmp.PixelWidth / tileSize.Width;
+            int tY = masterBmp.PixelHeight / tileSize.Height;
             Color[,] avgsMaster = new Color[tX, tY];
 
             for (int x = 0; x < tX; x++)
             {
                 for (int y = 0; y < tY; y++)
                 {
-                    avgsMaster[x, y] = GetTileAverage(MasterBmp, x * tileSize.Width, y * tileSize.Height, tileSize.Width, tileSize.Height);
+                    avgsMaster[x, y] = GetTileAverage(masterBmp, x * tileSize.Width, y * tileSize.Height, tileSize.Width, tileSize.Height);
                 }
             }
 
-            var bOut = new LockBitmap(MasterBmp, outputSize);
+            var outputBmp = new LockBitmap(outputSize);
 
             /// Tile Load And Resize Phase
-            foreach (var file in tileList)
+            foreach (var file in tileBmpList)
             {
                 var bmp = file.Resize(tileSize.Width, tileSize.Height, WriteableBitmapExtensions.Interpolation.Bilinear);
                 var color = GetTileAverage(bmp, 0, 0, bmp.PixelWidth, bmp.PixelHeight);
@@ -44,12 +41,11 @@ namespace Yugen.Mosaic.Uwp.Services
             if (TileBmpList.Count > 0)
             {
                 Random r = new Random();
-                if (bAdjustHue)
+                if (isAdjustHue)
                 {
                     // Adjust hue - get the first (random) tile found and adjust its colours
                     // to suit the average
                     List<Tile> tileQueue = new List<Tile>();
-                    Tile tFound = null;
                     int maxQueueLength = Math.Min(1000, Math.Max(0, TileBmpList.Count - 50));
 
                     for (int x = 0; x < tX; x++)
@@ -67,7 +63,7 @@ namespace Yugen.Mosaic.Uwp.Services
                             }
 
                             // Add to the 'queue'
-                            tFound = TileBmpList[index];
+                            Tile tFound = TileBmpList[index];
                             if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0) { tileQueue.RemoveAt(0); }
                             tileQueue.Add(tFound);
 
@@ -81,7 +77,7 @@ namespace Yugen.Mosaic.Uwp.Services
                                 {
                                     var color = bAdjusted.GetPixel(w, h);
                                     var newColor = ColorHelper.Convert(color);
-                                    bOut.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, newColor);
+                                    outputBmp.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, newColor);
                                 }
                             }
                         }
@@ -96,12 +92,11 @@ namespace Yugen.Mosaic.Uwp.Services
                         {
                             // Reset searching threshold
                             int threshold = 0;
-                            int index = 0;
                             int searchCounter = 0;
                             Tile tFound = null;
                             while (tFound == null)
                             {
-                                index = r.Next(TileBmpList.Count);
+                                int index = r.Next(TileBmpList.Count);
                                 if (GetDifference(avgsMaster[x, y], TileBmpList[index].color) < threshold)
                                 {
                                     tFound = TileBmpList[index];
@@ -119,7 +114,7 @@ namespace Yugen.Mosaic.Uwp.Services
                                 {
                                     var color = tFound.bitmap.GetPixel(w, h);
                                     var newColor = ColorHelper.Convert(color);
-                                    bOut.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, newColor);
+                                    outputBmp.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, newColor);
                                 }
                             }
                         }
@@ -127,9 +122,9 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
             }
 
-            return bOut;
+            return outputBmp;
         }
-        
+
         public static Color GetTileAverage(WriteableBitmap bSource, int x, int y, int width, int height)
         {
             long aR = 0;
@@ -166,6 +161,7 @@ namespace Yugen.Mosaic.Uwp.Services
             diff = Math.Max(diff, dB);
             return diff;
         }
+
 
         public static WriteableBitmap AdjustHue(WriteableBitmap bSource, Color targetColor)
         {
