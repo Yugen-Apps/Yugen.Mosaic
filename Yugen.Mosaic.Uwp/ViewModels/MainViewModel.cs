@@ -1,9 +1,12 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
@@ -19,11 +22,11 @@ namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel
     {
-        private WriteableBitmap masterImageSource;
-        public WriteableBitmap MasterImageSource
+        private WriteableBitmap masterBmpSource;
+        public WriteableBitmap MasterBpmSource
         {
-            get { return masterImageSource; }
-            set { Set(ref masterImageSource, value); }
+            get { return masterBmpSource; }
+            set { Set(ref masterBmpSource, value); }
         }
 
 
@@ -51,19 +54,19 @@ namespace Yugen.Mosaic.Uwp
 
         private Size tileSize = new Size(50, 50);
 
-        private ObservableCollection<WriteableBitmap> tileList = new ObservableCollection<WriteableBitmap>();
-        public ObservableCollection<WriteableBitmap> TileList
+        private ObservableCollection<WriteableBitmap> tileBmpList = new ObservableCollection<WriteableBitmap>();
+        public ObservableCollection<WriteableBitmap> TileBmpList
         {
-            get { return tileList; }
-            set { Set(ref tileList, value); }
+            get { return tileBmpList; }
+            set { Set(ref tileBmpList, value); }
         }
 
 
-        private WriteableBitmap outputImageSource;
-        public WriteableBitmap OutputImageSource
+        private WriteableBitmap outputBmpSource;
+        public WriteableBitmap OutputBmpSource
         {
-            get { return outputImageSource; }
-            set { Set(ref outputImageSource, value); }
+            get { return outputBmpSource; }
+            set { Set(ref outputBmpSource, value); }
         }
 
         private int outputWidth = 100;
@@ -104,16 +107,32 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref isAdjustHue, value); }
         }
 
+        private Image masterImage;
+        private List<Image> tileImageList = new List<Image>();
+
+
+        private async Task<WriteableBitmap> ImageToWriteableBitmap(Image masterImage)
+        {
+            InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+            masterImage.SaveAsBmp(outputStream.AsStreamForWrite());
+            return await BitmapFactory.FromStream(outputStream);
+        }
+
+
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
             if (masterFile == null)
                 return;
+            
             using (var inputStream = await masterFile.OpenReadAsync())
             using (var stream = inputStream.AsStreamForRead())
             {
-                MasterImageSource = await BitmapFactory.FromStream(stream);
+                masterImage = Image.Load(stream);
+                //MasterBpmSource = await BitmapFactory.FromStream(stream);
             }
+
+            MasterBpmSource = await ImageToWriteableBitmap(masterImage);
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -124,24 +143,30 @@ namespace Yugen.Mosaic.Uwp
 
             foreach (var file in files)
             {
+                Image image;
                 using (var inputStream = await file.OpenReadAsync())
                 using (var stream = inputStream.AsStreamForRead())
                 {
-                    var bmp = await BitmapFactory.FromStream(stream);
-                    tileList.Add(bmp);
+                    image = Image.Load(stream);
+                    tileImageList.Add(image);
+                    //var bmp = await BitmapFactory.FromStream(stream);
+                    //tileBmpList.Add(bmp);
                 }
+
+                var bmp = await ImageToWriteableBitmap(image);
+                tileBmpList.Add(bmp);
             }
         }
 
         public void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             IsLoading = true;
-            var resizedMaster = masterImageSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
+            var resizedMaster = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
 
             MosaicService mosaicClass = new MosaicService();
-            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileList.ToList(), tileSize, isAdjustHue);
+            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMaster, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue);
 
-            OutputImageSource = mosaicBmp.Output;
+            OutputBmpSource = mosaicBmp.Output;
             IsLoading = false;
         }
 
@@ -152,8 +177,30 @@ namespace Yugen.Mosaic.Uwp
             if (file == null)
                 return;
 
-            await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputImageSource, fileFormat);
+            await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
         }
 
+
+        //Parallel.For(0, 10, i =>
+        //{
+        //    System.Diagnostics.Debug.WriteLine($"{i} {clone.PixelHeight}");
+        //});
+
+        //public async Task RunTasks(WriteableBitmap clone)
+        //{
+        //    var tasks = new List<Task>();
+
+        //    tasks.Add(Task.Run(() => DoWork(400, 1, clone)));
+        //    tasks.Add(Task.Run(() => DoWork(200, 2, clone)));
+        //    tasks.Add(Task.Run(() => DoWork(300, 3, clone)));
+
+        //    await Task.WhenAll(tasks);
+        //}
+
+        //public async Task DoWork(int delay, int n, WriteableBitmap masterImageSource)
+        //{
+        //    await Task.Delay(delay);
+        //    System.Diagnostics.Debug.WriteLine($"{n} {masterImageSource.PixelHeight}");
+        //}
     }
 }

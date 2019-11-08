@@ -20,10 +20,10 @@
             <Image x:Name="masterImage"
                    Height="120"
                    Width="120"
-                   Source="{x:Bind ViewModel.MasterImageSource, Mode=OneWay}" />
+                   Source="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}" />
 
             <ListView x:Name="tileListView"
-                      ItemsSource="{x:Bind ViewModel.TileList, Mode=OneWay}">
+                      ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="imaging:WriteableBitmap">
                         <Image Source="{x:Bind}" />
@@ -34,7 +34,7 @@
 
         <StackPanel Grid.Column="1">
             <Image x:Name="outputImage"
-                   Source="{x:Bind ViewModel.OutputImageSource, Mode=OneWay}" 
+                   Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}" 
                    Stretch="None"/>
         </StackPanel>
 
