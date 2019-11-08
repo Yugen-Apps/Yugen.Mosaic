@@ -157,12 +157,17 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = true;
 
             var resizedMasterBmp = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
+            //MosaicService mosaicClass = new MosaicService();
+            //LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMasterBmp, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue); 
+            //OutputBmpSource = mosaicBmp.Output;
+
             Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
+            NewMosaicService mosaicClass = new NewMosaicService();
+            var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
+            var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
+            mosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileBmpList.ToList(), newTileSize, isAdjustHue);
 
-            MosaicService mosaicClass = new MosaicService();
-            LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMasterBmp, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue);
-
-            OutputBmpSource = mosaicBmp.Output;
+            OutputBmpSource = resizedMasterBmp;
 
             IsLoading = false;
         }
