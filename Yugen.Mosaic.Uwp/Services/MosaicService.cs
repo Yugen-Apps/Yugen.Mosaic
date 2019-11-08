@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Models;
@@ -12,6 +13,8 @@ namespace Yugen.Mosaic.Uwp.Services
     {
         public List<Tile> TileBmpList { get; set; } = new List<Tile>();
 
+        BenchmarkHelper benchmarkHelper = new BenchmarkHelper();
+
         public LockBitmap GenerateMosaic(WriteableBitmap masterBmp, Size outputSize, List<WriteableBitmap> tileBmpList, Size tileSize, bool isAdjustHue = false)
         {
             /// Average Master Image Phase
@@ -19,6 +22,7 @@ namespace Yugen.Mosaic.Uwp.Services
             int tY = masterBmp.PixelHeight / tileSize.Height;
             Color[,] avgsMaster = new Color[tX, tY];
 
+            benchmarkHelper.Start();
             for (int x = 0; x < tX; x++)
             {
                 for (int y = 0; y < tY; y++)
@@ -26,6 +30,7 @@ namespace Yugen.Mosaic.Uwp.Services
                     avgsMaster[x, y] = GetTileAverage(masterBmp, x * tileSize.Width, y * tileSize.Height, tileSize.Width, tileSize.Height);
                 }
             }
+            benchmarkHelper.Stop("2");
 
             var outputBmp = new LockBitmap(outputSize);
 
@@ -37,6 +42,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 TileBmpList.Add(new Tile(bmp, color));
             }
 
+            benchmarkHelper.Start();
             /// Iterative Replacement Phase / Search Phase
             if (TileBmpList.Count > 0)
             {
@@ -121,6 +127,7 @@ namespace Yugen.Mosaic.Uwp.Services
                     }
                 }
             }
+            benchmarkHelper.Stop("5");
 
             return outputBmp;
         }
@@ -183,6 +190,32 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
             }
             return result;
+        }
+    }
+
+    /// <summary>
+    /// 50x50 200x200
+    /// -1 Elapsed: 00:00:00.0000016
+    /// -2 Elapsed: 00:00:09.4523085
+    /// -3 Elapsed: 00:00:00.0001369
+    /// -4 Elapsed: 00:00:00.0987448
+    /// -5 Elapsed: 00:00:21.7696783
+    /// -6 Elapsed: 00:00:00.0000001
+    /// </summary>
+    public class BenchmarkHelper
+    {
+        private readonly Stopwatch _sw = new Stopwatch();
+
+        public void Start()
+        {
+            _sw.Restart();
+            //_sw.Start();
+        }
+
+        public void Stop(string text)
+        {
+            _sw.Stop();
+            System.Diagnostics.Debug.WriteLine($"-{text} Elapsed: {_sw.Elapsed}");
         }
     }
 }
