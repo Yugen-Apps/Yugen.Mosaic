@@ -65,9 +65,6 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <inheritdoc/>
         public void Apply()
         {
-            //int width = Source.Width;
-            //Image<TPixel> source = Source; // Avoid capturing this
-
             Parallel.For(0, _tY, y =>
             {
                 var rowSpan = Source.GetPixelRowSpan(y);

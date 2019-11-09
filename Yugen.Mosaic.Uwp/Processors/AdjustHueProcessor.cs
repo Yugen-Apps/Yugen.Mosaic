@@ -31,8 +31,8 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// </summary>
         private readonly Image<TPixel> Source;
 
-        private readonly Image<Rgba32> InputImage;
-        private readonly Color AverageColor;
+        private readonly Image<Rgba32> _inputImage;
+        private readonly Color _averageColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdjustHueProcessor"/> class
@@ -43,20 +43,21 @@ namespace Yugen.Mosaic.Uwp.Processors
         public AdjustHueProcessor(AdjustHueProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
             Source = source;
-            InputImage = definition.InputImage;
-            AverageColor = definition.AverageColor;
+            _inputImage = definition.InputImage;
+            _averageColor = definition.AverageColor;
         }
 
         /// <inheritdoc/>
         public void Apply()
         {
-            int width = Source.Width;
-            Image<TPixel> source = Source;
-            Rgba32 targetColor = AverageColor.ToPixel<Rgba32>();
+            //int width = Source.Width;
+            //Image<TPixel> source = Source;
+
+            Rgba32 targetColor = _averageColor.ToPixel<Rgba32>();
             
-            for (int h = 0; h < InputImage.Height; h++)
+            for (int h = 0; h < _inputImage.Height; h++)
             {
-                for (int w = 0; w < InputImage.Width; w++)
+                for (int w = 0; w < _inputImage.Width; w++)
                 {
 
                     // Get current output color
@@ -66,7 +67,7 @@ namespace Yugen.Mosaic.Uwp.Processors
 
 
                     Rgba32 pixel = new Rgba32();
-                    InputImage[w, h].ToRgba32(ref pixel);
+                    _inputImage[w, h].ToRgba32(ref pixel);
 
 
                     int R = Math.Min(255, Math.Max(0, (pixel.R + targetColor.R) / 2));
