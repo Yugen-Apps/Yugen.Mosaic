@@ -150,24 +150,26 @@ namespace Yugen.Mosaic.Uwp
 
         public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (MasterBpmSource == null || tileImageList.Count < 1)
-                return;
-
             IsLoading = true;
 
-            OutputBmpSource = await Generate();
+            var outputImage = await Generate();
+
+            var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
+            OutputBmpSource = bmp;
 
             IsLoading = false;
         }
 
-        private async Task<WriteableBitmap> Generate()
+        private async Task<Image> Generate()
         {
+            if (MasterBpmSource == null || tileImageList.Count < 1)
+                return null;
+
             Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
-            NewMosaicService newMosaicClass = new NewMosaicService();
+            MosaicService newMosaicClass = new MosaicService();
             var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
             var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            var outputImage = newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);
-            return await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
+            return newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);            
         }
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

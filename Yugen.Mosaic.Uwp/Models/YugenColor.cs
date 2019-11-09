@@ -3,7 +3,7 @@ using System;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
-    public class MyColor
+    public class YugenColor
     {
         public long R { get; set; }
         public long G { get; set; }

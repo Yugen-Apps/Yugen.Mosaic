@@ -1,14 +1,12 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
 using System;
 using System.Threading.Tasks;
-using Yugen.Mosaic.Uwp.Models;
 
-namespace Yugen.Mosaic.Uwp.Services
+namespace Yugen.Mosaic.Uwp.Processors
 {
     public sealed class GetTilesAverageProcessor : IImageProcessor
     {
@@ -97,8 +95,8 @@ namespace Yugen.Mosaic.Uwp.Services
                 for (int h = y; h < y + height; h++)
                 {
                     Rgba32 pixel = new Rgba32();
-                    source[w,h].ToRgba32(ref pixel);
-                    
+                    source[w, h].ToRgba32(ref pixel);
+
                     aR += pixel.R;
                     aG += pixel.G;
                     aB += pixel.B;
