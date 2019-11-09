@@ -116,14 +116,16 @@ namespace Yugen.Mosaic.Uwp.Services
                     while (tFound == null)
                     {
                         int index = r.Next(TileBmpList.Count);
-                        if (GetDifference(avgsMaster[x, y], TileBmpList[index].color) < threshold)
+                        var difference = GetDifference(avgsMaster[x, y], TileBmpList[index].color);
+                        if (difference < threshold)
                         {
                             tFound = TileBmpList[index];
                         }
                         else
                         {
                             searchCounter++;
-                            if (searchCounter >= TileBmpList.Count) { threshold += 5; }
+                            if (searchCounter >= TileBmpList.Count) 
+                                threshold += 5;
                         }
                     }
 

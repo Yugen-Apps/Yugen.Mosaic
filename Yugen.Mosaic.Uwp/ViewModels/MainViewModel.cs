@@ -159,18 +159,23 @@ namespace Yugen.Mosaic.Uwp
             if (MasterBpmSource == null || tileImageList.Count < 1)
                 return;
 
-            var resizedMasterBmp = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
-            //MosaicService mosaicClass = new MosaicService();
-            //LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMasterBmp, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue); 
-            //OutputBmpSource = mosaicBmp.Output;
-
-            Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
-            NewMosaicService mosaicClass = new NewMosaicService();
-            var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
-            var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            var image = mosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);
-            var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
-            OutputBmpSource = bmp;
+            if (false)
+            {
+                var resizedMasterBmp = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
+                MosaicService mosaicClass = new MosaicService();
+                LockBitmap mosaicBmp = mosaicClass.GenerateMosaic(resizedMasterBmp, outputSize, tileBmpList.ToList(), tileSize, isAdjustHue);
+                OutputBmpSource = mosaicBmp.Output;
+            }
+            else
+            {
+                Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
+                NewMosaicService newMosaicClass = new NewMosaicService();
+                var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
+                var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
+                var image = newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);
+                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
+                OutputBmpSource = bmp;
+            }
 
             IsLoading = false;
         }

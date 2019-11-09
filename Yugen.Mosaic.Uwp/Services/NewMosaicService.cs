@@ -94,6 +94,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize)
         {
             Random r = new Random();
+
             // Don't adjust hue - keep searching for a tile close enough
             for (int x = 0; x < _tX; x++)
             {
@@ -106,14 +107,16 @@ namespace Yugen.Mosaic.Uwp.Services
                     while (tFound == null)
                     {
                         int index = r.Next(_tileList.Count);
-                        if (GetDifference(_avgsMaster[x, y], _tileList[index].Color) < threshold)
+                        var difference = GetDifference(_avgsMaster[x, y], _tileList[index].Color);
+                        if (difference < threshold)
                         {
                             tFound = _tileList[index];
                         }
                         else
                         {
                             searchCounter++;
-                            if (searchCounter >= _tileList.Count) { threshold += 5; }
+                            if (searchCounter >= _tileList.Count) 
+                                threshold += 5;
                         }
                     }
 
@@ -152,10 +155,10 @@ namespace Yugen.Mosaic.Uwp.Services
         public SolidColorBrush GetSolidColorBrush(string hex)
         {
             hex = hex.Replace("#", string.Empty);
-            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
-            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
-            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
-            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
+            byte r = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
+            byte g = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
+            byte b = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
+            byte a = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
             SolidColorBrush myBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
             return myBrush;
         }
