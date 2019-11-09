@@ -18,15 +18,19 @@
 
         <StackPanel>
             <Image x:Name="masterImage"
+                   Source="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
+                   Stretch="Uniform"
                    Height="120"
-                   Width="120"
-                   Source="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}" />
+                   Width="120" />
 
             <ListView x:Name="tileListView"
                       ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="imaging:WriteableBitmap">
-                        <Image Source="{x:Bind}" />
+                        <Image Source="{x:Bind}"
+                               Stretch="Uniform"
+                               Height="100"
+                               Width="100" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -35,10 +39,10 @@
         <StackPanel Grid.Column="1"
                     Background="Gray">
             <Image x:Name="outputImage"
-                   Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}" 
+                   Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
                    Stretch="Uniform"
-                   Width="400"
-                   Height="400"/>
+                   Height="400"
+                   Width="400"/>
         </StackPanel>
 
         <StackPanel Grid.Column="2">
@@ -55,6 +59,10 @@
             <TextBox Header="Output Height"
                      Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
 
+            <CheckBox Content="Adjust Hue"
+                      IsChecked="{x:Bind ViewModel.IsAdjustHue, Mode=TwoWay}" />
+            
+
             <Button Content="Add Master"
                     Click="{x:Bind ViewModel.AddMasterButton_Click}"
                     Margin="2"/>
@@ -65,14 +73,15 @@
 
             <Button Content="Generate"
                     Click="{x:Bind ViewModel.GenerateButton_Click}"
-                    Margin="2"/>
+                    Margin="2" />
 
             <Button Content="Save"
                     Click="{x:Bind ViewModel.SaveButton_Click}"
-                    Margin="2"/>
+                    Margin="2" />
 
-            <CheckBox Content="Adjust Hue"
-                      IsChecked="{x:Bind ViewModel.IsAdjustHue, Mode=TwoWay}" />
+            <Button Content="Reset"
+                    Click="{x:Bind ViewModel.ResetButton_Click}"
+                    Margin="2" />
 
             <ProgressRing Height="40"
                           Width="40"

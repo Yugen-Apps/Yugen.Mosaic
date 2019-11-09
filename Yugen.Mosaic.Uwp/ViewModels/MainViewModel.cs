@@ -154,15 +154,20 @@ namespace Yugen.Mosaic.Uwp
 
             var outputImage = await Generate();
 
-            var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
-            OutputBmpSource = bmp;
+            if (outputImage != null)
+            {
+                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
+                OutputBmpSource = bmp;
+            }
 
             IsLoading = false;
         }
 
         private async Task<Image> Generate()
         {
-            if (MasterBpmSource == null || tileImageList.Count < 1)
+            await Task.Delay(1);
+
+            if (masterImage == null || tileImageList.Count < 1)
                 return null;
 
             Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
@@ -180,6 +185,15 @@ namespace Yugen.Mosaic.Uwp
                 return;
 
             await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
+        }
+
+        public void ResetButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            MasterBpmSource = null;
+            masterImage = null;
+
+            TileBmpList.Clear();
+            tileImageList.Clear();
         }
     }
 }
