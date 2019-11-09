@@ -46,7 +46,6 @@ namespace Yugen.Mosaic.Uwp.Processors
             AverageColor = definition.AverageColor;
         }
 
-
         /// <inheritdoc/>
         public void Apply()
         {
