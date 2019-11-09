@@ -20,7 +20,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _tY;
         private Color[,] _avgsMaster;
 
-        public Image GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, bool isAdjustHue)
+        public Image<Rgba32> GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, bool isAdjustHue)
         {
             _tileSize = tileSize;
             _tX = masterImage.Width / tileSize.Width;
@@ -50,14 +50,12 @@ namespace Yugen.Mosaic.Uwp.Services
             //progressBarValue = 0;
 
             foreach (var image in tileImageList)
-            {
-                YugenColor myColor = new YugenColor();
-
+            {                
                 image.Mutate(x => x.Resize(_tileSize.Width, _tileSize.Height));
-                var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, image.Width, image.Height, myColor);
+                var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, image.Width, image.Height);
                 image.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
 
-                _tileList.Add(new Tile(image, myColor.ToColor));
+                _tileList.Add(new Tile(image, getTileAverageProcessor.MyColor.ClAvg));
 
                 //progressBarValue++;
             }
@@ -119,11 +117,10 @@ namespace Yugen.Mosaic.Uwp.Services
                     {
                         for (int h = 0; h < tileSize.Height; h++)
                         {
-                            YugenColor myColor = new YugenColor();
-                            var getPixelProcessor = new GetPixelProcessor(w, h, myColor);
+                            var getPixelProcessor = new GetPixelProcessor(w, h);
                             adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
 
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = myColor.ToColor;
+                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor.ClAvg;
                         }
                     }
 
@@ -166,11 +163,10 @@ namespace Yugen.Mosaic.Uwp.Services
                     {
                         for (int h = 0; h < tileSize.Height; h++)
                         {
-                            YugenColor myColor = new YugenColor();
-                            var getPixelProcessor = new GetPixelProcessor(w, h, myColor);
+                            var getPixelProcessor = new GetPixelProcessor(w, h);
                             tFound.Image.Mutate(c => c.ApplyProcessor(getPixelProcessor));
 
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = myColor.ToColor;
+                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor.ClAvg;
                         }
                     }
 

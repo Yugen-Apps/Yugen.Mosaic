@@ -1,15 +1,12 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
     public class YugenColor
     {
-        public long R { get; set; }
-        public long G { get; set; }
-        public long B { get; set; }
-
-        public Color ToColor => Color.FromRgb(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
+        public Rgba32 ClAvg { get; set; }
     }
 
     //public async Task RunTasks(WriteableBitmap clone)

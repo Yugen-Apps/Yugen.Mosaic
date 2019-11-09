@@ -68,7 +68,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref outputBmpSource, value); }
         }
 
-        private int outputWidth = 100;
+        private int outputWidth = 1000;
         public int OutputWidth
         {
             get { return outputWidth; }
@@ -79,7 +79,7 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        private int outputHeight = 100;
+        private int outputHeight = 1000;
         public int OutputHeight
         {
             get { return outputHeight; }
@@ -90,7 +90,7 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        private Size outputSize = new Size(100, 100);
+        private Size outputSize = new Size(1000, 1000);
 
         private bool isLoading;
         public bool IsLoading
@@ -164,7 +164,7 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = false;
         }
 
-        private async Task<Image> Generate()
+        private async Task<Image<Rgba32>> Generate()
         {
             await Task.Delay(1);
 

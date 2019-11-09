@@ -126,6 +126,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Tile.cs" />
+    <Compile Include="Processors\PlainColorProcessor.cs" />
     <Compile Include="Processors\AdjustHueProcessor.cs" />
     <Compile Include="Processors\GetPixelProcessor.cs" />
     <Compile Include="Processors\GetTileAverageProcessor.cs" />

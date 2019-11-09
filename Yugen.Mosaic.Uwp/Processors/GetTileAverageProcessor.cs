@@ -3,33 +3,33 @@ using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
+using System;
+using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {
     public sealed class GetTileAverageProcessor : IImageProcessor
     {
-        private int _x;
-        private int _y;
-        private int _width;
-        private int _height;
+        public int X { get; }
+        public int Y { get; }
+        public int Width { get; }
+        public int Height { get; }
 
-        public YugenColor MyColor;
+        public YugenColor MyColor { get; } = new YugenColor();
 
-        public GetTileAverageProcessor(int x, int y, int width, int height, YugenColor myColor)
+        public GetTileAverageProcessor(int x, int y, int width, int height)
         {
-            _x = x;
-            _y = y;
-            _width = width;
-            _height = height;
-
-            MyColor = myColor;
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
         }
 
         /// <inheritdoc/>
         public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Image<TPixel> source, Rectangle sourceRectangle) where TPixel : struct, IPixel<TPixel>
         {
-            return new GetTileAverageProcessor<TPixel>(this, source, sourceRectangle, _x, _y, _width, _height, MyColor);
+            return new GetTileAverageProcessor<TPixel>(this, source, sourceRectangle);
         }
     }
 
@@ -40,12 +40,12 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// </summary>
         private readonly Image<TPixel> Source;
 
-        private int _x;
-        private int _y;
-        private int _width;
-        private int _height;
+        private readonly int _x;
+        private readonly int _y;
+        private readonly int _width;
+        private readonly int _height;
 
-        public YugenColor MyColor;
+        private readonly YugenColor _myColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -53,32 +53,29 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="definition">The <see cref="HlslGaussianBlurProcessor"/> defining the processor parameters</param>
         /// <param name="source">The source <see cref="Image{TPixel}"/> for the current processor instance</param>
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
-        public GetTileAverageProcessor(GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle, int x, int y, int width, int height, YugenColor myColor)
+        public GetTileAverageProcessor(GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
             Source = source;
 
-            _x = x;
-            _y = y;
-            _width = width;
-            _height = height;
+            _x = definition.X;
+            _y = definition.Y;
+            _width = definition.Width;
+            _height = definition.Height;
 
-            MyColor = myColor;
+            _myColor = definition.MyColor;
         }
 
 
         /// <inheritdoc/>
         public void Apply()
         {
-            int width = Source.Width;
-            Image<TPixel> source = Source; // Avoid capturing this
-
             long aR = 0;
             long aG = 0;
             long aB = 0;
 
-            for (int h = _y; h < _y + _height; h++)
+            Parallel.For(_y, _y+_height, h =>
             {
-                var rowSpan = source.GetPixelRowSpan(h);
+                var rowSpan = Source.GetPixelRowSpan(h);
 
                 for (int w = _x; w < _x + _width; w++)
                 {
@@ -89,15 +86,13 @@ namespace Yugen.Mosaic.Uwp.Processors
                     aG += pixel.G;
                     aB += pixel.B;
                 }
-            }
+            });
 
-            aR /= width * _height;
-            aG /= width * _height;
-            aB /= width * _height;
+            aR /= _width * _height;
+            aG /= _width * _height;
+            aB /= _width * _height;
 
-            MyColor.R = aR;
-            MyColor.G = aG;
-            MyColor.B = aB;
+            _myColor.ClAvg = new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB), 255);
         }
 
         /// <inheritdoc/>
