@@ -150,10 +150,10 @@ namespace Yugen.Mosaic.Uwp
 
         public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            IsLoading = true;
-
             if (MasterBpmSource == null || tileImageList.Count < 1)
                 return;
+
+            IsLoading = true;
 
             OutputBmpSource = await Generate();
 
