@@ -24,7 +24,8 @@
                    Width="120" />
 
             <ListView x:Name="tileListView"
-                      ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}">
+                      ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}"
+                      Height="400">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="imaging:WriteableBitmap">
                         <Image Source="{x:Bind}"
