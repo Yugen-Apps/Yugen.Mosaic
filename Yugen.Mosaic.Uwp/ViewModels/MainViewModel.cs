@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
@@ -154,15 +155,19 @@ namespace Yugen.Mosaic.Uwp
             if (MasterBpmSource == null || tileImageList.Count < 1)
                 return;
 
+            OutputBmpSource = await Generate();
+
+            IsLoading = false;
+        }
+
+        private async Task<WriteableBitmap> Generate()
+        {
             Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
             NewMosaicService newMosaicClass = new NewMosaicService();
             var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
             var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            var image = newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);
-            var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
-            OutputBmpSource = bmp;
-
-            IsLoading = false;
+            var outputImage = newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);
+            return await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
         }
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -174,8 +179,5 @@ namespace Yugen.Mosaic.Uwp
 
             await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
         }
-
-
-
     }
 }
