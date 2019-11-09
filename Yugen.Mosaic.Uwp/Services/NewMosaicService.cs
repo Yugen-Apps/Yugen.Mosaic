@@ -130,7 +130,6 @@ namespace Yugen.Mosaic.Uwp.Services
                             tFound.Image.Mutate(c => c.ApplyProcessor(getPixelProcessor));
 
                             outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = myColor.ToColor;
-                            //outputImage.SetPixel(x * tileSize.Width + w, y * tileSize.Height + h, myColor);
                         }
                     }
 

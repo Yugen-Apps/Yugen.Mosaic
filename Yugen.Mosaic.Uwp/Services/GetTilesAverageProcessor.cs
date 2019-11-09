@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
+using System;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Models;
 
@@ -75,17 +76,40 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 for (int x = 0; x < _tX; x++)
                 {
-                    Rgba32 pixel = new Rgba32();
-                    rowSpan[x].ToRgba32(ref pixel);
+                    //MyColor myColor = new MyColor();
+                    //var getTileAverageProcessor = new GetTileAverageProcessor(x * _tileSize.Width, y * _tileSize.Width, _tileSize.Width, _tileSize.Height, myColor);
+                    //Source.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
 
-                    MyColor myColor = new MyColor();
-                    var getTileAverageProcessor = new GetTileAverageProcessor(x * _tileSize.Width, y * _tileSize.Width, _tileSize.Width, _tileSize.Height, myColor);
-                    Source.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
-
-                    AvgsMaster[x, y] = myColor.ToColor;
+                    AvgsMaster[x, y] = GetTileAverage(source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height); ;
                 }
 
             });
+        }
+
+        private Color GetTileAverage(Image<TPixel> source, int x, int y, int width, int height)
+        {
+            long aR = 0;
+            long aG = 0;
+            long aB = 0;
+
+            for (int w = x; w < x + width; w++)
+            {
+                for (int h = y; h < y + height; h++)
+                {
+                    Rgba32 pixel = new Rgba32();
+                    source[w,h].ToRgba32(ref pixel);
+                    
+                    aR += pixel.R;
+                    aG += pixel.G;
+                    aB += pixel.B;
+                }
+            }
+
+            aR /= width * height;
+            aG /= width * height;
+            aB /= width * height;
+
+            return Color.FromRgb(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
 
 

@@ -36,7 +36,9 @@
                     Background="Gray">
             <Image x:Name="outputImage"
                    Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}" 
-                   Stretch="None"/>
+                   Stretch="Uniform"
+                   Width="400"
+                   Height="400"/>
         </StackPanel>
 
         <StackPanel Grid.Column="2">
