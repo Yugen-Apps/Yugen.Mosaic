@@ -10,7 +10,7 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class MosaicService
     {
-        public List<Tile> TileBmpList { get; set; } = new List<Tile>();
+        private List<Tile> TileBmpList { get; set; } = new List<Tile>();
 
         private int tileSizeWidth;
         private int tileSizeHeight;
