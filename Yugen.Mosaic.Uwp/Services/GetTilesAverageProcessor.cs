@@ -5,6 +5,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
 using System.Threading.Tasks;
+using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -77,9 +78,11 @@ namespace Yugen.Mosaic.Uwp.Services
                     Rgba32 pixel = new Rgba32();
                     rowSpan[x].ToRgba32(ref pixel);
 
-                    var getTileAverageProcessor = new GetTileAverageProcessor(x * _tileSize.Width, y * _tileSize.Width, _tileSize.Width, _tileSize.Height, AvgsMaster, x, y);
+                    MyColor myColor = new MyColor();
+                    var getTileAverageProcessor = new GetTileAverageProcessor(x * _tileSize.Width, y * _tileSize.Width, _tileSize.Width, _tileSize.Height, myColor);
                     Source.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
-                    //AvgsMaster[x, y] = getTileAverageProcessor.Color;
+
+                    AvgsMaster[x, y] = myColor.ToColor;
                 }
 
             });

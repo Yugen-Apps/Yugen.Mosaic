@@ -156,7 +156,7 @@ namespace Yugen.Mosaic.Uwp
         {
             IsLoading = true;
 
-            if (MasterBpmSource == null)
+            if (MasterBpmSource == null || tileImageList.Count < 1)
                 return;
 
             var resizedMasterBmp = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
@@ -185,27 +185,7 @@ namespace Yugen.Mosaic.Uwp
             await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
         }
 
-
-        //Parallel.For(0, 10, i =>
-        //{
-        //    System.Diagnostics.Debug.WriteLine($"{i} {clone.PixelHeight}");
-        //});
-
-        //public async Task RunTasks(WriteableBitmap clone)
-        //{
-        //    var tasks = new List<Task>();
-
-        //    tasks.Add(Task.Run(() => DoWork(400, 1, clone)));
-        //    tasks.Add(Task.Run(() => DoWork(200, 2, clone)));
-        //    tasks.Add(Task.Run(() => DoWork(300, 3, clone)));
-
-        //    await Task.WhenAll(tasks);
-        //}
-
-        //public async Task DoWork(int delay, int n, WriteableBitmap masterImageSource)
-        //{
-        //    await Task.Delay(delay);
-        //    System.Diagnostics.Debug.WriteLine($"{n} {masterImageSource.PixelHeight}");
-        //}
+        
+ 
     }
 }

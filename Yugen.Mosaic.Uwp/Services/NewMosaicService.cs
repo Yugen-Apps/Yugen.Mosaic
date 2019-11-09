@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -62,12 +60,10 @@ namespace Yugen.Mosaic.Uwp.Services
                 var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, image.Width, image.Height, myColor);
                 image.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
 
-                var color = Color.FromRgb(Convert.ToByte(myColor.R), Convert.ToByte(myColor.G), Convert.ToByte(myColor.B)); ;
-                TileList.Add(new NewTile(image, color));
+                TileList.Add(new NewTile(image, myColor.ToColor));
 
                 //progressBarValue++;
             }
         }
-
     }
 }

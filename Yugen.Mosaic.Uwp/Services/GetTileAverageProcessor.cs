@@ -14,24 +14,6 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _y;
         private int _width;
         private int _height;
-        
-        public Color[,] AvgsMaster;
-        private int _avgX;
-        private int _avgY;
-
-
-        public GetTileAverageProcessor(int x, int y, int width, int height, Color[,] avgsMaster, int avgX, int avgY)
-        {
-            _x = x;
-            _y = y;
-            _width = width;
-            _height = height;
-
-            AvgsMaster = avgsMaster;
-            _avgX = avgX;
-            _avgY = avgY;
-        }
-
 
         public MyColor MyColor;
 
@@ -48,7 +30,7 @@ namespace Yugen.Mosaic.Uwp.Services
         /// <inheritdoc/>
         public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Image<TPixel> source, Rectangle sourceRectangle) where TPixel : struct, IPixel<TPixel>
         {
-            return new GetTileAverageProcessor<TPixel>(this, source, sourceRectangle, _x, _y, _width, _height, AvgsMaster, _avgX, _avgY, MyColor);
+            return new GetTileAverageProcessor<TPixel>(this, source, sourceRectangle, _x, _y, _width, _height, MyColor);
         }
     }
 
@@ -64,10 +46,6 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _width;
         private int _height;
 
-        public Color[,] AvgsMaster;
-        private int _avgX;
-        private int _avgY;
-
         public MyColor MyColor;
 
         /// <summary>
@@ -76,7 +54,7 @@ namespace Yugen.Mosaic.Uwp.Services
         /// <param name="definition">The <see cref="HlslGaussianBlurProcessor"/> defining the processor parameters</param>
         /// <param name="source">The source <see cref="Image{TPixel}"/> for the current processor instance</param>
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
-        public GetTileAverageProcessor(GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle, int x, int y, int width, int height, Color[,] avgsMaster, int avgX, int avgY, MyColor myColor)
+        public GetTileAverageProcessor(GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle, int x, int y, int width, int height, MyColor myColor)
         {
             Source = source;
 
@@ -84,10 +62,6 @@ namespace Yugen.Mosaic.Uwp.Services
             _y = y;
             _width = width;
             _height = height;
-
-            AvgsMaster = avgsMaster;
-            _avgX = avgX;
-            _avgY = avgY;
 
             MyColor = myColor;
         }
@@ -122,16 +96,9 @@ namespace Yugen.Mosaic.Uwp.Services
             aG /= width * _height;
             aB /= width * _height;
 
-            if (AvgsMaster == null)
-            {
-                MyColor.R = aR;
-                MyColor.G = aG;
-                MyColor.B = aB;
-            }
-            else
-            {
-                AvgsMaster[_avgX, _avgY] = Color.FromRgb(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB)); ;
-            }
+            MyColor.R = aR;
+            MyColor.G = aG;
+            MyColor.B = aB;
         }
 
         /// <inheritdoc/>
