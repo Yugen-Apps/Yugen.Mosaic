@@ -152,9 +152,12 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        public void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             IsLoading = true;
+
+            if (MasterBpmSource == null)
+                return;
 
             var resizedMasterBmp = MasterBpmSource.Resize(outputWidth, outputHeight, WriteableBitmapExtensions.Interpolation.Bilinear);
             //MosaicService mosaicClass = new MosaicService();
@@ -165,9 +168,9 @@ namespace Yugen.Mosaic.Uwp
             NewMosaicService mosaicClass = new NewMosaicService();
             var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
             var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            mosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileBmpList.ToList(), newTileSize, isAdjustHue);
-
-            OutputBmpSource = resizedMasterBmp;
+            var image = mosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);
+            var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
+            OutputBmpSource = bmp;
 
             IsLoading = false;
         }

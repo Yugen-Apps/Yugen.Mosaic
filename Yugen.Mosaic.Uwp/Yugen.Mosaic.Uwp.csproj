@@ -127,6 +127,10 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BenchmarkHelper.cs" />
+    <Compile Include="Models\NewTile.cs" />
+    <Compile Include="Services\GetTileAverageProcessor.cs" />
+    <Compile Include="Services\GetTilesAverageProcessor.cs" />
+    <Compile Include="Models\MyColor.cs" />
     <Compile Include="Services\NewMosaicService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Services\MosaicService.cs" />

@@ -32,7 +32,8 @@
             </ListView>
         </StackPanel>
 
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="1"
+                    Background="Gray">
             <Image x:Name="outputImage"
                    Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}" 
                    Stretch="None"/>
