@@ -110,9 +110,8 @@ namespace Yugen.Mosaic.Uwp.Services
                     tileQueue.Add(tFound);
 
                     // Adjust the hue
-                    YugenColor targetColor = new YugenColor();
                     Image adjustedImage =  new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
-                    var adjustHueProcessor = new AdjustHueProcessor(_avgsMaster[x, y], targetColor);
+                    var adjustHueProcessor = new AdjustHueProcessor(_avgsMaster[x, y]);
                     adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
 
                     // Apply found tile to section
