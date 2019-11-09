@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
@@ -105,8 +106,8 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref isAdjustHue, value); }
         }
 
-        private Image masterImage;
-        private List<Image> tileImageList = new List<Image>();
+        private Image<Rgba32> masterImage;
+        private List<Image<Rgba32>> tileImageList = new List<Image<Rgba32>>();
 
 
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -118,7 +119,7 @@ namespace Yugen.Mosaic.Uwp
             using (var inputStream = await masterFile.OpenReadAsync())
             using (var stream = inputStream.AsStreamForRead())
             {
-                masterImage = Image.Load(stream);
+                masterImage = Image.Load<Rgba32>(stream);
                 //MasterBpmSource = await BitmapFactory.FromStream(stream);
             }
 
@@ -133,11 +134,11 @@ namespace Yugen.Mosaic.Uwp
 
             foreach (var file in files)
             {
-                Image image;
+                Image<Rgba32> image;
                 using (var inputStream = await file.OpenReadAsync())
                 using (var stream = inputStream.AsStreamForRead())
                 {
-                    image = Image.Load(stream);
+                    image = Image.Load<Rgba32>(stream);
                     tileImageList.Add(image);
                     //var bmp = await BitmapFactory.FromStream(stream);
                     //tileBmpList.Add(bmp);
@@ -170,7 +171,7 @@ namespace Yugen.Mosaic.Uwp
             if (masterImage == null || tileImageList.Count < 1)
                 return null;
 
-            Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
+            Image<Rgba32> resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
             MosaicService newMosaicClass = new MosaicService();
             var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
             var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);

@@ -20,7 +20,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _tY;
         private Color[,] _avgsMaster;
 
-        public Image GenerateMosaic(Image masterImage, Size outputSize, List<Image> tileImageList, Size tileSize, bool isAdjustHue)
+        public Image GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, bool isAdjustHue)
         {
             _tileSize = tileSize;
             _tX = masterImage.Width / tileSize.Width;
@@ -38,13 +38,13 @@ namespace Yugen.Mosaic.Uwp.Services
             return outputImage;
         }
         
-        private void GetTilesAverage(Image masterImage)
+        private void GetTilesAverage(Image<Rgba32> masterImage)
         {
             var getTilesAverageProcessor = new GetTilesAverageProcessor(_tX, _tY, _tileSize, _avgsMaster);
             masterImage.Mutate(c => c.ApplyProcessor(getTilesAverageProcessor));
         }
 
-        private void LoadTilesAndResize(List<Image> tileImageList)
+        private void LoadTilesAndResize(List<Image<Rgba32>> tileImageList)
         {
             //progressBarMaximum = tileBmpList.Count;
             //progressBarValue = 0;
@@ -110,10 +110,10 @@ namespace Yugen.Mosaic.Uwp.Services
                     tileQueue.Add(tFound);
 
                     // Adjust the hue
-                    Image adjustedImage =  new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
-                    var adjustHueProcessor = new AdjustHueProcessor(_avgsMaster[x, y]);
+                    Image<Rgba32> adjustedImage =  new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
+                    var adjustHueProcessor = new AdjustHueProcessor(tFound.Image, _avgsMaster[x, y]);
                     adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
-
+                    
                     // Apply found tile to section
                     for (int w = 0; w < tileSize.Width; w++)
                     {
