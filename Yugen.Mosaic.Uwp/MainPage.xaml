@@ -32,10 +32,13 @@
             </ListView>
         </StackPanel>
 
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="1"
+                    Background="Gray">
             <Image x:Name="outputImage"
                    Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}" 
-                   Stretch="None"/>
+                   Stretch="Uniform"
+                   Width="400"
+                   Height="400"/>
         </StackPanel>
 
         <StackPanel Grid.Column="2">
@@ -53,16 +56,23 @@
                      Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
 
             <Button Content="Add Master"
-                    Click="{x:Bind ViewModel.AddMasterButton_Click}" />
+                    Click="{x:Bind ViewModel.AddMasterButton_Click}"
+                    Margin="2"/>
 
             <Button Content="Add Tiles"
-                    Click="{x:Bind ViewModel.AddTilesButton_Click}" />
+                    Click="{x:Bind ViewModel.AddTilesButton_Click}"
+                    Margin="2"/>
 
             <Button Content="Generate"
-                    Click="{x:Bind ViewModel.GenerateButton_Click}" />
+                    Click="{x:Bind ViewModel.GenerateButton_Click}"
+                    Margin="2"/>
 
             <Button Content="Save"
-                    Click="{x:Bind ViewModel.SaveButton_Click}" />
+                    Click="{x:Bind ViewModel.SaveButton_Click}"
+                    Margin="2"/>
+
+            <CheckBox Content="Adjust Hue"
+                      IsChecked="{x:Bind ViewModel.IsAdjustHue, Mode=TwoWay}" />
 
             <ProgressRing Height="40"
                           Width="40"

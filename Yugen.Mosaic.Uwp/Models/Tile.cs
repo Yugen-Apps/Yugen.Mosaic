@@ -1,17 +1,16 @@
-﻿using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI;
+﻿using SixLabors.ImageSharp;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
     public class Tile
     {
-        public WriteableBitmap bitmap;
-        public Color color;
+        public Image Image;
+        public Color Color;
 
-        public Tile(WriteableBitmap bSource, Color cSource)
+        public Tile(Image image, Color color)
         {
-            bitmap = bSource;
-            color = cSource;
+            Image = image;
+            Color = color;
         }
     }
 }
