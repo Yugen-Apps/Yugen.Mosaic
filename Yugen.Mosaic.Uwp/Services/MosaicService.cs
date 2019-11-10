@@ -77,57 +77,8 @@ namespace Yugen.Mosaic.Uwp.Services
                     SearchAndReplaceAdjustHue(outputImage, tileSize);
                     break;
                 case 2:
+                    PlainColor(outputImage, tileSize);
                     break;
-            }
-        }
-
-        private void SearchAndReplaceAdjustHue(Image<Rgba32> outputImage, Size tileSize)
-        {
-            Random r = new Random();
-            // Adjust hue - get the first (random) tile found and adjust its colours
-            // to suit the average
-            List<Tile> tileQueue = new List<Tile>();
-            int maxQueueLength = Math.Min(1000, Math.Max(0, _tileList.Count - 50));
-
-            for (int x = 0; x < _tX; x++)
-            {
-                for (int y = 0; y < _tY; y++)
-                {
-                    int index = 0;
-                    // Check if it's the same as the last (X)?
-                    if (tileQueue.Count > 1)
-                    {
-                        while (tileQueue.Contains(_tileList[index]))
-                        {
-                            index = r.Next(_tileList.Count);
-                        }
-                    }
-
-                    // Add to the 'queue'
-                    Tile tFound = _tileList[index];
-                    if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0) 
-                        tileQueue.RemoveAt(0);
-                    tileQueue.Add(tFound);
-
-                    // Adjust the hue
-                    Image<Rgba32> adjustedImage =  new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
-                    var adjustHueProcessor = new AdjustHueProcessor(tFound.Image, _avgsMaster[x, y]);
-                    adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
-                    
-                    // Apply found tile to section
-                    for (int w = 0; w < tileSize.Width; w++)
-                    {
-                        for (int h = 0; h < tileSize.Height; h++)
-                        {
-                            var getPixelProcessor = new GetPixelProcessor(w, h);
-                            adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
-
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
-                        }
-                    }
-
-                    //progressBarValue++;
-                }
             }
         }
 
@@ -155,7 +106,7 @@ namespace Yugen.Mosaic.Uwp.Services
                         else
                         {
                             searchCounter++;
-                            if (searchCounter >= _tileList.Count) 
+                            if (searchCounter >= _tileList.Count)
                                 threshold += 5;
                         }
                     }
@@ -177,7 +128,107 @@ namespace Yugen.Mosaic.Uwp.Services
             }
         }
 
-        public int GetDifference(Rgba32 source, Rgba32 target)
+        private void SearchAndReplaceAdjustHue(Image<Rgba32> outputImage, Size tileSize)
+        {
+            Random r = new Random();
+            // Adjust hue - get the first (random) tile found and adjust its colours
+            // to suit the average
+            List<Tile> tileQueue = new List<Tile>();
+            int maxQueueLength = Math.Min(1000, Math.Max(0, _tileList.Count - 50));
+
+            for (int x = 0; x < _tX; x++)
+            {
+                for (int y = 0; y < _tY; y++)
+                {
+                    int index = 0;
+                    // Check if it's the same as the last (X)?
+                    if (tileQueue.Count > 1)
+                    {
+                        while (tileQueue.Contains(_tileList[index]))
+                        {
+                            index = r.Next(_tileList.Count);
+                        }
+                    }
+
+                    // Add to the 'queue'
+                    Tile tFound = _tileList[index];
+                    if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
+                        tileQueue.RemoveAt(0);
+                    tileQueue.Add(tFound);
+
+                    // Adjust the hue
+                    Image<Rgba32> adjustedImage = new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
+                    var adjustHueProcessor = new AdjustHueProcessor(tFound.Image, _avgsMaster[x, y]);
+                    adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
+
+                    // Apply found tile to section
+                    for (int w = 0; w < tileSize.Width; w++)
+                    {
+                        for (int h = 0; h < tileSize.Height; h++)
+                        {
+                            var getPixelProcessor = new GetPixelProcessor(w, h);
+                            adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
+
+                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
+                        }
+                    }
+
+                    //progressBarValue++;
+                }
+            }
+        }
+
+        private void PlainColor(Image<Rgba32> outputImage, Size tileSize)
+        {
+            Random r = new Random();
+            // Adjust hue - get the first (random) tile found and adjust its colours
+            // to suit the average
+            List<Tile> tileQueue = new List<Tile>();
+            int maxQueueLength = Math.Min(1000, Math.Max(0, _tileList.Count - 50));
+
+            for (int x = 0; x < _tX; x++)
+            {
+                for (int y = 0; y < _tY; y++)
+                {
+                    int index = 0;
+                    // Check if it's the same as the last (X)?
+                    if (tileQueue.Count > 1)
+                    {
+                        while (tileQueue.Contains(_tileList[index]))
+                        {
+                            index = r.Next(_tileList.Count);
+                        }
+                    }
+
+                    // Add to the 'queue'
+                    Tile tFound = _tileList[index];
+                    if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
+                        tileQueue.RemoveAt(0);
+                    tileQueue.Add(tFound);
+
+                    // Adjust the hue
+                    Image<Rgba32> adjustedImage = new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
+                    var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
+                    adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
+
+                    // Apply found tile to section
+                    for (int w = 0; w < tileSize.Width; w++)
+                    {
+                        for (int h = 0; h < tileSize.Height; h++)
+                        {
+                            var getPixelProcessor = new GetPixelProcessor(w, h);
+                            adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
+
+                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
+                        }
+                    }
+
+                    //progressBarValue++;
+                }
+            }
+        }
+
+        private int GetDifference(Rgba32 source, Rgba32 target)
         {
             int dR = Math.Abs(source.R - target.R);
             int dG = Math.Abs(source.G - target.G);
