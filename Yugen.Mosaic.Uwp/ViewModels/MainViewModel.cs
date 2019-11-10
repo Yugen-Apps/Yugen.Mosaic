@@ -54,8 +54,8 @@ namespace Yugen.Mosaic.Uwp
 
         private Size tileSize = new Size(50, 50);
 
-        private ObservableCollection<WriteableBitmap> tileBmpList = new ObservableCollection<WriteableBitmap>();
-        public ObservableCollection<WriteableBitmap> TileBmpList
+        private ObservableCollection<string> tileBmpList = new ObservableCollection<string>();
+        public ObservableCollection<string> TileBmpList
         {
             get { return tileBmpList; }
             set { Set(ref tileBmpList, value); }
@@ -137,7 +137,8 @@ namespace Yugen.Mosaic.Uwp
                 //MasterBpmSource = await BitmapFactory.FromStream(stream);
             }
 
-            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(masterImage);
+            var thumbnail = masterImage.Clone(x => x.Resize(400, 400));
+            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(thumbnail);
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -158,8 +159,8 @@ namespace Yugen.Mosaic.Uwp
                     //tileBmpList.Add(bmp);
                 }
 
-                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
-                tileBmpList.Add(bmp);
+                //var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
+                tileBmpList.Add(file.Name);
             }
         }
 
