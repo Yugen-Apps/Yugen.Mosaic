@@ -1,8 +1,10 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
 using System;
+using System.Threading.Tasks;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {
@@ -53,13 +55,14 @@ namespace Yugen.Mosaic.Uwp.Processors
             //int width = Source.Width;
             //Image<TPixel> source = Source;
 
-            for (int h = 0; h < _inputImage.Height; h++)
+            Parallel.For(0, _inputImage.Height, h =>
             {
+                var rowSpan = _inputImage.GetPixelRowSpan(h);
+
                 for (int w = 0; w < _inputImage.Width; w++)
                 {
-                    // Get current output color
                     Rgba32 pixel = new Rgba32();
-                    _inputImage[w, h].ToRgba32(ref pixel);
+                    rowSpan[w].ToRgba32(ref pixel);
 
                     int R = Math.Min(255, Math.Max(0, (pixel.R + _averageColor.R) / 2));
                     int G = Math.Min(255, Math.Max(0, (pixel.G + _averageColor.G) / 2));
@@ -71,7 +74,7 @@ namespace Yugen.Mosaic.Uwp.Processors
                     pixelColor.FromRgba32(clAvg);
                     Source[w, h] = pixelColor;
                 }
-            }
+            });
         }
 
         /// <inheritdoc/>

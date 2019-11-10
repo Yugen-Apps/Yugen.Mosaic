@@ -5,7 +5,6 @@ using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
 using System;
 using System.Threading.Tasks;
-using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {

@@ -2,7 +2,6 @@
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
-using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {

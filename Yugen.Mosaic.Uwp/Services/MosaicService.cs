@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
+using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml.Media.Imaging;
-using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Processors;
 
