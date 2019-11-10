@@ -19,7 +19,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _tX;
         private int _tY;
         private Color[,] _avgsMaster;
-
+        
         public Image<Rgba32> GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, bool isAdjustHue)
         {
             _tileSize = tileSize;
@@ -55,7 +55,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, image.Width, image.Height);
                 image.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
 
-                _tileList.Add(new Tile(image, getTileAverageProcessor.MyColor.ClAvg));
+                _tileList.Add(new Tile(image, getTileAverageProcessor.MyColor[0]));
 
                 //progressBarValue++;
             }
@@ -120,7 +120,7 @@ namespace Yugen.Mosaic.Uwp.Services
                             var getPixelProcessor = new GetPixelProcessor(w, h);
                             adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
 
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor.ClAvg;
+                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
                         }
                     }
 
@@ -166,7 +166,7 @@ namespace Yugen.Mosaic.Uwp.Services
                             var getPixelProcessor = new GetPixelProcessor(w, h);
                             tFound.Image.Mutate(c => c.ApplyProcessor(getPixelProcessor));
 
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor.ClAvg;
+                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
                         }
                     }
 

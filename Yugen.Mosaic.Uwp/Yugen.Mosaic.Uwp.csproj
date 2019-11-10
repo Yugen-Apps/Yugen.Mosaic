@@ -131,7 +131,6 @@
     <Compile Include="Processors\GetPixelProcessor.cs" />
     <Compile Include="Processors\GetTileAverageProcessor.cs" />
     <Compile Include="Processors\GetTilesAverageProcessor.cs" />
-    <Compile Include="Models\YugenColor.cs" />
     <Compile Include="Services\MosaicService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

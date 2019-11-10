@@ -16,7 +16,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         public int Width { get; }
         public int Height { get; }
 
-        public YugenColor MyColor { get; } = new YugenColor();
+        public Rgba32[] MyColor { get; } = new Rgba32[1];
 
         public GetTileAverageProcessor(int x, int y, int width, int height)
         {
@@ -45,7 +45,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _width;
         private readonly int _height;
 
-        private readonly YugenColor _myColor;
+        private readonly Rgba32[] _myColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -92,7 +92,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             aG /= _width * _height;
             aB /= _width * _height;
 
-            _myColor.ClAvg = new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB), 255);
+            _myColor[0] = Color.FromRgba(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB), 255);
         }
 
         /// <inheritdoc/>

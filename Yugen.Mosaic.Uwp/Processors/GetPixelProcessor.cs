@@ -10,8 +10,8 @@ namespace Yugen.Mosaic.Uwp.Processors
     {
         public int X { get; }
         public int Y { get; }
-
-        public YugenColor MyColor { get; } = new YugenColor();
+        
+        public Rgba32[] MyColor { get; } = new Rgba32[1];
 
         public GetPixelProcessor(int x, int y)
         {
@@ -36,7 +36,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _x;
         private readonly int _y;
 
-        private readonly YugenColor _myColor;
+        private readonly Rgba32[] _myColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -64,7 +64,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             Rgba32 pixel = new Rgba32();
             source[_x, _y].ToRgba32(ref pixel);
 
-            _myColor.ClAvg = pixel;
+            _myColor[0] = pixel;
         }
 
         /// <inheritdoc/>

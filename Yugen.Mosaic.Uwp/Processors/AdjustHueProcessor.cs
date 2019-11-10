@@ -77,9 +77,9 @@ namespace Yugen.Mosaic.Uwp.Processors
                     //Color clAvg = Color.FromRgba(255, Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
                     Rgba32 clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B), 255);
                     
-                    TPixel a = new TPixel();
-                    a.FromRgba32(clAvg);
-                    Source[w, h] = a;
+                    TPixel pixelColor = new TPixel();
+                    pixelColor.FromRgba32(clAvg);
+                    Source[w, h] = pixelColor;
                 }
             }
         }
