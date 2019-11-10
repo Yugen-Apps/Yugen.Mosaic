@@ -12,9 +12,9 @@ namespace Yugen.Mosaic.Uwp.Processors
 {
     public sealed class PlainColorProcessor : IImageProcessor
     {
-        public Color AverageColor { get; }
+        public Rgba32 AverageColor { get; }
 
-        public PlainColorProcessor(Color averageColor)
+        public PlainColorProcessor(Rgba32 averageColor)
         {
             AverageColor = averageColor;
         }
@@ -33,7 +33,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// </summary>
         private readonly Image<TPixel> Source;
 
-        private readonly Color AverageColor;
+        private readonly Rgba32 AverageColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlainColorProcessor"/> class
@@ -52,11 +52,13 @@ namespace Yugen.Mosaic.Uwp.Processors
         {
             int width = Source.Width;
             Image<TPixel> source = Source;
-            RgbaVector averageColorVector = AverageColor.ToPixel<RgbaVector>();
+            //RgbaVector averageColorVector = AverageColor.ToPixel<RgbaVector>();
+
+            var averageColor4 = AverageColor.ToVector4(); //var b = AverageColor.ToScaledVector4();
 
             Parallel.For(0, source.Height, y =>
             {
-                Vector4 averageColor4 = Unsafe.As<RgbaVector, Vector4>(ref averageColorVector);
+                //Vector4 averageColor4 = Unsafe.As<RgbaVector, Vector4>(ref averageColorVector);
                 ref TPixel r0 = ref source.GetPixelRowSpan(y).GetPinnableReference();
 
                 for (int x = 0; x < width; x++)

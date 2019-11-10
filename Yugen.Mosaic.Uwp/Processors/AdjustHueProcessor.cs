@@ -9,9 +9,9 @@ namespace Yugen.Mosaic.Uwp.Processors
     public sealed class AdjustHueProcessor : IImageProcessor
     {
         public Image<Rgba32> InputImage { get; }
-        public Color AverageColor { get; }
+        public Rgba32 AverageColor { get; }
 
-        public AdjustHueProcessor(Image<Rgba32> inputImage, Color averageColor)
+        public AdjustHueProcessor(Image<Rgba32> inputImage, Rgba32 averageColor)
         {
             InputImage = inputImage;
             AverageColor = averageColor;
@@ -32,7 +32,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly Image<TPixel> Source;
 
         private readonly Image<Rgba32> _inputImage;
-        private readonly Color _averageColor;
+        private readonly Rgba32 _averageColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdjustHueProcessor"/> class
@@ -53,30 +53,20 @@ namespace Yugen.Mosaic.Uwp.Processors
             //int width = Source.Width;
             //Image<TPixel> source = Source;
 
-            Rgba32 targetColor = _averageColor.ToPixel<Rgba32>();
-            
             for (int h = 0; h < _inputImage.Height; h++)
             {
                 for (int w = 0; w < _inputImage.Width; w++)
                 {
-
                     // Get current output color
-                    //var clSource = bSource.GetPixel(w, h);
-                    //Rgba32 colorSource = new Rgba32();
-                    //source[w, h].ToRgba32(ref colorSource);
-
-
                     Rgba32 pixel = new Rgba32();
                     _inputImage[w, h].ToRgba32(ref pixel);
 
+                    int R = Math.Min(255, Math.Max(0, (pixel.R + _averageColor.R) / 2));
+                    int G = Math.Min(255, Math.Max(0, (pixel.G + _averageColor.G) / 2));
+                    int B = Math.Min(255, Math.Max(0, (pixel.B + _averageColor.B) / 2));
 
-                    int R = Math.Min(255, Math.Max(0, (pixel.R + targetColor.R) / 2));
-                    int G = Math.Min(255, Math.Max(0, (pixel.G + targetColor.G) / 2));
-                    int B = Math.Min(255, Math.Max(0, (pixel.B + targetColor.B) / 2));
+                    Rgba32 clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
 
-                    //Color clAvg = Color.FromRgba(255, Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
-                    Rgba32 clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B), 255);
-                    
                     TPixel pixelColor = new TPixel();
                     pixelColor.FromRgba32(clAvg);
                     Source[w, h] = pixelColor;

@@ -64,8 +64,7 @@ namespace Yugen.Mosaic.Uwp.Processors
 
             _myColor = definition.MyColor;
         }
-
-
+        
         /// <inheritdoc/>
         public void Apply()
         {

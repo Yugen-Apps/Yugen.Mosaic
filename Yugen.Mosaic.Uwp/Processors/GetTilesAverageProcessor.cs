@@ -14,9 +14,9 @@ namespace Yugen.Mosaic.Uwp.Processors
         public int TY { get; }
         public Size TileSize { get; }
 
-        public Color[,] AvgsMaster { get; }
+        public Rgba32[,] AvgsMaster { get; }
 
-        public GetTilesAverageProcessor(int tX, int tY, Size tileSize, Color[,] avgsMaster)
+        public GetTilesAverageProcessor(int tX, int tY, Size tileSize, Rgba32[,] avgsMaster)
         {
             TX = tX;
             TY = tY;
@@ -43,7 +43,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _tY;
         private Size _tileSize;
 
-        private Color[,] _avgsMaster;
+        private Rgba32[,] _avgsMaster;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class

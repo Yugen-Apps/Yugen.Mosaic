@@ -16,6 +16,12 @@ namespace Yugen.Mosaic.Uwp.Models
     }
 }
 
+//Rgba32 targetColor = _averageColor.ToPixel<Rgba32>();
+
+//Color clAvg = Color.FromRgba(255, Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
+//Rgba32 clAvg = Color.FromRgba(255, Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
+//Rgba32 clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B), 255);
+
 //public async Task RunTasks(WriteableBitmap clone)
 //{
 //    var tasks = new List<Task>();

@@ -53,16 +53,12 @@ namespace Yugen.Mosaic.Uwp.Processors
 
             _myColor = definition.MyColor;
         }
-
-
+        
         /// <inheritdoc/>
         public void Apply()
         {
-            int width = Source.Width;
-            Image<TPixel> source = Source; // Avoid capturing this
-
             Rgba32 pixel = new Rgba32();
-            source[_x, _y].ToRgba32(ref pixel);
+            Source[_x, _y].ToRgba32(ref pixel);
 
             _myColor[0] = pixel;
         }

@@ -18,15 +18,15 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private int _tX;
         private int _tY;
-        private Color[,] _avgsMaster;
+        private Rgba32[,] _avgsMaster;
         
         public Image<Rgba32> GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, bool isAdjustHue)
         {
             _tileSize = tileSize;
             _tX = masterImage.Width / tileSize.Width;
             _tY = masterImage.Height / tileSize.Height;
-            _avgsMaster = new Color[_tX, _tY];
-
+            _avgsMaster = new Rgba32[_tX, _tY];
+            
             GetTilesAverage(masterImage);
 
             var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
@@ -175,14 +175,11 @@ namespace Yugen.Mosaic.Uwp.Services
             }
         }
 
-        public int GetDifference(Color source, Color target)
+        public int GetDifference(Rgba32 source, Rgba32 target)
         {
-            var SourceColor = ColorHelper.GetSolidColorBrush(source.ToHex()).Color;
-            var targetColor = ColorHelper.GetSolidColorBrush(target.ToHex()).Color;
-
-            int dR = Math.Abs(SourceColor.R - targetColor.R);
-            int dG = Math.Abs(SourceColor.G - targetColor.G);
-            int dB = Math.Abs(SourceColor.B - targetColor.B);
+            int dR = Math.Abs(source.R - target.R);
+            int dG = Math.Abs(source.G - target.G);
+            int dB = Math.Abs(source.B - target.B);
             int diff = Math.Max(dR, dG);
             return Math.Max(diff, dB);
         }
