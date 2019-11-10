@@ -19,7 +19,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _tY;
         private Rgba32[,] _avgsMaster;
         
-        public Image<Rgba32> GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, bool isAdjustHue)
+        public Image<Rgba32> GenerateMosaic(Image<Rgba32> masterImage, Size outputSize, List<Image<Rgba32>> tileImageList, Size tileSize, int mosaicType)
         {
             _tileSize = tileSize;
             _tX = masterImage.Width / tileSize.Width;
@@ -32,7 +32,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
             LoadTilesAndResize(tileImageList);
 
-            SearchAndReplace(outputImage, tileSize, isAdjustHue);
+            SearchAndReplace(outputImage, tileSize, mosaicType);
 
             return outputImage;
         }
@@ -60,7 +60,7 @@ namespace Yugen.Mosaic.Uwp.Services
             }
         }
 
-        private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize, bool isAdjustHue)
+        private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize, int mosaicType)
         {
             if (_tileList.Count < 1)
                 return;
@@ -68,13 +68,16 @@ namespace Yugen.Mosaic.Uwp.Services
             //progressBarMaximum = tX * tY;
             //progressBarValue = 0;
 
-            if (isAdjustHue)
+            switch (mosaicType)
             {
-                SearchAndReplaceAdjustHue(outputImage, tileSize);
-            }
-            else
-            {
-                SearchAndReplace(outputImage, tileSize);
+                case 0:
+                    SearchAndReplace(outputImage, tileSize);
+                    break;
+                case 1:
+                    SearchAndReplaceAdjustHue(outputImage, tileSize);
+                    break;
+                case 2:
+                    break;
             }
         }
 

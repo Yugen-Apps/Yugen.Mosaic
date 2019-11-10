@@ -60,9 +60,9 @@
             <TextBox Header="Output Height"
                      Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
 
-            <CheckBox Content="Adjust Hue"
-                      IsChecked="{x:Bind ViewModel.IsAdjustHue, Mode=TwoWay}" />
-            
+            <ComboBox Header="Mosaic Type"
+                      ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.MosaicSelectedType, Mode=TwoWay}" />
 
             <Button Content="Add Master"
                     Click="{x:Bind ViewModel.AddMasterButton_Click}"
@@ -84,6 +84,7 @@
                     Click="{x:Bind ViewModel.ResetButton_Click}"
                     Margin="2" />
 
+            
             <ProgressRing Height="40"
                           Width="40"
                           IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"

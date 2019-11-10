@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Helpers;
+using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
@@ -99,15 +100,28 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref isLoading, value); }
         }
 
-        private bool isAdjustHue;
-        public bool IsAdjustHue
+        public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
-            get { return isAdjustHue; }
-            set { Set(ref isAdjustHue, value); }
+            new MosaicType { Id=0, Title="Classic" },
+            new MosaicType { Id=1, Title="AdjustHue" },
+            new MosaicType { Id=2, Title="Plain Color" }
+        };
+
+        private MosaicType mosaicSelectedType;
+        public MosaicType MosaicSelectedType
+        {
+            get { return mosaicSelectedType; }
+            set { Set(ref mosaicSelectedType, value); }
         }
 
         private Image<Rgba32> masterImage;
         private List<Image<Rgba32>> tileImageList = new List<Image<Rgba32>>();
+
+
+        public MainViewModel()
+        {
+            MosaicSelectedType = MosaicTypeList[0];
+        }
 
 
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -175,7 +189,7 @@ namespace Yugen.Mosaic.Uwp
             MosaicService newMosaicClass = new MosaicService();
             var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
             var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            return newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);            
+            return newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, MosaicSelectedType.Id);
         }
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
