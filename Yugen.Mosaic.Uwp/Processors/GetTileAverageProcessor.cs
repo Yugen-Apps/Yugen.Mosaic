@@ -90,7 +90,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             aG /= _width * _height;
             aB /= _width * _height;
 
-            _myColor[0] = Color.FromRgba(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB), 255);
+            _myColor[0] = new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
 
         /// <inheritdoc/>

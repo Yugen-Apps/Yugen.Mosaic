@@ -71,12 +71,12 @@ namespace Yugen.Mosaic.Uwp.Processors
 
                 for (int x = 0; x < _tX; x++)
                 {
-                    _avgsMaster[x, y] = GetTileAverage(Source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height); ;
+                    _avgsMaster[x, y].FromRgba32(GetTileAverage(Source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height));
                 }
             });
         }
 
-        private Color GetTileAverage(Image<TPixel> source, int x, int y, int width, int height)
+        private Rgba32 GetTileAverage(Image<TPixel> source, int x, int y, int width, int height)
         {
             long aR = 0;
             long aG = 0;
@@ -101,7 +101,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             aG /= width * height;
             aB /= width * height;
 
-            return Color.FromRgb(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
+            return new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
 
 

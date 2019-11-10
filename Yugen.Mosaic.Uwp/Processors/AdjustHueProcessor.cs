@@ -68,10 +68,9 @@ namespace Yugen.Mosaic.Uwp.Processors
                     int G = Math.Min(255, Math.Max(0, (pixel.G + _averageColor.G) / 2));
                     int B = Math.Min(255, Math.Max(0, (pixel.B + _averageColor.B) / 2));
 
-                    Rgba32 clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
-
-                    TPixel pixelColor = new TPixel();
-                    pixelColor.FromRgba32(clAvg);
+                    Color clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
+                    
+                    TPixel pixelColor = clAvg.ToPixel<TPixel>();
                     Source[w, h] = pixelColor;
                 }
             });
