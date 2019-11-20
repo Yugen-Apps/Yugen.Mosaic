@@ -1,30 +1,28 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
 using System;
-using Yugen.Mosaic.Uwp.Helpers;
-using Yugen.Mosaic.Uwp.Models;
+using System.Threading.Tasks;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {
     public sealed class AdjustHueProcessor : IImageProcessor
     {
-        private Color _color;
+        public Image<Rgba32> InputImage { get; }
+        public Rgba32 AverageColor { get; }
 
-        public YugenColor MyColor;
-
-        public AdjustHueProcessor(Color color, YugenColor myColor)
+        public AdjustHueProcessor(Image<Rgba32> inputImage, Rgba32 averageColor)
         {
-            _color = color;
-
-            MyColor = myColor;
+            InputImage = inputImage;
+            AverageColor = averageColor;
         }
 
         /// <inheritdoc/>
         public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Image<TPixel> source, Rectangle sourceRectangle) where TPixel : struct, IPixel<TPixel>
         {
-            return new AdjustHueProcessor<TPixel>(this, source, sourceRectangle, _color, MyColor);
+            return new AdjustHueProcessor<TPixel>(this, source, sourceRectangle);
         }
     }
 
@@ -35,55 +33,47 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// </summary>
         private readonly Image<TPixel> Source;
 
-        private Color _color;
-
-        public YugenColor MyColor;
+        private readonly Image<Rgba32> _inputImage;
+        private readonly Rgba32 _averageColor;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
+        /// Initializes a new instance of the <see cref="AdjustHueProcessor"/> class
         /// </summary>
-        /// <param name="definition">The <see cref="HlslGaussianBlurProcessor"/> defining the processor parameters</param>
+        /// <param name="definition">The <see cref="AdjustHueProcessor"/> defining the processor parameters</param>
         /// <param name="source">The source <see cref="Image{TPixel}"/> for the current processor instance</param>
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
-        public AdjustHueProcessor(AdjustHueProcessor definition, Image<TPixel> source, Rectangle sourceRectangle, Color color, YugenColor myColor)
+        public AdjustHueProcessor(AdjustHueProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
             Source = source;
-
-            _color = color;
-
-            MyColor = myColor;
+            _inputImage = definition.InputImage;
+            _averageColor = definition.AverageColor;
         }
-
 
         /// <inheritdoc/>
         public void Apply()
         {
-            int width = Source.Width;
-            Image<TPixel> source = Source; // Avoid capturing this            
+            //int width = Source.Width;
+            //Image<TPixel> source = Source;
 
-            for (int w = 0; w < source.Width; w++)
+            Parallel.For(0, _inputImage.Height, h =>
             {
-                for (int h = 0; h < source.Height; h++)
+                var rowSpan = _inputImage.GetPixelRowSpan(h);
+
+                for (int w = 0; w < _inputImage.Width; w++)
                 {
-                    // Get current output color
                     Rgba32 pixel = new Rgba32();
-                    source[w, h].ToRgba32(ref pixel);
+                    rowSpan[w].ToRgba32(ref pixel);
 
-                    var targetColor = ColorHelper.GetSolidColorBrush(_color.ToHex()).Color;
+                    int R = Math.Min(255, Math.Max(0, (pixel.R + _averageColor.R) / 2));
+                    int G = Math.Min(255, Math.Max(0, (pixel.G + _averageColor.G) / 2));
+                    int B = Math.Min(255, Math.Max(0, (pixel.B + _averageColor.B) / 2));
 
-                    int R = Math.Min(255, Math.Max(0, (pixel.R + targetColor.R) / 2));
-                    int G = Math.Min(255, Math.Max(0, (pixel.G + targetColor.G) / 2));
-                    int B = Math.Min(255, Math.Max(0, (pixel.B + targetColor.B) / 2));
-
-                    MyColor.R = R;
-                    MyColor.G = G;
-                    MyColor.B = B;
-
-                    string hex = R.ToString("X2") + G.ToString("X2") + B.ToString("X2");
-                    var color = Rgba32.FromHex(hex);
-                    source[w, h].FromRgba32(color);
+                    Color clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
+                    
+                    TPixel pixelColor = clAvg.ToPixel<TPixel>();
+                    Source[w, h] = pixelColor;
                 }
-            }
+            });
         }
 
         /// <inheritdoc/>

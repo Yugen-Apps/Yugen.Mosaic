@@ -16,28 +16,34 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
-            <Image x:Name="masterImage"
+        <Grid Background="{ThemeResource SystemControlAcrylicElementBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Margin="2" 
+                       Text="Master Image" />
+
+            <Image Grid.Row="1"
+                   x:Name="masterImage"
                    Source="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
-                   Stretch="Uniform"
                    Height="120"
+                   Margin="2"
+                   Stretch="Uniform"
                    Width="120" />
 
-            <ListView x:Name="tileListView"
-                      ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="imaging:WriteableBitmap">
-                        <Image Source="{x:Bind}"
-                               Stretch="Uniform"
-                               Height="100"
-                               Width="100" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+            <ListView Grid.Row="2"
+                      x:Name="tileListView"
+                      ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}"
+                      Header="Tiles List"
+                      Margin="2"
+                      VerticalAlignment="Stretch"/>
+        </Grid>
 
         <StackPanel Grid.Column="1"
-                    Background="Gray">
+                    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
             <Image x:Name="outputImage"
                    Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
                    Stretch="Uniform"
@@ -45,48 +51,66 @@
                    Width="400"/>
         </StackPanel>
 
-        <StackPanel Grid.Column="2">
+        <StackPanel Grid.Column="2"
+                    Background="{ThemeResource SystemControlAcrylicElementBrush}">
 
-            <TextBox Header="Tile Width"
-                     Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}" />
+            <TextBox Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
+                     Header="Tile Width"
+                     Margin="2" 
+                     Width="100"/>
 
-            <TextBox Header="Tile Height"
-                     Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}" />
+            <TextBox Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"
+                     Header="Tile Height"
+                     Margin="2"
+                     Width="100" />
 
-            <TextBox Header="Output Width"
-                     Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}" />
+            <TextBox Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
+                     Header="Output Width"
+                     Margin="2"
+                     Width="100" />
 
-            <TextBox Header="Output Height"
-                     Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
+            <TextBox Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
+                     Header="Output Height"
+                     Margin="2"
+                     Width="100" />
 
-            <CheckBox Content="Adjust Hue"
-                      IsChecked="{x:Bind ViewModel.IsAdjustHue, Mode=TwoWay}" />
+            <ComboBox ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.MosaicSelectedType, Mode=TwoWay}"
+                      Header="Mosaic Type"
+                      Margin="2"
+                      Width="100" />
+
+            <Button Click="{x:Bind ViewModel.AddMasterButton_Click}"
+                    Content="Add Master"
+                    Margin="2"
+                    Width="100" />
+
+            <Button Click="{x:Bind ViewModel.AddTilesButton_Click}"
+                    Content="Add Tiles"
+                    Margin="2"
+                    Width="100" />
+
+            <Button Click="{x:Bind ViewModel.GenerateButton_Click}"
+                    Content="Generate"
+                    Margin="2"
+                    Width="100" />
+
+            <Button Click="{x:Bind ViewModel.SaveButton_Click}"
+                    Content="Save"
+                    Margin="2"
+                    Width="100" />
+
+            <Button Click="{x:Bind ViewModel.ResetButton_Click}"
+                    Content="Reset"
+                    Margin="2"
+                    Width="100" />
+
             
-
-            <Button Content="Add Master"
-                    Click="{x:Bind ViewModel.AddMasterButton_Click}"
-                    Margin="2"/>
-
-            <Button Content="Add Tiles"
-                    Click="{x:Bind ViewModel.AddTilesButton_Click}"
-                    Margin="2"/>
-
-            <Button Content="Generate"
-                    Click="{x:Bind ViewModel.GenerateButton_Click}"
-                    Margin="2" />
-
-            <Button Content="Save"
-                    Click="{x:Bind ViewModel.SaveButton_Click}"
-                    Margin="2" />
-
-            <Button Content="Reset"
-                    Click="{x:Bind ViewModel.ResetButton_Click}"
-                    Margin="2" />
-
-            <ProgressRing Height="40"
-                          Width="40"
-                          IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                          IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
+            <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                          IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                          Height="80"
+                          Margin="2"
+                          Width="80" />
 
         </StackPanel>
 

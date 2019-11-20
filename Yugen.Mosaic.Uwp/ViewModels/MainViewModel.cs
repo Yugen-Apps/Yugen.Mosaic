@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Helpers;
+using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
@@ -52,8 +54,8 @@ namespace Yugen.Mosaic.Uwp
 
         private Size tileSize = new Size(50, 50);
 
-        private ObservableCollection<WriteableBitmap> tileBmpList = new ObservableCollection<WriteableBitmap>();
-        public ObservableCollection<WriteableBitmap> TileBmpList
+        private ObservableCollection<string> tileBmpList = new ObservableCollection<string>();
+        public ObservableCollection<string> TileBmpList
         {
             get { return tileBmpList; }
             set { Set(ref tileBmpList, value); }
@@ -67,7 +69,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref outputBmpSource, value); }
         }
 
-        private int outputWidth = 100;
+        private int outputWidth = 1000;
         public int OutputWidth
         {
             get { return outputWidth; }
@@ -78,7 +80,7 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        private int outputHeight = 100;
+        private int outputHeight = 1000;
         public int OutputHeight
         {
             get { return outputHeight; }
@@ -89,7 +91,7 @@ namespace Yugen.Mosaic.Uwp
             }
         }
 
-        private Size outputSize = new Size(100, 100);
+        private Size outputSize = new Size(1000, 1000);
 
         private bool isLoading;
         public bool IsLoading
@@ -98,15 +100,28 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref isLoading, value); }
         }
 
-        private bool isAdjustHue;
-        public bool IsAdjustHue
+        public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
-            get { return isAdjustHue; }
-            set { Set(ref isAdjustHue, value); }
+            new MosaicType { Id=0, Title="Classic" },
+            new MosaicType { Id=1, Title="AdjustHue" },
+            new MosaicType { Id=2, Title="Plain Color" }
+        };
+
+        private MosaicType mosaicSelectedType;
+        public MosaicType MosaicSelectedType
+        {
+            get { return mosaicSelectedType; }
+            set { Set(ref mosaicSelectedType, value); }
         }
 
-        private Image masterImage;
-        private List<Image> tileImageList = new List<Image>();
+        private Image<Rgba32> masterImage;
+        private List<Image<Rgba32>> tileImageList = new List<Image<Rgba32>>();
+
+
+        public MainViewModel()
+        {
+            MosaicSelectedType = MosaicTypeList[0];
+        }
 
 
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -118,11 +133,12 @@ namespace Yugen.Mosaic.Uwp
             using (var inputStream = await masterFile.OpenReadAsync())
             using (var stream = inputStream.AsStreamForRead())
             {
-                masterImage = Image.Load(stream);
+                masterImage = Image.Load<Rgba32>(stream);
                 //MasterBpmSource = await BitmapFactory.FromStream(stream);
             }
 
-            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(masterImage);
+            var thumbnail = masterImage.Clone(x => x.Resize(400, 400));
+            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(thumbnail);
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -133,18 +149,18 @@ namespace Yugen.Mosaic.Uwp
 
             foreach (var file in files)
             {
-                Image image;
+                Image<Rgba32> image;
                 using (var inputStream = await file.OpenReadAsync())
                 using (var stream = inputStream.AsStreamForRead())
                 {
-                    image = Image.Load(stream);
+                    image = Image.Load<Rgba32>(stream);
                     tileImageList.Add(image);
                     //var bmp = await BitmapFactory.FromStream(stream);
                     //tileBmpList.Add(bmp);
                 }
 
-                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
-                tileBmpList.Add(bmp);
+                //var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
+                tileBmpList.Add(file.Name);
             }
         }
 
@@ -163,18 +179,18 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = false;
         }
 
-        private async Task<Image> Generate()
+        private async Task<Image<Rgba32>> Generate()
         {
             await Task.Delay(1);
 
             if (masterImage == null || tileImageList.Count < 1)
                 return null;
 
-            Image resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
+            Image<Rgba32> resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
             MosaicService newMosaicClass = new MosaicService();
             var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
             var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            return newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, isAdjustHue);            
+            return newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, MosaicSelectedType.Id);
         }
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

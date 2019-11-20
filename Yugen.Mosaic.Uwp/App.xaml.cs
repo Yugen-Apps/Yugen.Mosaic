@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -20,6 +23,9 @@ namespace Yugen.Mosaic.Uwp
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            AppCenter.Start("db37232b-835b-495d-b6ab-20c26f67c7e8",
+                   typeof(Analytics), typeof(Crashes));
         }
 
         /// <summary>
