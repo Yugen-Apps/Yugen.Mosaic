@@ -5,6 +5,8 @@
     xmlns:local="using:Yugen.Mosaic.Uwp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+    xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource AppWorkBackgroundBrush}">
 
@@ -15,11 +17,127 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
-            <Grid Background="{ThemeResource AppBackgroundBrush}">
-
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.ColumnSpan="3" Background="{ThemeResource AppBackgroundBrush}" BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness="0,0,0,.5">
+                <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
+                    <TextBlock Text="Yugen Mosaic" VerticalAlignment="Center" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource BaseTextBlockStyle}"/>
+                </StackPanel>
             </Grid>
-            <Grid Grid.Column="2" Background="{ThemeResource AppBackgroundBrush}">
-
+            <Grid Grid.Row="1" Background="{ThemeResource AppBackgroundBrush}" Padding="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Spacing="5" >
+                    <TextBlock Text="Master Image" Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource AppForegroundBrush}"/>
+                    <Border Height="230" Width="230">
+                        <Grid PointerEntered="Grid_PointerEntered" 
+                              PointerExited="Grid_PointerExited" 
+                              Tapped="Grid_Tapped"
+                              extensions:Mouse.Cursor="Hand" CornerRadius="10">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}" Stretch="Uniform"/>
+                            </Grid.Background>
+                            <Grid x:Name="AddMasterUI" Background="{ThemeResource AppTransparentBackgroundBrush}" CornerRadius="10">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="25" Spacing="10">
+                                    <FontIcon Glyph="" FontSize="32"/>
+                                    <TextBlock Text="Click here to choose a Master image" TextWrapping="WrapWholeWords" TextAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Spacing="5" Margin="0,25,0,0">
+                    <TextBlock Text="Tiles list" Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource AppForegroundBrush}"/>
+                    <Button HorizontalAlignment="Stretch" Click="{x:Bind ViewModel.AddTilesButton_Click}">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <FontIcon Glyph=""/>
+                            <TextBlock Text="Add Tiles"/>
+                        </StackPanel>
+                    </Button>
+                    <toolkitControls:AdaptiveGridView Grid.Row="2" DesiredWidth="120" StretchContentForSingleRow="False"
+                                                      ItemsSource="{x:Bind ViewModel.TileBmpList, Mode=OneWay}">
+                        <toolkitControls:AdaptiveGridView.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Grid>
+                                    <Image Source="/Assets/SmallTile.png"/>
+                                    <Border Background="{ThemeResource AppTransparentBackgroundBrush}" Padding="5" VerticalAlignment="Bottom">
+                                        <TextBlock Text="{x:Bind}" TextWrapping="Wrap"  Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                    </Border>
+                                </Grid>
+                                
+                            </DataTemplate>
+                        </toolkitControls:AdaptiveGridView.ItemTemplate>
+                    </toolkitControls:AdaptiveGridView>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <ScrollViewer HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Border Background="{ThemeResource AppWorkAreaBrush}" BorderBrush="{ThemeResource AppBorderBrush}" BorderThickness=".5" Height="400" Width="400">
+                        <Image x:Name="outputImage"
+                           Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
+                           Stretch="Uniform"/>
+                    </Border>
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Column="2" Grid.Row="1" Background="{ThemeResource AppBackgroundBrush}" Padding="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Tile Properties" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="W:" VerticalAlignment="Center" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}" Margin="5,0,5,0"/>
+                        <TextBox Grid.Column="1" InputScope="Number" Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"/>
+                        <TextBlock Grid.Column="2" Text="H:" VerticalAlignment="Center" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}" Margin="5,0,5,0"/>
+                        <TextBox Grid.Column="3" InputScope="Number" Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"/>
+                    </Grid>
+                    <Rectangle Height=".5" Fill="{ThemeResource AppBorderBrush}" Margin="0,15,0,0"/>
+                    <TextBlock Text="Mosaic Type" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}"/>
+                    <ComboBox Margin="24,0,0,0" HorizontalAlignment="Stretch" 
+                              ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
+                              SelectedItem="{x:Bind ViewModel.MosaicSelectedType, Mode=TwoWay}"/>
+                    <Rectangle Height=".5" Fill="{ThemeResource AppBorderBrush}" Margin="0,15,0,0"/>
+                    <TextBlock Text="Output Properties" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="W:" VerticalAlignment="Center" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}" Margin="5,0,5,0"/>
+                        <TextBox Grid.Column="1" InputScope="Number" Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"/>
+                        <TextBlock Grid.Column="2" Text="H:" VerticalAlignment="Center" Foreground="{ThemeResource AppForegroundBrush}" Style="{StaticResource CaptionTextBlockStyle}" Margin="5,0,5,0"/>
+                        <TextBox Grid.Column="3" InputScope="Number" Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"/>
+                    </Grid>
+                    <Rectangle Height=".5" Fill="{ThemeResource AppBorderBrush}" Margin="0,15,0,0"/>
+                    <Button Content="Generate" HorizontalAlignment="Stretch" Margin="5,0,0,0" Style="{ThemeResource AccentButtonStyle}" Click="{x:Bind ViewModel.GenerateButton_Click}"/>
+                    <Grid Margin="5,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Save" HorizontalAlignment="Stretch" Margin="0,0,5,0" Click="{x:Bind ViewModel.SaveButton_Click}"/>
+                        <Button Grid.Column="1" Content="Reset" HorizontalAlignment="Stretch" Margin="5,0,0,0" Click="{x:Bind ViewModel.ResetButton_Click}"/>
+                    </Grid>
+                </StackPanel>
+                <Button Grid.Row="1" HorizontalAlignment="Stretch" Height="36">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <FontIcon Glyph=""/>
+                        <TextBlock Text="Settings"/>
+                    </StackPanel>
+                </Button>
             </Grid>
         </Grid>
     </Grid>
