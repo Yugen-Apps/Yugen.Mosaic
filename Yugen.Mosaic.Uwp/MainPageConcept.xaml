@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource AppWorkBackgroundBrush}">
 
     <Grid>
         <Grid>
@@ -15,6 +15,12 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
+            <Grid Background="{ThemeResource AppBackgroundBrush}">
+
+            </Grid>
+            <Grid Grid.Column="2" Background="{ThemeResource AppBackgroundBrush}">
+
+            </Grid>
         </Grid>
     </Grid>
 </Page>
