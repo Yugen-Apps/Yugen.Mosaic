@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
@@ -23,7 +24,7 @@ namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel
     {
-        private BitmapImage masterBmpSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+        private BitmapImage masterBmpSource = new BitmapImage();
         public BitmapImage MasterBpmSource
         {
             get { return masterBmpSource; }
@@ -63,8 +64,8 @@ namespace Yugen.Mosaic.Uwp
         }
 
 
-        private WriteableBitmap outputBmpSource;
-        public WriteableBitmap OutputBmpSource
+        private BitmapImage outputBmpSource = new BitmapImage();
+        public BitmapImage OutputBmpSource
         {
             get { return outputBmpSource; }
             set { Set(ref outputBmpSource, value); }
@@ -94,12 +95,6 @@ namespace Yugen.Mosaic.Uwp
 
         private Size outputSize = new Size(1000, 1000);
 
-        private bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Set(ref isLoading, value); }
-        }
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
@@ -114,9 +109,18 @@ namespace Yugen.Mosaic.Uwp
             get { return mosaicSelectedType; }
             set { Set(ref mosaicSelectedType, value); }
         }
+        
+
+        private bool isLoading;
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set { Set(ref isLoading, value); }
+        }
 
         private Image<Rgba32> masterImage;
         private List<Image<Rgba32>> tileImageList = new List<Image<Rgba32>>();
+        private Image<Rgba32> outputImage;
 
 
         public MainViewModel()
@@ -136,7 +140,13 @@ namespace Yugen.Mosaic.Uwp
             {
                 masterImage = Image.Load<Rgba32>(stream);
 
-                using (Image copy = masterImage.Clone(x => x.Resize(400, 400)))
+                var resizeOptions = new ResizeOptions()
+                {
+                    Mode = ResizeMode.Max,
+                    Size = new SixLabors.Primitives.Size(400, 400)
+                };
+
+                using (Image copy = masterImage.Clone(x => x.Resize(resizeOptions)))
                 {
                     InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
                     copy.SaveAsJpeg(outputStream.AsStreamForWrite());
@@ -153,6 +163,8 @@ namespace Yugen.Mosaic.Uwp
             if (files == null)
                 return;
 
+            IsLoading = true;
+
             foreach (var file in files)
             {
                 Image<Rgba32> image;
@@ -162,11 +174,16 @@ namespace Yugen.Mosaic.Uwp
                     image = Image.Load<Rgba32>(stream);
                     tileImageList.Add(image);
 
-                    using (Image copy = image.Clone(x => x.Resize(200, 200)))
+                    var resizeOptions = new ResizeOptions() { 
+                        Mode = ResizeMode.Max ,
+                        Size = new SixLabors.Primitives.Size(200,200)
+                    };
+
+                    using (Image copy = image.Clone(x => x.Resize(resizeOptions)))
                     {
                         InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
                         copy.SaveAsJpeg(outputStream.AsStreamForWrite());
-                        
+
                         outputStream.Seek(0);
                         var bmp = new BitmapImage();
                         await bmp.SetSourceAsync(outputStream);
@@ -175,20 +192,25 @@ namespace Yugen.Mosaic.Uwp
                         TileBmpCollection.Add(tileBmp);
                     }
                 }
-
             }
+
+            IsLoading = false;
         }
 
         public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             IsLoading = true;
 
-            var outputImage = await Generate();
+            outputImage = await Generate();
 
             if (outputImage != null)
             {
-                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
-                OutputBmpSource = bmp;
+                //var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
+                InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+                outputImage.SaveAsJpeg(outputStream.AsStreamForWrite());
+
+                outputStream.Seek(0);
+                await OutputBmpSource.SetSourceAsync(outputStream);
             }
 
             IsLoading = false;
@@ -215,7 +237,12 @@ namespace Yugen.Mosaic.Uwp
             if (file == null)
                 return;
 
-            await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
+            using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                outputImage.SaveAsJpeg(stream.AsStreamForWrite());
+            }
+
+            //await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
         }
 
         public void ResetButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
