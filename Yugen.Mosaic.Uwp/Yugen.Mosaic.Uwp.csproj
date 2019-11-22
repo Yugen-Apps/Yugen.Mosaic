@@ -125,9 +125,6 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPageConcept.xaml.cs">
-      <DependentUpon>MainPageConcept.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\Tile.cs" />
     <Compile Include="Processors\PlainColorProcessor.cs" />
     <Compile Include="Processors\AdjustHueProcessor.cs" />
@@ -205,10 +202,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainPageConcept.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
