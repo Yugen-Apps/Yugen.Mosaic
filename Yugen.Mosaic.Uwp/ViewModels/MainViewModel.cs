@@ -23,8 +23,8 @@ namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel
     {
-        private WriteableBitmap masterBmpSource;
-        public WriteableBitmap MasterBpmSource
+        private BitmapImage masterBmpSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+        public BitmapImage MasterBpmSource
         {
             get { return masterBmpSource; }
             set { Set(ref masterBmpSource, value); }
@@ -140,12 +140,11 @@ namespace Yugen.Mosaic.Uwp
                 {
                     InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
                     copy.SaveAsJpeg(outputStream.AsStreamForWrite());
-                    MasterBpmSource = await BitmapFactory.FromStream(outputStream);
+
+                    outputStream.Seek(0);
+                    await MasterBpmSource.SetSourceAsync(outputStream);
                 }
             }
-
-            //var thumbnail = masterImage.Clone(x => x.Resize(400, 400));
-            //MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(thumbnail);
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -163,16 +162,18 @@ namespace Yugen.Mosaic.Uwp
                     image = Image.Load<Rgba32>(stream);
                     tileImageList.Add(image);
 
-                    //using (Image copy = image.Clone(x => x.Resize(200, 200)))
-                    //{
-                    //    InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
-                    //    copy.SaveAsJpeg(outputStream.AsStreamForWrite());
-                    //    var bmp = await BitmapFactory.FromStream(outputStream);
+                    using (Image copy = image.Clone(x => x.Resize(200, 200)))
+                    {
+                        InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+                        copy.SaveAsJpeg(outputStream.AsStreamForWrite());
+                        
+                        outputStream.Seek(0);
+                        var bmp = new BitmapImage();
+                        await bmp.SetSourceAsync(outputStream);
 
-                    //    var tileBmp = new TileBmp(file.Name, bmp);
-                    //    TileBmpCollection.Add(tileBmp);
-                    //}
-                    TileBmpCollection.Add(new TileBmp(file.Name, null));
+                        var tileBmp = new TileBmp(file.Name, bmp);
+                        TileBmpCollection.Add(tileBmp);
+                    }
                 }
 
             }

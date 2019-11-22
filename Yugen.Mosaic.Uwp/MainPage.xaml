@@ -48,20 +48,25 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Spacing="5">
+                    
                     <TextBlock Text="Master Image"
                                Style="{StaticResource CaptionTextBlockStyle}"
                                Foreground="{ThemeResource AppForegroundBrush}" />
+                    
                     <Border Height="230"
                             Width="230">
+                        
                         <Grid PointerEntered="Grid_PointerEntered"
                               PointerExited="Grid_PointerExited"
                               Tapped="Grid_Tapped"
                               extensions:Mouse.Cursor="Hand"
                               CornerRadius="10">
+                            
                             <Grid.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
                                             Stretch="Uniform" />
                             </Grid.Background>
+                            
                             <Grid x:Name="AddMasterUI"
                                   Background="{ThemeResource AppTransparentBackgroundBrush}"
                                   CornerRadius="10">
@@ -76,8 +81,11 @@
                                                TextAlignment="Center" />
                                 </StackPanel>
                             </Grid>
+                            
                         </Grid>
+                        
                     </Border>
+                    
                 </StackPanel>
 
                 <StackPanel Grid.Row="1"
@@ -107,8 +115,7 @@
                     <toolkitControls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate x:DataType="models:TileBmp">
                             <Grid>
-                                <!--<Image Source="{x:Bind Image}" />-->
-                                <Image Source="/Assets/SmallTile.png" />
+                                <Image Source="{x:Bind Image}" />
                                 <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
                                         Padding="5"
                                         VerticalAlignment="Bottom">
