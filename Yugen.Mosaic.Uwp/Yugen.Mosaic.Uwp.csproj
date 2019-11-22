@@ -125,6 +125,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TileBmp.cs" />
     <Compile Include="Models\Tile.cs" />
     <Compile Include="Processors\PlainColorProcessor.cs" />
     <Compile Include="Processors\AdjustHueProcessor.cs" />

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
@@ -54,11 +55,11 @@ namespace Yugen.Mosaic.Uwp
 
         private Size tileSize = new Size(50, 50);
 
-        private ObservableCollection<string> tileBmpList = new ObservableCollection<string>();
-        public ObservableCollection<string> TileBmpList
+        private ObservableCollection<TileBmp> tileBmpCollection = new ObservableCollection<TileBmp>();
+        public ObservableCollection<TileBmp> TileBmpCollection
         {
-            get { return tileBmpList; }
-            set { Set(ref tileBmpList, value); }
+            get { return tileBmpCollection; }
+            set { Set(ref tileBmpCollection, value); }
         }
 
 
@@ -134,11 +135,17 @@ namespace Yugen.Mosaic.Uwp
             using (var stream = inputStream.AsStreamForRead())
             {
                 masterImage = Image.Load<Rgba32>(stream);
-                //MasterBpmSource = await BitmapFactory.FromStream(stream);
+
+                using (Image copy = masterImage.Clone(x => x.Resize(400, 400)))
+                {
+                    InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+                    copy.SaveAsJpeg(outputStream.AsStreamForWrite());
+                    MasterBpmSource = await BitmapFactory.FromStream(outputStream);
+                }
             }
 
-            var thumbnail = masterImage.Clone(x => x.Resize(400, 400));
-            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(thumbnail);
+            //var thumbnail = masterImage.Clone(x => x.Resize(400, 400));
+            //MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(thumbnail);
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -155,12 +162,19 @@ namespace Yugen.Mosaic.Uwp
                 {
                     image = Image.Load<Rgba32>(stream);
                     tileImageList.Add(image);
-                    //var bmp = await BitmapFactory.FromStream(stream);
-                    //tileBmpList.Add(bmp);
+
+                    //using (Image copy = image.Clone(x => x.Resize(200, 200)))
+                    //{
+                    //    InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+                    //    copy.SaveAsJpeg(outputStream.AsStreamForWrite());
+                    //    var bmp = await BitmapFactory.FromStream(outputStream);
+
+                    //    var tileBmp = new TileBmp(file.Name, bmp);
+                    //    TileBmpCollection.Add(tileBmp);
+                    //}
+                    TileBmpCollection.Add(new TileBmp(file.Name, null));
                 }
 
-                //var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
-                tileBmpList.Add(file.Name);
             }
         }
 
@@ -208,7 +222,7 @@ namespace Yugen.Mosaic.Uwp
             MasterBpmSource = null;
             masterImage = null;
 
-            TileBmpList.Clear();
+            TileBmpCollection.Clear();
             tileImageList.Clear();
         }
     }

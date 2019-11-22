@@ -27,6 +27,7 @@ namespace Yugen.Mosaic.Uwp
             coreTitleBar.ExtendViewIntoTitleBar = true;
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
             //Active:
             titleBar.BackgroundColor = Colors.Transparent;
             titleBar.ButtonBackgroundColor = Colors.Transparent;
