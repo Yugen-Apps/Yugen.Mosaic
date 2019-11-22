@@ -55,10 +55,10 @@
                     
                     <Border Height="230"
                             Width="230">
-                        
-                        <Grid PointerEntered="Grid_PointerEntered"
-                              PointerExited="Grid_PointerExited"
-                              Tapped="Grid_Tapped"
+
+                        <Grid PointerEntered="{x:Bind ViewModel.Grid_PointerEntered}"
+                              PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
+                              Tapped="{x:Bind ViewModel.Grid_Tapped}"
                               extensions:Mouse.Cursor="Hand"
                               CornerRadius="10">
                             
@@ -69,7 +69,8 @@
                             
                             <Grid x:Name="AddMasterUI"
                                   Background="{ThemeResource AppTransparentBackgroundBrush}"
-                                  CornerRadius="10">
+                                  CornerRadius="10"
+                                  Visibility="{x:Bind ViewModel.IsAddMasterUIVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Margin="25"

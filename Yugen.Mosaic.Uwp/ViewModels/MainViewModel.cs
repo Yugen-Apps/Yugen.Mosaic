@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
@@ -24,13 +25,19 @@ namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel
     {
-        private BitmapImage masterBmpSource = new BitmapImage();
+        private BitmapImage masterBmpSource;
         public BitmapImage MasterBpmSource
         {
             get { return masterBmpSource; }
             set { Set(ref masterBmpSource, value); }
         }
 
+        private bool isAddMasterUIVisible = true;
+        public bool IsAddMasterUIVisible
+        {
+            get { return isAddMasterUIVisible; }
+            set { Set(ref isAddMasterUIVisible, value); }
+        }
 
         private int tileWidth = 50;
         public int TileWidth
@@ -129,6 +136,23 @@ namespace Yugen.Mosaic.Uwp
         }
 
 
+        public void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            IsAddMasterUIVisible = true;
+        }
+
+        public void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            IsAddMasterUIVisible = (MasterBpmSource != null) ? false : true;
+        }
+
+        public void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            AddMasterButton_Click(sender, e);
+            IsAddMasterUIVisible = false;
+        }
+
+
         public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
@@ -152,6 +176,7 @@ namespace Yugen.Mosaic.Uwp
                     copy.SaveAsJpeg(outputStream.AsStreamForWrite());
 
                     outputStream.Seek(0);
+                    MasterBpmSource = new BitmapImage();
                     await MasterBpmSource.SetSourceAsync(outputStream);
                 }
             }
