@@ -58,7 +58,7 @@
 
                         <Grid PointerEntered="{x:Bind ViewModel.Grid_PointerEntered}"
                               PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
-                              Tapped="{x:Bind ViewModel.Grid_Tapped}"
+                              Tapped="{x:Bind ViewModel.AddMasterGrid_Tapped}"
                               extensions:Mouse.Cursor="Hand"
                               CornerRadius="10">
                             
@@ -209,7 +209,7 @@
                     <ComboBox Margin="24,0,0,0"
                               HorizontalAlignment="Stretch"
                               ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
-                              SelectedItem="{x:Bind ViewModel.MosaicSelectedType, Mode=TwoWay}" />
+                              SelectedItem="{x:Bind ViewModel.SelectedMosaicType, Mode=TwoWay}" />
                     <Rectangle Height=".5"
                                Fill="{ThemeResource AppBorderBrush}"
                                Margin="0,15,0,0" />
