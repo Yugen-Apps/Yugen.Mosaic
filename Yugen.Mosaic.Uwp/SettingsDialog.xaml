@@ -12,7 +12,7 @@
     <Grid Padding="15,15,15,30" Background="{ThemeResource AppDeepBackgroundBrush}">
         <StackPanel Orientation="Vertical" Spacing="15" MaxWidth="360">
             <Grid>
-                <TextBlock Text="Settings" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource AppForegroundBrush}"/>
+                <TextBlock Text="Settings" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource AppForegroundBrush}" HorizontalAlignment="Left"/>
                 <Button Style="{StaticResource SoftRevealButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Tapped="Button_Tapped">
                     <FontIcon Glyph=""/>
                 </Button>

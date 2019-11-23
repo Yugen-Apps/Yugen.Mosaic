@@ -25,16 +25,6 @@ namespace Yugen.Mosaic.Uwp
         {
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-
-            //Active:
-            titleBar.BackgroundColor = Colors.Transparent;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-
-            //Inactive:
-            titleBar.InactiveBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
         }
 
         private async void SettingsClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)

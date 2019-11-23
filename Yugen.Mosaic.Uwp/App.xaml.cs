@@ -7,6 +7,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Yugen.Mosaic.Uwp.Services;
 
 namespace Yugen.Mosaic.Uwp
 {
@@ -26,6 +27,12 @@ namespace Yugen.Mosaic.Uwp
 
             AppCenter.Start("db37232b-835b-495d-b6ab-20c26f67c7e8",
                    typeof(Analytics), typeof(Crashes));
+            InitializeThemes();
+        }
+
+        private async void InitializeThemes()
+        {
+            await ThemeSelectorService.InitializeAsync();
         }
 
         /// <summary>
