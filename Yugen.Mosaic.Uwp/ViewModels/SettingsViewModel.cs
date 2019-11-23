@@ -14,8 +14,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 {
     public class SettingsViewModel: BaseViewModel
     {
+        private const string STORE_REVIEWFORMAT = "ms-windows-store:REVIEW?PFN={0}";
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
         private ICommand _switchThemeCommand;
+        private ICommand _launchRateAndReviewCommand;
 
         public ElementTheme ElementTheme
         {
@@ -36,6 +38,20 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                         });
                 }
                 return _switchThemeCommand;
+            }
+        }
+        public ICommand LaunchRateAndReviewCommand
+        {
+            get
+            {
+                if (_launchRateAndReviewCommand == null)
+                {
+                    _launchRateAndReviewCommand = new RelayCommand(async () =>
+                    {
+                        await Windows.System.Launcher.LaunchUriAsync(new Uri(string.Format(STORE_REVIEWFORMAT, Package.Current.Id.FamilyName)));
+                    });
+                }
+                return _launchRateAndReviewCommand;
             }
         }
 

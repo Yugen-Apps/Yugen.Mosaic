@@ -27,7 +27,6 @@ namespace Yugen.Mosaic.Uwp
 
             AppCenter.Start("db37232b-835b-495d-b6ab-20c26f67c7e8",
                    typeof(Analytics), typeof(Crashes));
-            InitializeThemes();
         }
 
         private async void InitializeThemes()
@@ -42,6 +41,7 @@ namespace Yugen.Mosaic.Uwp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            InitializeThemes();
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (!(Window.Current.Content is Frame rootFrame))
