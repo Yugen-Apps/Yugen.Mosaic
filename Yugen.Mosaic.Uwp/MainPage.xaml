@@ -284,7 +284,7 @@
 
                 <Button Grid.Row="1"
                         HorizontalAlignment="Stretch"
-                        Height="36">
+                        Height="36" Click="SettingsClick">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="" />
