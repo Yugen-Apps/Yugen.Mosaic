@@ -122,7 +122,6 @@
     <Compile Include="Extensions\FileFormatExtensions.cs" />
     <Compile Include="Enums\FileFormat.cs" />
     <Compile Include="Extensions\SettingsStorageExtensions.cs" />
-    <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -253,6 +252,10 @@
     <PackageReference Include="Yugen.Toolkit.Uwp">
       <Version>1.0.9</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converters\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
