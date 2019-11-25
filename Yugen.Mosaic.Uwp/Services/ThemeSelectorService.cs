@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
@@ -9,8 +6,7 @@ using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Yugen.Mosaic.Uwp.Helpers;
-using Yugen.Toolkit.Standard.Helpers;
+using Yugen.Mosaic.Uwp.Extensions;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -36,6 +32,7 @@ namespace Yugen.Mosaic.Uwp.Services
             await SaveThemeInSettingsAsync(Theme);
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
             //Active
             titleBar.BackgroundColor = Colors.Transparent;
             titleBar.ButtonBackgroundColor = Colors.Transparent;

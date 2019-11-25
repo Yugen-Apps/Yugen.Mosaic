@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
-using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Services;
+using Yugen.Toolkit.Standard.Commands;
+using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.ViewModels
@@ -55,29 +52,13 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             }
         }
 
-        public string AppName
-        {
-            get
-            {
-                //This may change if the app gets localized
-                return "Yugen Mosaic";
-            }
-        }
-        public string AppVersion
-        {
-            get
-            {
-                var version = Package.Current.Id.Version;
-                return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
-            }
-        }
-        public string Publisher
-        {
-            get
-            {
-                var package = Package.Current;
-                return package.PublisherDisplayName;
-            }
-        }
+        //This may change if the app gets localized
+        public string AppName => "Yugen Mosaic";
+
+        public string AppVersion => SystemHelper.AppVersion;
+
+        public string Publisher => SystemHelper.Publisher;
+
+        public string[] Collaborator => new[] { "Leisvan", "Yoshi" };
     }
 }
