@@ -1,16 +1,17 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.Foundation;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
-using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
@@ -22,83 +23,67 @@ namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel
     {
-        private WriteableBitmap masterBmpSource;
-        public WriteableBitmap MasterBpmSource
+        private BitmapImage _masterBmpSource = new BitmapImage();
+        public BitmapImage MasterBpmSource
         {
-            get { return masterBmpSource; }
-            set { Set(ref masterBmpSource, value); }
+            get { return _masterBmpSource; }
+            set { Set(ref _masterBmpSource, value); }
         }
 
+        private bool _isAddMasterUIVisible = true;
+        public bool IsAddMasterUIVisible
+        {
+            get { return _isAddMasterUIVisible; }
+            set { Set(ref _isAddMasterUIVisible, value); }
+        }
 
-        private int tileWidth = 50;
+        private int _tileWidth = 50;
         public int TileWidth
         {
-            get { return tileWidth; }
-            set
-            {
-                Set(ref tileWidth, value);
-                tileSize.Width = tileWidth;
-            }
+            get { return _tileWidth; }
+            set { Set(ref _tileWidth, value); }
         }
 
-        private int tileHeight = 50;
+        private int _tileHeight = 50;
         public int TileHeight
         {
-            get { return tileHeight; }
-            set
-            {
-                Set(ref tileHeight, value);
-                tileSize.Height = tileHeight;
-            }
+            get { return _tileHeight; }
+            set { Set(ref _tileHeight, value); }
         }
 
-        private Size tileSize = new Size(50, 50);
+        private Size _tileSize => new Size(_tileWidth, _tileHeight);
 
-        private ObservableCollection<string> tileBmpList = new ObservableCollection<string>();
-        public ObservableCollection<string> TileBmpList
+        private ObservableCollection<TileBmp> _tileBmpCollection = new ObservableCollection<TileBmp>();
+        public ObservableCollection<TileBmp> TileBmpCollection
         {
-            get { return tileBmpList; }
-            set { Set(ref tileBmpList, value); }
+            get { return _tileBmpCollection; }
+            set { Set(ref _tileBmpCollection, value); }
         }
 
 
-        private WriteableBitmap outputBmpSource;
-        public WriteableBitmap OutputBmpSource
+        private BitmapImage _outputBmpSource = new BitmapImage();
+        public BitmapImage OutputBmpSource
         {
-            get { return outputBmpSource; }
-            set { Set(ref outputBmpSource, value); }
+            get { return _outputBmpSource; }
+            set { Set(ref _outputBmpSource, value); }
         }
 
-        private int outputWidth = 1000;
+        private int _outputWidth = 1000;
         public int OutputWidth
         {
-            get { return outputWidth; }
-            set
-            {
-                Set(ref outputWidth, value);
-                outputSize.Width = outputWidth;
-            }
+            get { return _outputWidth; }
+            set { Set(ref _outputWidth, value); }
         }
 
-        private int outputHeight = 1000;
+        private int _outputHeight = 1000;
         public int OutputHeight
         {
-            get { return outputHeight; }
-            set
-            {
-                Set(ref outputHeight, value);
-                outputSize.Height = outputHeight;
-            }
+            get { return _outputHeight; }
+            set { Set(ref _outputHeight, value); }
         }
 
-        private Size outputSize = new Size(1000, 1000);
+        private Size outputSize => new Size(_outputWidth, _outputHeight);
 
-        private bool isLoading;
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { Set(ref isLoading, value); }
-        }
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
@@ -107,38 +92,68 @@ namespace Yugen.Mosaic.Uwp
             new MosaicType { Id=2, Title="Plain Color" }
         };
 
-        private MosaicType mosaicSelectedType;
-        public MosaicType MosaicSelectedType
+        private MosaicType _selectedMosaicType;
+        public MosaicType SelectedMosaicType
         {
-            get { return mosaicSelectedType; }
-            set { Set(ref mosaicSelectedType, value); }
+            get { return _selectedMosaicType; }
+            set { Set(ref _selectedMosaicType, value); }
         }
 
-        private Image<Rgba32> masterImage;
-        private List<Image<Rgba32>> tileImageList = new List<Image<Rgba32>>();
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { Set(ref _isLoading, value); }
+        }
+
+        private MosaicService _mosaicService = new MosaicService();
+
+        private Image<Rgba32> _outputImage;
 
 
         public MainViewModel()
         {
-            MosaicSelectedType = MosaicTypeList[0];
+            SelectedMosaicType = MosaicTypeList[0];
         }
 
 
-        public async void AddMasterButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            IsAddMasterUIVisible = true;
+        }
+
+        public void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            UpdateIsAddMasterUIVisible();
+        }
+
+        private void UpdateIsAddMasterUIVisible()
+        {
+            IsAddMasterUIVisible = (MasterBpmSource.PixelWidth > 0 && MasterBpmSource.PixelHeight > 0) ? false : true;
+        }
+
+
+        public async void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
-            if (masterFile == null)
-                return;
-
-            using (var inputStream = await masterFile.OpenReadAsync())
-            using (var stream = inputStream.AsStreamForRead())
+            if (masterFile != null)
             {
-                masterImage = Image.Load<Rgba32>(stream);
-                //MasterBpmSource = await BitmapFactory.FromStream(stream);
+                using (var inputStream = await masterFile.OpenReadAsync())
+                using (var stream = inputStream.AsStreamForRead())
+                {
+                    var image = _mosaicService.AddMasterImage(stream);
+
+                    using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 400))
+                    {
+                        InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
+
+                        await MasterBpmSource.SetSourceAsync(outputStream);
+                    }
+                }
             }
 
-            var thumbnail = masterImage.Clone(x => x.Resize(400, 400));
-            MasterBpmSource = await WriteableBitmapHelper.ImageToWriteableBitmap(thumbnail);
+            UpdateIsAddMasterUIVisible();
         }
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -147,69 +162,67 @@ namespace Yugen.Mosaic.Uwp
             if (files == null)
                 return;
 
+            IsLoading = true;
+
             foreach (var file in files)
             {
-                Image<Rgba32> image;
                 using (var inputStream = await file.OpenReadAsync())
                 using (var stream = inputStream.AsStreamForRead())
                 {
-                    image = Image.Load<Rgba32>(stream);
-                    tileImageList.Add(image);
-                    //var bmp = await BitmapFactory.FromStream(stream);
-                    //tileBmpList.Add(bmp);
+                    var image = _mosaicService.AddTileImage(stream);
+
+                    using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
+                    {
+                        InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
+
+                        var bmp = new BitmapImage();
+                        await bmp.SetSourceAsync(outputStream);
+
+                        TileBmpCollection.Add(new TileBmp(file.Name, bmp));
+                    }
                 }
-
-                //var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(image);
-                tileBmpList.Add(file.Name);
-            }
-        }
-
-        public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            IsLoading = true;
-
-            var outputImage = await Generate();
-
-            if (outputImage != null)
-            {
-                var bmp = await WriteableBitmapHelper.ImageToWriteableBitmap(outputImage);
-                OutputBmpSource = bmp;
             }
 
             IsLoading = false;
         }
 
-        private async Task<Image<Rgba32>> Generate()
+
+        public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            IsLoading = true;
+
             await Task.Delay(1);
 
-            if (masterImage == null || tileImageList.Count < 1)
-                return null;
+            _outputImage = _mosaicService.GenerateMosaic(outputSize, _tileSize, SelectedMosaicType.Id);
 
-            Image<Rgba32> resizedMasterImage = masterImage.Clone(x => x.Resize(outputWidth, outputHeight));
-            MosaicService newMosaicClass = new MosaicService();
-            var newOutputSize = new SixLabors.Primitives.Size((int)outputSize.Width, (int)outputSize.Height);
-            var newTileSize = new SixLabors.Primitives.Size((int)tileSize.Width, (int)tileSize.Height);
-            return newMosaicClass.GenerateMosaic(resizedMasterImage, newOutputSize, tileImageList, newTileSize, MosaicSelectedType.Id);
+            if (_outputImage != null)
+            {
+                InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(_outputImage);
+                await OutputBmpSource.SetSourceAsync(outputStream);
+            }
+
+            IsLoading = false;
         }
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var fileFormat = FileFormat.Jpg;
             var file = await FilePickerHelper.SaveFile("Mosaic", "Image", fileFormat.FileFormatToString());
-            if (file == null)
+            if (file == null || _outputImage == null)
                 return;
 
-            await WriteableBitmapHelper.WriteableBitmapToStorageFile(file, outputBmpSource, fileFormat);
+            using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                _outputImage.SaveAsJpeg(stream.AsStreamForWrite());
+            }
         }
 
         public void ResetButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            MasterBpmSource = null;
-            masterImage = null;
+            _mosaicService.Reset();
 
-            TileBmpList.Clear();
-            tileImageList.Clear();
+            MasterBpmSource = null;
+            TileBmpCollection.Clear();
         }
     }
 }

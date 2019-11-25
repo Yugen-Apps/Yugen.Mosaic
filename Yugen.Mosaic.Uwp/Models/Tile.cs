@@ -5,8 +5,8 @@ namespace Yugen.Mosaic.Uwp.Models
 {
     public class Tile
     {
-        public Image<Rgba32> Image;
-        public Rgba32 Color;
+        public Image<Rgba32> Image { get; set; }
+        public Rgba32 Color { get; set; }
 
         public Tile(Image<Rgba32> image, Rgba32 color)
         {
