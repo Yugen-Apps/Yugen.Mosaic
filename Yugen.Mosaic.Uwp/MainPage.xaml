@@ -19,6 +19,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="32" />
                 <RowDefinition />
@@ -60,7 +61,7 @@
                               PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
                               Tapped="{x:Bind ViewModel.AddMasterGrid_Tapped}"
                               extensions:Mouse.Cursor="Hand"
-                              CornerRadius="10">
+                              CornerRadius="4">
                             
                             <Grid.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
@@ -69,7 +70,7 @@
                             
                             <Grid x:Name="AddMasterUI"
                                   Background="{ThemeResource AppTransparentBackgroundBrush}"
-                                  CornerRadius="10"
+                                  CornerRadius="4"
                                   Visibility="{x:Bind ViewModel.IsAddMasterUIVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"

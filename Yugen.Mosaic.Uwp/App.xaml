@@ -9,9 +9,13 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
+                
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                
                 <ResourceDictionary>
+                    
                     <SolidColorBrush x:Key="NullBackground"></SolidColorBrush>
+                    
                     <Style x:Key="SoftRevealButtonStyle"
                            TargetType="Button">
                         <Setter Property="Background"
@@ -103,51 +107,73 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
+                    
                 </ResourceDictionary>
+                
             </ResourceDictionary.MergedDictionaries>
 
             <ResourceDictionary.ThemeDictionaries>
+                
                 <ResourceDictionary x:Key="Light">
+                    
                     <SolidColorBrush x:Key="AppBackgroundBrush"
                                      Color="#FFF0F0F0" />
+                    
                     <SolidColorBrush x:Key="AppDeepBackgroundBrush"
                                      Color="#FFDBDBDB" />
+                    
                     <SolidColorBrush x:Key="AppForegroundBrush"
                                      Color="#FF535353" />
+                    
                     <SolidColorBrush x:Key="AppWorkBackgroundBrush"
                                      Color="#FFA6A6A6" />
+                    
                     <SolidColorBrush x:Key="AppWorkAreaBrush"
                                      Color="White" />
+                    
                     <SolidColorBrush x:Key="AppBorderBrush"
                                      Color="#FFC8C8C8" />
+                    
                     <SolidColorBrush x:Key="AppTransparentBackgroundBrush"
                                      Color="#7FFFFFFF" />
+                    
                     <!--TitleBar themed resources-->
                     <Color x:Key="TitleBarButtonForeground">#242424</Color>
                     <Color x:Key="TitleBarButtonHoverBackground">White</Color>
                     <Color x:Key="TitleBarButtonHoverForeground">#242424</Color>
+                    
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Key="Dark">
+                    
                     <SolidColorBrush x:Key="AppBackgroundBrush"
                                      Color="#FF535353" />
+                    
                     <SolidColorBrush x:Key="AppDeepBackgroundBrush"
                                      Color="#FF424242" />
+                    
                     <SolidColorBrush x:Key="AppForegroundBrush"
                                      Color="#FFC2C2C2" />
+                    
                     <SolidColorBrush x:Key="AppWorkBackgroundBrush"
                                      Color="#FF606060" />
+                    
                     <SolidColorBrush x:Key="AppWorkAreaBrush"
                                      Color="#FFF0F0F0" />
+                    
                     <SolidColorBrush x:Key="AppBorderBrush"
                                      Color="#FF3F3F3F" />
+                    
                     <SolidColorBrush x:Key="AppTransparentBackgroundBrush"
                                      Color="#7F000000" />
+                    
                     <!--TitleBar themed resources-->
                     <Color x:Key="TitleBarButtonForeground">#dcdcdc</Color>
                     <Color x:Key="TitleBarButtonHoverBackground">#262626</Color>
                     <Color x:Key="TitleBarButtonHoverForeground">#dcdcdc</Color>
+                    
                 </ResourceDictionary>
+                
             </ResourceDictionary.ThemeDictionaries>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
