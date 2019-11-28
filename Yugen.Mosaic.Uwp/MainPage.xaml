@@ -7,6 +7,7 @@
       xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
       xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
+      xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}">
 
@@ -186,19 +187,34 @@
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        <TextBox Grid.Column="1"
+
+                        <!--<TextBox Grid.Column="1"
                                  InputScope="Number"
-                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}" />
+                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}" />-->
+
+                        <validation:ValidatingTextBoxUserControl Grid.Column="1"
+                                                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
+                                                                 ValidationRules="{StaticResource IntValidationRule}"
+                                                                 IsMandatory="True"
+                                                                 IsRealTimeValidationEnabled="True"/>
+
                         <TextBlock Grid.Column="2"
                                    Text="H:"
                                    VerticalAlignment="Center"
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        <TextBox Grid.Column="3"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}" />
                         
+                        <!--<TextBox Grid.Column="3"
+                                 InputScope="Number"
+                                 Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}" />-->
+
+                        <validation:ValidatingTextBoxUserControl Grid.Column="3"
+                                                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
+                                                                 ValidationRules="{StaticResource IntValidationRule}"
+                                                                 IsMandatory="True"
+                                                                 IsRealTimeValidationEnabled="True" />
+
                     </Grid>
                     
                     <Rectangle Height=".5"
@@ -232,18 +248,33 @@
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        <TextBox Grid.Column="1"
+                        
+                        <!--<TextBox Grid.Column="1"
                                  InputScope="Number"
-                                 Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}" />
+                                 Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}" />-->
+
+                        <validation:ValidatingTextBoxUserControl Grid.Column="1"
+                                                                 Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
+                                                                 ValidationRules="{StaticResource IntValidationRule}"
+                                                                 IsMandatory="True"
+                                                                 IsRealTimeValidationEnabled="True" />
+
                         <TextBlock Grid.Column="2"
                                    Text="H:"
                                    VerticalAlignment="Center"
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        <TextBox Grid.Column="3"
+                        
+                        <!--<TextBox Grid.Column="3"
                                  InputScope="Number"
-                                 Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
+                                 Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />-->
+
+                        <validation:ValidatingTextBoxUserControl Grid.Column="3"
+                                                                 Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
+                                                                 ValidationRules="{StaticResource IntValidationRule}"
+                                                                 IsMandatory="True"
+                                                                 IsRealTimeValidationEnabled="True" />
                         
                     </Grid>
                     
