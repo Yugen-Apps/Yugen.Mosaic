@@ -157,9 +157,10 @@
                 
             </Grid>
 
-            <Grid Grid.Column="2"
-                  Grid.Row="1"
-                  Background="{ThemeResource AppBackgroundBrush}"
+            <validation:ValidatingForm x:Name="ValidatingForm"
+                                       Grid.Column="2"
+                                       Grid.Row="1">
+            <Grid Background="{ThemeResource AppBackgroundBrush}"
                   Padding="8">
 
                 <Grid.RowDefinitions>
@@ -188,7 +189,7 @@
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
 
-                        <validation:ValidatingTextBoxUserControl Grid.Column="1"
+                        <validation:ValidatingTextBox Grid.Column="1"
                                                                  Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
                                                                  MandatoryValidationMessage="Mandatory"
@@ -201,8 +202,8 @@
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        
-                        <validation:ValidatingTextBoxUserControl Grid.Column="3"
+
+                        <validation:ValidatingTextBox Grid.Column="3"
                                                                  Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
                                                                  MandatoryValidationMessage="Mandatory"
@@ -242,8 +243,8 @@
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        
-                        <validation:ValidatingTextBoxUserControl Grid.Column="1"
+
+                        <validation:ValidatingTextBox Grid.Column="1"
                                                                  Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
                                                                  MandatoryValidationMessage="Mandatory"
@@ -256,8 +257,8 @@
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
-                        
-                        <validation:ValidatingTextBoxUserControl Grid.Column="3"
+
+                        <validation:ValidatingTextBox Grid.Column="3"
                                                                  Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
                                                                  MandatoryValidationMessage="Mandatory"
@@ -269,11 +270,13 @@
                     <Rectangle Height=".5"
                                Fill="{ThemeResource AppBorderBrush}"
                                Margin="0,15,0,0" />
-                    <Button Content="Generate"
+                    
+                    <validation:ValidatingButton Content="Generate"
                             HorizontalAlignment="Stretch"
                             Margin="5,0,0,0"
                             Style="{ThemeResource AccentButtonStyle}"
-                            Click="{x:Bind ViewModel.GenerateButton_Click}" />
+                            Click="{x:Bind ViewModel.GenerateButton_Click}" 
+                            ValidatingForm="{x:Bind ValidatingForm}"/>
                     
                     <Grid Margin="5,0,0,0">
                         
@@ -304,7 +307,8 @@
                 
                 <Button Grid.Row="1"
                         HorizontalAlignment="Stretch"
-                        Height="36" Click="SettingsClick">
+                        Height="36" 
+                        Click="SettingsClick">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="" />
@@ -313,7 +317,7 @@
                 </Button>
 
             </Grid>
-
+            </validation:ValidatingForm>
         </Grid>
 
     </Grid>
