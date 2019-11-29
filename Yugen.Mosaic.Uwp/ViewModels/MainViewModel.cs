@@ -17,8 +17,6 @@ using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace Yugen.Mosaic.Uwp
 {
     public class MainViewModel : BaseViewModel

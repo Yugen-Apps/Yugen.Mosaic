@@ -188,13 +188,10 @@
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
 
-                        <!--<TextBox Grid.Column="1"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}" />-->
-
                         <validation:ValidatingTextBoxUserControl Grid.Column="1"
                                                                  Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
+                                                                 MandatoryValidationMessage="Mandatory"
                                                                  IsMandatory="True"
                                                                  IsRealTimeValidationEnabled="True"/>
 
@@ -205,13 +202,10 @@
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
                         
-                        <!--<TextBox Grid.Column="3"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}" />-->
-
                         <validation:ValidatingTextBoxUserControl Grid.Column="3"
-                                                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
+                                                                 Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
+                                                                 MandatoryValidationMessage="Mandatory"
                                                                  IsMandatory="True"
                                                                  IsRealTimeValidationEnabled="True" />
 
@@ -249,13 +243,10 @@
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
                         
-                        <!--<TextBox Grid.Column="1"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}" />-->
-
                         <validation:ValidatingTextBoxUserControl Grid.Column="1"
                                                                  Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
+                                                                 MandatoryValidationMessage="Mandatory"
                                                                  IsMandatory="True"
                                                                  IsRealTimeValidationEnabled="True" />
 
@@ -266,13 +257,10 @@
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Margin="5,0,5,0" />
                         
-                        <!--<TextBox Grid.Column="3"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />-->
-
                         <validation:ValidatingTextBoxUserControl Grid.Column="3"
                                                                  Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
                                                                  ValidationRules="{StaticResource IntValidationRule}"
+                                                                 MandatoryValidationMessage="Mandatory"
                                                                  IsMandatory="True"
                                                                  IsRealTimeValidationEnabled="True" />
                         
@@ -313,7 +301,7 @@
                                   Width="80" />
 
                 </StackPanel>
-
+                
                 <Button Grid.Row="1"
                         HorizontalAlignment="Stretch"
                         Height="36" Click="SettingsClick">
