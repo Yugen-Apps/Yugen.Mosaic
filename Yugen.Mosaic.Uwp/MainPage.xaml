@@ -119,7 +119,9 @@
                 <toolkitControls:AdaptiveGridView Grid.Row="2"
                                                   DesiredWidth="120"
                                                   StretchContentForSingleRow="False"
-                                                  ItemsSource="{x:Bind ViewModel.TileBmpCollection, Mode=OneWay}">
+                                                  ItemsSource="{x:Bind ViewModel.TileBmpCollection, Mode=OneWay}"
+                                                  ItemClick="{x:Bind ViewModel.AdaptiveGridView_ItemClick}"
+                                                  IsItemClickEnabled="True">
 
                     <toolkitControls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate x:DataType="models:TileBmp">

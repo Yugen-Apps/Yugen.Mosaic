@@ -8,6 +8,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
@@ -171,7 +173,7 @@ namespace Yugen.Mosaic.Uwp
                 using (var inputStream = await file.OpenReadAsync())
                 using (var stream = inputStream.AsStreamForRead())
                 {
-                    var image = _mosaicService.AddTileImage(stream);
+                    var image = _mosaicService.AddTileImage(file.DisplayName, stream);
 
                     using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
                     {
@@ -180,7 +182,7 @@ namespace Yugen.Mosaic.Uwp
                         var bmp = new BitmapImage();
                         await bmp.SetSourceAsync(outputStream);
 
-                        TileBmpCollection.Add(new TileBmp(file.Name, bmp));
+                        TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
                     }
                 }
             }
@@ -188,6 +190,21 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = false;
         }
 
+        public async void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is TileBmp item)
+            {
+                await MessageDialogHelper.Confirm("Do you want to Remove this picture?",
+                    "",
+                    new UICommand("Yes",
+                        action =>
+                        {
+                            TileBmpCollection.Remove(item);
+                            _mosaicService.RemoveTileImage(item.Name);
+                        }),
+                    new UICommand("No"));
+            }
+        }
 
         public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {

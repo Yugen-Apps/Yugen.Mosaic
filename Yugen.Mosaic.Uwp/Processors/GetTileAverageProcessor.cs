@@ -16,14 +16,16 @@ namespace Yugen.Mosaic.Uwp.Processors
         public int Width { get; }
         public int Height { get; }
 
-        public Rgba32[] MyColor { get; } = new Rgba32[1];
+        public Image<Rgba32> ResizedImage { get; }
+        public Rgba32[] AverageColor { get; } = new Rgba32[1];
 
-        public GetTileAverageProcessor(int x, int y, int width, int height)
+        public GetTileAverageProcessor(int x, int y, int width, int height, Image<Rgba32> resizedImage)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
+            ResizedImage = resizedImage.CloneAs<Rgba32>();
         }
 
         /// <inheritdoc/>
@@ -45,7 +47,8 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _width;
         private readonly int _height;
 
-        private readonly Rgba32[] _myColor;
+        private readonly Image<Rgba32> _resizedImage;
+        private readonly Rgba32[] _averageColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -62,13 +65,14 @@ namespace Yugen.Mosaic.Uwp.Processors
             _width = definition.Width;
             _height = definition.Height;
 
-            _myColor = definition.MyColor;
+            _resizedImage = definition.ResizedImage;
+            _averageColor = definition.AverageColor;
         }
         
         /// <inheritdoc/>
         public void Apply()
         {
-            _source.Mutate(x => x.Resize(_width, _height));
+            _resizedImage.Mutate(x => x.Resize(_width, _height));
 
             long aR = 0;
             long aG = 0;
@@ -76,7 +80,7 @@ namespace Yugen.Mosaic.Uwp.Processors
 
             Parallel.For(_y, _y+_height, h =>
             {
-                var rowSpan = _source.GetPixelRowSpan(h);
+                var rowSpan = _resizedImage.GetPixelRowSpan(h);
 
                 for (int w = _x; w < _x + _width; w++)
                 {
@@ -93,7 +97,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             aG /= _width * _height;
             aB /= _width * _height;
 
-            _myColor[0] = new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
+            _averageColor[0] = new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
 
         /// <inheritdoc/>

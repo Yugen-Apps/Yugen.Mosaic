@@ -47,7 +47,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _width;
         private readonly int _height;
 
-        private Image<Rgba32> _outputImage { get; }
+        private readonly Image<Rgba32> _outputImage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class

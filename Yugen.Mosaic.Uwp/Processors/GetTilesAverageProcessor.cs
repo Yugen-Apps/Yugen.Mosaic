@@ -14,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         public int TY { get; }
         public Size TileSize { get; }
 
-        public Rgba32[,] AvgsMaster { get; }
+        public Rgba32[,] AverageColors { get; }
 
         public GetTilesAverageProcessor(int tX, int tY, Size tileSize, Rgba32[,] avgsMaster)
         {
@@ -22,7 +22,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             TY = tY;
             TileSize = tileSize;
 
-            AvgsMaster = avgsMaster;
+            AverageColors = avgsMaster;
         }
 
         /// <inheritdoc/>
@@ -43,7 +43,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _tY;
         private Size _tileSize;
 
-        private readonly Rgba32[,] _avgsMaster;
+        private readonly Rgba32[,] _averageColors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -59,7 +59,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             _tY = definition.TY;
             _tileSize = definition.TileSize;
 
-            _avgsMaster = definition.AvgsMaster;
+            _averageColors = definition.AverageColors;
         }
 
         /// <inheritdoc/>
@@ -71,7 +71,7 @@ namespace Yugen.Mosaic.Uwp.Processors
 
                 for (int x = 0; x < _tX; x++)
                 {
-                    _avgsMaster[x, y].FromRgba32(GetTileAverage(_source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height));
+                    _averageColors[x, y].FromRgba32(GetTileAverage(_source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height));
                 }
             });
         }
