@@ -9,31 +9,33 @@ using System.Threading.Tasks;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {
-    public sealed class GetTileAverageProcessor : IImageProcessor
+    public sealed class ApplyTileFoundProcessor : IImageProcessor
     {
         public int X { get; }
         public int Y { get; }
         public int Width { get; }
         public int Height { get; }
 
-        public Rgba32[] MyColor { get; } = new Rgba32[1];
+        public Image<Rgba32> OutputImage { get; }
 
-        public GetTileAverageProcessor(int x, int y, int width, int height)
+        public ApplyTileFoundProcessor(int x, int y, int width, int height, Image<Rgba32> outputImage)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
+
+            OutputImage = outputImage;
         }
 
         /// <inheritdoc/>
         public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Image<TPixel> source, Rectangle sourceRectangle) where TPixel : struct, IPixel<TPixel>
         {
-            return new GetTileAverageProcessor<TPixel>(this, source, sourceRectangle);
+            return new ApplyTileFoundProcessor<TPixel>(this, source, sourceRectangle);
         }
     }
 
-    public class GetTileAverageProcessor<TPixel> : IImageProcessor<TPixel> where TPixel : struct, IPixel<TPixel>
+    public class ApplyTileFoundProcessor<TPixel> : IImageProcessor<TPixel> where TPixel : struct, IPixel<TPixel>
     {
         /// <summary>
         /// The source <see cref="Image{TPixel}"/> instance to modify
@@ -45,7 +47,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         private readonly int _width;
         private readonly int _height;
 
-        private readonly Rgba32[] _myColor;
+        private Image<Rgba32> _outputImage { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -53,7 +55,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="definition">The <see cref="HlslGaussianBlurProcessor"/> defining the processor parameters</param>
         /// <param name="source">The source <see cref="Image{TPixel}"/> for the current processor instance</param>
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
-        public GetTileAverageProcessor(GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
+        public ApplyTileFoundProcessor(ApplyTileFoundProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
             _source = source;
 
@@ -62,38 +64,24 @@ namespace Yugen.Mosaic.Uwp.Processors
             _width = definition.Width;
             _height = definition.Height;
 
-            _myColor = definition.MyColor;
+            _outputImage = definition.OutputImage;
         }
         
         /// <inheritdoc/>
         public void Apply()
         {
-            _source.Mutate(x => x.Resize(_width, _height));
-
-            long aR = 0;
-            long aG = 0;
-            long aB = 0;
-
-            Parallel.For(_y, _y+_height, h =>
+            Parallel.For(0, _height, h =>
             {
                 var rowSpan = _source.GetPixelRowSpan(h);
 
-                for (int w = _x; w < _x + _width; w++)
+                for (int w = 0; w < _width; w++)
                 {
                     Rgba32 pixel = new Rgba32();
                     rowSpan[w].ToRgba32(ref pixel);
 
-                    aR += pixel.R;
-                    aG += pixel.G;
-                    aB += pixel.B;
+                    _outputImage[_x * _width + w, _y * _height + h] = pixel;
                 }
             });
-
-            aR /= _width * _height;
-            aG /= _width * _height;
-            aB /= _width * _height;
-
-            _myColor[0] = new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
 
         /// <inheritdoc/>

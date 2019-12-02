@@ -127,9 +127,9 @@
     </Compile>
     <Compile Include="Models\TileBmp.cs" />
     <Compile Include="Models\Tile.cs" />
+    <Compile Include="Processors\ApplyTileFoundProcessor.cs" />
     <Compile Include="Processors\PlainColorProcessor.cs" />
     <Compile Include="Processors\AdjustHueProcessor.cs" />
-    <Compile Include="Processors\GetPixelProcessor.cs" />
     <Compile Include="Processors\GetTileAverageProcessor.cs" />
     <Compile Include="Processors\GetTilesAverageProcessor.cs" />
     <Compile Include="Services\MosaicService.cs" />

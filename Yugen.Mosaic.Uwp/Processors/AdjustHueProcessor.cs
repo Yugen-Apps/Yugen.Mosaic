@@ -31,8 +31,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <summary>
         /// The source <see cref="Image{TPixel}"/> instance to modify
         /// </summary>
-        private readonly Image<TPixel> Source;
-
+        private readonly Image<TPixel> _source;
         private readonly Image<Rgba32> _inputImage;
         private readonly Rgba32 _averageColor;
 
@@ -44,7 +43,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
         public AdjustHueProcessor(AdjustHueProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
-            Source = source;
+            _source = source;
             _inputImage = definition.InputImage;
             _averageColor = definition.AverageColor;
         }
@@ -71,7 +70,7 @@ namespace Yugen.Mosaic.Uwp.Processors
                     Color clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
                     
                     TPixel pixelColor = clAvg.ToPixel<TPixel>();
-                    Source[w, h] = pixelColor;
+                    _source[w, h] = pixelColor;
                 }
             });
         }

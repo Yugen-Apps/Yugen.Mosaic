@@ -25,6 +25,9 @@ namespace Yugen.Mosaic.Uwp.Services
         private int _tY;
         private Rgba32[,] _avgsMaster;
 
+        private int _progress;
+        private int _progressMax;
+
 
         public Image<Rgba32> AddMasterImage(Stream stream)
         {
@@ -89,19 +92,17 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private void LoadTilesAndResize()
         {
-            //progressBarMaximum = tileBmpList.Count;
-            //progressBarValue = 0;
+            _progressMax = _tileImageList.Count;
+            _progress = 0;
 
             _resizedTileList.Clear();
             foreach (var image in _tileImageList)
             {                
-                image.Mutate(x => x.Resize(_tileSize.Width, _tileSize.Height));
-                var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, image.Width, image.Height);
+                var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, _tileSize.Width, _tileSize.Height);
                 image.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
 
                 _resizedTileList.Add(new Tile(image, getTileAverageProcessor.MyColor[0]));
-
-                //progressBarValue++;
+                _progress++;
             }
         }
 
@@ -110,9 +111,9 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             if (_resizedTileList.Count < 1)
                 return;
-            
-            //progressBarMaximum = tX * tY;
-            //progressBarValue = 0;
+
+            _progressMax = _tileImageList.Count;
+            _progress = 0;
 
             switch (mosaicType)
             {
@@ -128,11 +129,11 @@ namespace Yugen.Mosaic.Uwp.Services
             }
         }
 
+        // Don't adjust hue - keep searching for a tile close enough
         private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize)
         {
             Random r = new Random();
 
-            // Don't adjust hue - keep searching for a tile close enough
             for (int x = 0; x < _tX; x++)
             {
                 for (int y = 0; y < _tY; y++)
@@ -158,27 +159,18 @@ namespace Yugen.Mosaic.Uwp.Services
                     }
 
                     // Apply found tile to section
-                    for (int w = 0; w < tileSize.Width; w++)
-                    {
-                        for (int h = 0; h < tileSize.Height; h++)
-                        {
-                            var getPixelProcessor = new GetPixelProcessor(w, h);
-                            tFound.Image.Mutate(c => c.ApplyProcessor(getPixelProcessor));
+                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                    tFound.Image.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));                
 
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
-                        }
-                    }
-
-                    //progressBarValue++;
+                    _progress++;
                 }
             }
         }
-        
+
+        // Adjust hue - get the first (random) tile found and adjust its colours to suit the average
         private void SearchAndReplaceAdjustHue(Image<Rgba32> outputImage, Size tileSize)
         {
             Random r = new Random();
-            // Adjust hue - get the first (random) tile found and adjust its colours
-            // to suit the average
             List<Tile> tileQueue = new List<Tile>();
             int maxQueueLength = Math.Min(1000, Math.Max(0, _resizedTileList.Count - 50));
 
@@ -208,28 +200,17 @@ namespace Yugen.Mosaic.Uwp.Services
                     adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
 
                     // Apply found tile to section
-                    for (int w = 0; w < tileSize.Width; w++)
-                    {
-                        for (int h = 0; h < tileSize.Height; h++)
-                        {
-                            var getPixelProcessor = new GetPixelProcessor(w, h);
-                            adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
+                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                    adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
 
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
-                        }
-                    }
-
-                    //progressBarValue++;
+                    _progress++;
                 }
             }
         }
 
-
         private void PlainColor(Image<Rgba32> outputImage, Size tileSize)
         {
             Random r = new Random();
-            // Adjust hue - get the first (random) tile found and adjust its colours
-            // to suit the average
             List<Tile> tileQueue = new List<Tile>();
             int maxQueueLength = Math.Min(1000, Math.Max(0, _resizedTileList.Count - 50));
 
@@ -259,21 +240,14 @@ namespace Yugen.Mosaic.Uwp.Services
                     adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
 
                     // Apply found tile to section
-                    for (int w = 0; w < tileSize.Width; w++)
-                    {
-                        for (int h = 0; h < tileSize.Height; h++)
-                        {
-                            var getPixelProcessor = new GetPixelProcessor(w, h);
-                            adjustedImage.Mutate(c => c.ApplyProcessor(getPixelProcessor));
-
-                            outputImage[x * tileSize.Width + w, y * tileSize.Height + h] = getPixelProcessor.MyColor[0];
-                        }
-                    }
-
-                    //progressBarValue++;
+                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                    adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+                    
+                    _progress++;
                 }
             }
         }
+
 
         private int GetDifference(Rgba32 source, Rgba32 target)
         {
