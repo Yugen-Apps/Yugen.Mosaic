@@ -64,7 +64,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public Image<Rgba32> GenerateMosaic(Size outputSize, Size tileSize, int mosaicType)
         {
-            if (_masterImage == null || _tileImageList.Count < 1)
+            if (_masterImage == null || (mosaicType !=2 && _tileImageList.Count < 1))
                 return null;
 
             Image<Rgba32> resizedMasterImage = _masterImage.Clone(x => x.Resize(outputSize.Width, outputSize.Height));
@@ -109,16 +109,13 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize, int mosaicType)
         {
-            if (_resizedTileList.Count < 1)
-                return;
-
             _progressMax = _tileImageList.Count;
             _progress = 0;
 
             switch (mosaicType)
             {
                 case 0:
-                    SearchAndReplace(outputImage, tileSize);
+                    SearchAndReplaceClassic(outputImage, tileSize);
                     break;
                 case 1:
                     SearchAndReplaceAdjustHue(outputImage, tileSize);
@@ -130,7 +127,7 @@ namespace Yugen.Mosaic.Uwp.Services
         }
 
         // Don't adjust hue - keep searching for a tile close enough
-        private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize)
+        private void SearchAndReplaceClassic(Image<Rgba32> outputImage, Size tileSize)
         {
             Random r = new Random();
 
@@ -208,34 +205,15 @@ namespace Yugen.Mosaic.Uwp.Services
             }
         }
 
+        // Use just mosic colored tiles
         private void PlainColor(Image<Rgba32> outputImage, Size tileSize)
         {
-            Random r = new Random();
-            List<Tile> tileQueue = new List<Tile>();
-            int maxQueueLength = Math.Min(1000, Math.Max(0, _resizedTileList.Count - 50));
-
             for (int x = 0; x < _tX; x++)
             {
                 for (int y = 0; y < _tY; y++)
                 {
-                    int index = 0;
-                    // Check if it's the same as the last (X)?
-                    if (tileQueue.Count > 1)
-                    {
-                        while (tileQueue.Contains(_resizedTileList[index]))
-                        {
-                            index = r.Next(_resizedTileList.Count);
-                        }
-                    }
-
-                    // Add to the 'queue'
-                    Tile tFound = _resizedTileList[index];
-                    if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
-                        tileQueue.RemoveAt(0);
-                    tileQueue.Add(tFound);
-
                     // Adjust the hue
-                    Image<Rgba32> adjustedImage = new Image<Rgba32>(tFound.Image.Width, tFound.Image.Height);
+                    Image<Rgba32> adjustedImage = new Image<Rgba32>(tileSize.Width, tileSize.Height);
                     var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
                     adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
 
