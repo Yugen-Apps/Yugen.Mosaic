@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
+using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
@@ -35,14 +36,14 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _isAddMasterUIVisible, value); }
         }
 
-        private int _tileWidth = 50;
+        private int _tileWidth = 25;
         public int TileWidth
         {
             get { return _tileWidth; }
             set { Set(ref _tileWidth, value); }
         }
 
-        private int _tileHeight = 50;
+        private int _tileHeight = 25;
         public int TileHeight
         {
             get { return _tileHeight; }
@@ -145,9 +146,12 @@ namespace Yugen.Mosaic.Uwp
                     using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 400))
                     {
                         InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
-
                         await MasterBpmSource.SetSourceAsync(outputStream);
                     }
+
+                    var newSize = RatioHelper.Convert(image.Width, image.Height, outputSize.Width, outputSize.Height);
+                    OutputWidth = newSize.Item1;
+                    OutputHeight = newSize.Item2;
                 }
             }
 
