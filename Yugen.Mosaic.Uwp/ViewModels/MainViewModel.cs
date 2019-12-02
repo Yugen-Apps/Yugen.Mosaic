@@ -137,7 +137,9 @@ namespace Yugen.Mosaic.Uwp
 
         public async void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
+            var masterFile = await FilePickerHelper.OpenFile(
+                new List<string> { ".jpg", ".png" },
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (masterFile != null)
             {
                 using (var inputStream = await masterFile.OpenReadAsync())
@@ -162,7 +164,9 @@ namespace Yugen.Mosaic.Uwp
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var files = await FilePickerHelper.OpenFiles(new List<string> { ".jpg", ".png" });
+            var files = await FilePickerHelper.OpenFiles(
+                new List<string> { ".jpg", ".png" },
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (files == null)
                 return;
 
@@ -225,14 +229,28 @@ namespace Yugen.Mosaic.Uwp
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var fileFormat = FileFormat.Jpg;
-            var file = await FilePickerHelper.SaveFile("Mosaic", "Image", fileFormat.FileFormatToString());
+            var fileTypes = new Dictionary<string, List<string>>() {
+                { FileFormat.Png.ToString(), new List<string>() { FileFormat.Png.FileFormatToString() } },
+                { FileFormat.Jpg.ToString(), new List<string>() { FileFormat.Jpg.FileFormatToString() } }
+            };
+
+            var file = await FilePickerHelper.SaveFile("Mosaic", fileTypes, 
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+
             if (file == null || _outputImage == null)
                 return;
 
             using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
-                _outputImage.SaveAsJpeg(stream.AsStreamForWrite());
+                switch (file.FileType)
+                {
+                    case ".png":
+                        _outputImage.SaveAsPng(stream.AsStreamForWrite());
+                        break;
+                    default:
+                        _outputImage.SaveAsJpeg(stream.AsStreamForWrite());
+                        break;
+                }
             }
         }
 
