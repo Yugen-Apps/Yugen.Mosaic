@@ -9,7 +9,7 @@
   <Identity
     Name="30978emiliano84.YugenMosaic"
     Publisher="CN=0259C6DD-5945-485D-962F-C84F7531D6C4"
-    Version="1.0.5.0" />
+    Version="1.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="3abb8d0e-97ba-48fb-a67a-84567f3e9afd" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

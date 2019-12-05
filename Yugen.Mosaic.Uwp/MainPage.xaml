@@ -324,8 +324,8 @@
 
                     <Button Grid.Row="1"
                             HorizontalAlignment="Stretch"
-                            Height="36"
-                            Click="SettingsClick">
+                                Height="36"
+                                Click="{x:Bind ViewModel.SettingsButton_Click}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="5">
                             <FontIcon Glyph="" />
