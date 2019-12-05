@@ -5,13 +5,16 @@ namespace Yugen.Mosaic.Uwp.Models
 {
     public class Tile
     {
-        public Image<Rgba32> Image { get; set; }
-        public Rgba32 Color { get; set; }
+        public Image<Rgba32> OriginalImage { get; set; }
+        public string Name { get; set; }
 
-        public Tile(Image<Rgba32> image, Rgba32 color)
+        public Image<Rgba32> ResizedImage { get; set; }
+        public Rgba32 AverageColor { get; set; }
+
+        public Tile(Image<Rgba32> originalImage, string name)
         {
-            Image = image;
-            Color = color;
+            OriginalImage = originalImage;
+            Name = name;
         }
     }
 }

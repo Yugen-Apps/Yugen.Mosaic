@@ -8,16 +8,17 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
+using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace Yugen.Mosaic.Uwp
 {
@@ -37,14 +38,14 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _isAddMasterUIVisible, value); }
         }
 
-        private int _tileWidth = 50;
+        private int _tileWidth = 25;
         public int TileWidth
         {
             get { return _tileWidth; }
             set { Set(ref _tileWidth, value); }
         }
 
-        private int _tileHeight = 50;
+        private int _tileHeight = 25;
         public int TileHeight
         {
             get { return _tileHeight; }
@@ -136,7 +137,9 @@ namespace Yugen.Mosaic.Uwp
 
         public async void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var masterFile = await FilePickerHelper.OpenFile(new List<string> { ".jpg", ".png" });
+            var masterFile = await FilePickerHelper.OpenFile(
+                new List<string> { ".jpg", ".png" },
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (masterFile != null)
             {
                 using (var inputStream = await masterFile.OpenReadAsync())
@@ -147,9 +150,12 @@ namespace Yugen.Mosaic.Uwp
                     using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 400))
                     {
                         InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
-
                         await MasterBpmSource.SetSourceAsync(outputStream);
                     }
+
+                    var newSize = RatioHelper.Convert(image.Width, image.Height, outputSize.Width, outputSize.Height);
+                    OutputWidth = newSize.Item1;
+                    OutputHeight = newSize.Item2;
                 }
             }
 
@@ -158,7 +164,9 @@ namespace Yugen.Mosaic.Uwp
 
         public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var files = await FilePickerHelper.OpenFiles(new List<string> { ".jpg", ".png" });
+            var files = await FilePickerHelper.OpenFiles(
+                new List<string> { ".jpg", ".png" },
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (files == null)
                 return;
 
@@ -169,7 +177,7 @@ namespace Yugen.Mosaic.Uwp
                 using (var inputStream = await file.OpenReadAsync())
                 using (var stream = inputStream.AsStreamForRead())
                 {
-                    var image = _mosaicService.AddTileImage(stream);
+                    var image = _mosaicService.AddTileImage(file.DisplayName, stream);
 
                     using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
                     {
@@ -178,7 +186,7 @@ namespace Yugen.Mosaic.Uwp
                         var bmp = new BitmapImage();
                         await bmp.SetSourceAsync(outputStream);
 
-                        TileBmpCollection.Add(new TileBmp(file.Name, bmp));
+                        TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
                     }
                 }
             }
@@ -186,6 +194,21 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = false;
         }
 
+        public async void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is TileBmp item)
+            {
+                await MessageDialogHelper.Confirm("Do you want to Remove this picture?",
+                    "",
+                    new UICommand("Yes",
+                        action =>
+                        {
+                            TileBmpCollection.Remove(item);
+                            _mosaicService.RemoveTileImage(item.Name);
+                        }),
+                    new UICommand("No"));
+            }
+        }
 
         public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -206,14 +229,28 @@ namespace Yugen.Mosaic.Uwp
 
         public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var fileFormat = FileFormat.Jpg;
-            var file = await FilePickerHelper.SaveFile("Mosaic", "Image", fileFormat.FileFormatToString());
+            var fileTypes = new Dictionary<string, List<string>>() {
+                { FileFormat.Png.ToString(), new List<string>() { FileFormat.Png.FileFormatToString() } },
+                { FileFormat.Jpg.ToString(), new List<string>() { FileFormat.Jpg.FileFormatToString() } }
+            };
+
+            var file = await FilePickerHelper.SaveFile("Mosaic", fileTypes, 
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+
             if (file == null || _outputImage == null)
                 return;
 
             using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
-                _outputImage.SaveAsJpeg(stream.AsStreamForWrite());
+                switch (file.FileType)
+                {
+                    case ".png":
+                        _outputImage.SaveAsPng(stream.AsStreamForWrite());
+                        break;
+                    default:
+                        _outputImage.SaveAsJpeg(stream.AsStreamForWrite());
+                        break;
+                }
             }
         }
 

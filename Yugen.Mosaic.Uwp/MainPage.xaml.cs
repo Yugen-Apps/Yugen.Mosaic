@@ -1,10 +1,6 @@
 ﻿using Windows.ApplicationModel.Core;
-using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using System;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Yugen.Mosaic.Uwp
 {

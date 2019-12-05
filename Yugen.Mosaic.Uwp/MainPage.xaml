@@ -7,6 +7,7 @@
       xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
       xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
+      xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}">
 
@@ -19,6 +20,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="32" />
                 <RowDefinition />
@@ -28,13 +30,17 @@
                   Background="{ThemeResource AppBackgroundBrush}"
                   BorderBrush="{ThemeResource AppBorderBrush}"
                   BorderThickness="0,0,0,.5">
+                
                 <StackPanel Orientation="Horizontal"
                             Margin="32,0,0,0">
+                    
                     <TextBlock Text="Yugen Mosaic"
                                VerticalAlignment="Center"
                                Foreground="{ThemeResource AppForegroundBrush}"
                                Style="{StaticResource BaseTextBlockStyle}" />
+                    
                 </StackPanel>
+                
             </Grid>
 
             <Grid Grid.Row="1"
@@ -48,11 +54,11 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Spacing="5">
-                    
+
                     <TextBlock Text="Master Image"
                                Style="{StaticResource CaptionTextBlockStyle}"
                                Foreground="{ThemeResource AppForegroundBrush}" />
-                    
+
                     <Border Height="230"
                             Width="230">
 
@@ -60,17 +66,18 @@
                               PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
                               Tapped="{x:Bind ViewModel.AddMasterGrid_Tapped}"
                               extensions:Mouse.Cursor="Hand"
-                              CornerRadius="10">
-                            
+                              CornerRadius="2">
+
                             <Grid.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
                                             Stretch="Uniform" />
                             </Grid.Background>
-                            
+
                             <Grid x:Name="AddMasterUI"
                                   Background="{ThemeResource AppTransparentBackgroundBrush}"
-                                  CornerRadius="10"
+                                  CornerRadius="2"
                                   Visibility="{x:Bind ViewModel.IsAddMasterUIVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Margin="25"
@@ -81,12 +88,13 @@
                                                TextWrapping="WrapWholeWords"
                                                TextAlignment="Center" />
                                 </StackPanel>
+                                
                             </Grid>
-                            
+
                         </Grid>
-                        
+
                     </Border>
-                    
+
                 </StackPanel>
 
                 <StackPanel Grid.Row="1"
@@ -111,13 +119,15 @@
                 <toolkitControls:AdaptiveGridView Grid.Row="2"
                                                   DesiredWidth="120"
                                                   StretchContentForSingleRow="False"
-                                                  ItemsSource="{x:Bind ViewModel.TileBmpCollection, Mode=OneWay}">
+                                                  ItemsSource="{x:Bind ViewModel.TileBmpCollection, Mode=OneWay}"
+                                                  ItemClick="{x:Bind ViewModel.AdaptiveGridView_ItemClick}"
+                                                  IsItemClickEnabled="True">
 
                     <toolkitControls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate x:DataType="models:TileBmp">
                             <Grid>
-                                <Image Source="{x:Bind Image}" 
-                                       Height="120"/>
+                                <Image Source="{x:Bind Image}"
+                                       Height="120" />
                                 <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
                                         Padding="5"
                                         VerticalAlignment="Bottom">
@@ -135,165 +145,200 @@
 
             <Grid Grid.Row="1"
                   Grid.Column="1">
-                
+
                 <ScrollViewer HorizontalScrollMode="Auto"
                               HorizontalScrollBarVisibility="Auto">
-                    
+
                     <Border Background="{ThemeResource AppWorkAreaBrush}"
                             BorderBrush="{ThemeResource AppBorderBrush}"
                             BorderThickness=".5"
                             Height="400"
                             Width="400">
-                        
+
                         <Image x:Name="outputImage"
                                Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
                                Stretch="Uniform" />
-                        
+
                     </Border>
-                    
+
                 </ScrollViewer>
+
+            </Grid>
+
+            <Grid Background="{ThemeResource AppBackgroundBrush}"
+                  Grid.Row="1"
+                  Grid.Column="2"
+                  Padding="8">
+                
+                <validation:ValidatingForm x:Name="ValidatingForm">
+                    
+                    <Grid Background="{ThemeResource AppBackgroundBrush}"
+                      Padding="8">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Spacing="10">
+
+                        <TextBlock Text="Tile Properties"
+                                   Foreground="{ThemeResource AppForegroundBrush}"
+                                   Style="{StaticResource CaptionTextBlockStyle}" />
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="W:"
+                                       VerticalAlignment="Center"
+                                       Foreground="{ThemeResource AppForegroundBrush}"
+                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Margin="5,0,5,0" />
+
+                            <validation:ValidatingTextBox Grid.Column="1"
+                                                          Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
+                                                          ValidationRules="{StaticResource IntValidationRule}"
+                                                          MandatoryValidationMessage="Mandatory"
+                                                          IsMandatory="True"
+                                                          IsRealTimeValidationEnabled="True" />
+
+                            <TextBlock Grid.Column="2"
+                                       Text="H:"
+                                       VerticalAlignment="Center"
+                                       Foreground="{ThemeResource AppForegroundBrush}"
+                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Margin="5,0,5,0" />
+
+                            <validation:ValidatingTextBox Grid.Column="3"
+                                                          Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"
+                                                          ValidationRules="{StaticResource IntValidationRule}"
+                                                          MandatoryValidationMessage="Mandatory"
+                                                          IsMandatory="True"
+                                                          IsRealTimeValidationEnabled="True" />
+
+                        </Grid>
+
+                        <Rectangle Height=".5"
+                                   Fill="{ThemeResource AppBorderBrush}"
+                                   Margin="0,15,0,0" />
+                        
+                        <TextBlock Text="Mosaic Type"
+                                   Foreground="{ThemeResource AppForegroundBrush}"
+                                   Style="{StaticResource CaptionTextBlockStyle}" />
+                        
+                        <ComboBox Margin="24,0,0,0"
+                                  HorizontalAlignment="Stretch"
+                                  ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
+                                  SelectedItem="{x:Bind ViewModel.SelectedMosaicType, Mode=TwoWay}" />
+                        
+                        <Rectangle Height=".5"
+                                   Fill="{ThemeResource AppBorderBrush}"
+                                   Margin="0,15,0,0" />
+                        
+                        <TextBlock Text="Output Properties"
+                                   Foreground="{ThemeResource AppForegroundBrush}"
+                                   Style="{StaticResource CaptionTextBlockStyle}" />
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="W:"
+                                       VerticalAlignment="Center"
+                                       Foreground="{ThemeResource AppForegroundBrush}"
+                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Margin="5,0,5,0" />
+
+                            <validation:ValidatingTextBox Grid.Column="1"
+                                                          Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
+                                                          ValidationRules="{StaticResource IntValidationRule}"
+                                                          MandatoryValidationMessage="Mandatory"
+                                                          IsMandatory="True"
+                                                          IsRealTimeValidationEnabled="True" />
+
+                            <TextBlock Grid.Column="2"
+                                       Text="H:"
+                                       VerticalAlignment="Center"
+                                       Foreground="{ThemeResource AppForegroundBrush}"
+                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Margin="5,0,5,0" />
+
+                            <validation:ValidatingTextBox Grid.Column="3"
+                                                          Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
+                                                          ValidationRules="{StaticResource IntValidationRule}"
+                                                          MandatoryValidationMessage="Mandatory"
+                                                          IsMandatory="True"
+                                                          IsRealTimeValidationEnabled="True" />
+
+                        </Grid>
+
+                        <Rectangle Height=".5"
+                                   Fill="{ThemeResource AppBorderBrush}"
+                                   Margin="0,15,0,0" />
+
+                        <validation:ValidatingButton Content="Generate"
+                                                     HorizontalAlignment="Stretch"
+                                                     Margin="5,0,0,0"
+                                                     Style="{ThemeResource AccentButtonStyle}"
+                                                     Click="{x:Bind ViewModel.GenerateButton_Click}"
+                                                     ValidatingForm="{x:Bind ValidatingForm}" />
+
+                        <Grid Margin="5,0,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Content="Save"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="0,0,5,0"
+                                    Click="{x:Bind ViewModel.SaveButton_Click}" />
+                            
+                            <Button Grid.Column="1"
+                                    Content="Reset"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="5,0,0,0"
+                                    Click="{x:Bind ViewModel.ResetButton_Click}" />
+
+                        </Grid>
+
+                        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                      IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                      Height="80"
+                                      Margin="2"
+                                      Width="80" />
+
+                    </StackPanel>
+
+                    <Button Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            Height="36"
+                            Click="SettingsClick">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="5">
+                            <FontIcon Glyph="" />
+                            <TextBlock Text="Settings" />
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
+                    
+                </validation:ValidatingForm>
                 
             </Grid>
-
-            <Grid Grid.Column="2"
-                  Grid.Row="1"
-                  Background="{ThemeResource AppBackgroundBrush}"
-                  Padding="8">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <StackPanel Spacing="10">
-                    
-                    <TextBlock Text="Tile Properties"
-                               Foreground="{ThemeResource AppForegroundBrush}"
-                               Style="{StaticResource CaptionTextBlockStyle}" />
-                    
-                    <Grid>
-                        
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock Text="W:"
-                                   VerticalAlignment="Center"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Margin="5,0,5,0" />
-                        <TextBox Grid.Column="1"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}" />
-                        <TextBlock Grid.Column="2"
-                                   Text="H:"
-                                   VerticalAlignment="Center"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Margin="5,0,5,0" />
-                        <TextBox Grid.Column="3"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}" />
-                        
-                    </Grid>
-                    
-                    <Rectangle Height=".5"
-                               Fill="{ThemeResource AppBorderBrush}"
-                               Margin="0,15,0,0" />
-                    <TextBlock Text="Mosaic Type"
-                               Foreground="{ThemeResource AppForegroundBrush}"
-                               Style="{StaticResource CaptionTextBlockStyle}" />
-                    <ComboBox Margin="24,0,0,0"
-                              HorizontalAlignment="Stretch"
-                              ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
-                              SelectedItem="{x:Bind ViewModel.SelectedMosaicType, Mode=TwoWay}" />
-                    <Rectangle Height=".5"
-                               Fill="{ThemeResource AppBorderBrush}"
-                               Margin="0,15,0,0" />
-                    <TextBlock Text="Output Properties"
-                               Foreground="{ThemeResource AppForegroundBrush}"
-                               Style="{StaticResource CaptionTextBlockStyle}" />
-                    
-                    <Grid>
-                        
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock Text="W:"
-                                   VerticalAlignment="Center"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Margin="5,0,5,0" />
-                        <TextBox Grid.Column="1"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}" />
-                        <TextBlock Grid.Column="2"
-                                   Text="H:"
-                                   VerticalAlignment="Center"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Margin="5,0,5,0" />
-                        <TextBox Grid.Column="3"
-                                 InputScope="Number"
-                                 Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}" />
-                        
-                    </Grid>
-                    
-                    <Rectangle Height=".5"
-                               Fill="{ThemeResource AppBorderBrush}"
-                               Margin="0,15,0,0" />
-                    <Button Content="Generate"
-                            HorizontalAlignment="Stretch"
-                            Margin="5,0,0,0"
-                            Style="{ThemeResource AccentButtonStyle}"
-                            Click="{x:Bind ViewModel.GenerateButton_Click}" />
-                    
-                    <Grid Margin="5,0,0,0">
-                        
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        
-                        <Button Content="Save"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,5,0"
-                                Click="{x:Bind ViewModel.SaveButton_Click}" />
-                        <Button Grid.Column="1"
-                                Content="Reset"
-                                HorizontalAlignment="Stretch"
-                                Margin="5,0,0,0"
-                                Click="{x:Bind ViewModel.ResetButton_Click}" />
-                        
-                    </Grid>
-
-                    <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                  IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                  Height="80"
-                                  Margin="2"
-                                  Width="80" />
-
-                </StackPanel>
-
-                <Button Grid.Row="1"
-                        HorizontalAlignment="Stretch"
-                        Height="36" Click="SettingsClick">
-                    <StackPanel Orientation="Horizontal"
-                                Spacing="5">
-                        <FontIcon Glyph="" />
-                        <TextBlock Text="Settings" />
-                    </StackPanel>
-                </Button>
-
-            </Grid>
-
+            
         </Grid>
 
     </Grid>

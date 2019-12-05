@@ -3,7 +3,6 @@ using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
-using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -31,9 +30,9 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <summary>
         /// The source <see cref="Image{TPixel}"/> instance to modify
         /// </summary>
-        private readonly Image<TPixel> Source;
+        private readonly Image<TPixel> _source;
 
-        private readonly Rgba32 AverageColor;
+        private readonly Rgba32 _averageColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlainColorProcessor"/> class
@@ -43,18 +42,18 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
         public PlainColorProcessor(PlainColorProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
-            Source = source;
-            AverageColor = definition.AverageColor;
+            _source = source;
+            _averageColor = definition.AverageColor;
         }
 
         /// <inheritdoc/>
         public void Apply()
         {
-            int width = Source.Width;
-            Image<TPixel> source = Source;
+            int width = _source.Width;
+            Image<TPixel> source = _source;
             //RgbaVector averageColorVector = AverageColor.ToPixel<RgbaVector>();
 
-            var averageColor4 = AverageColor.ToVector4(); //var b = AverageColor.ToScaledVector4();
+            var averageColor4 = _averageColor.ToVector4(); //var b = AverageColor.ToScaledVector4();
 
             Parallel.For(0, source.Height, y =>
             {

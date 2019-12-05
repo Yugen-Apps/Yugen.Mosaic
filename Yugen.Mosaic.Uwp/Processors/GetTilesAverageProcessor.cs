@@ -14,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         public int TY { get; }
         public Size TileSize { get; }
 
-        public Rgba32[,] AvgsMaster { get; }
+        public Rgba32[,] AverageColors { get; }
 
         public GetTilesAverageProcessor(int tX, int tY, Size tileSize, Rgba32[,] avgsMaster)
         {
@@ -22,7 +22,7 @@ namespace Yugen.Mosaic.Uwp.Processors
             TY = tY;
             TileSize = tileSize;
 
-            AvgsMaster = avgsMaster;
+            AverageColors = avgsMaster;
         }
 
         /// <inheritdoc/>
@@ -37,13 +37,13 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <summary>
         /// The source <see cref="Image{TPixel}"/> instance to modify
         /// </summary>
-        private readonly Image<TPixel> Source;
+        private readonly Image<TPixel> _source;
 
         private readonly int _tX;
         private readonly int _tY;
         private Size _tileSize;
 
-        private Rgba32[,] _avgsMaster;
+        private readonly Rgba32[,] _averageColors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HlslGaussianBlurProcessor"/> class
@@ -53,13 +53,13 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
         public GetTilesAverageProcessor(GetTilesAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
-            Source = source;
+            _source = source;
 
             _tX = definition.TX;
             _tY = definition.TY;
             _tileSize = definition.TileSize;
 
-            _avgsMaster = definition.AvgsMaster;
+            _averageColors = definition.AverageColors;
         }
 
         /// <inheritdoc/>
@@ -67,11 +67,11 @@ namespace Yugen.Mosaic.Uwp.Processors
         {
             Parallel.For(0, _tY, y =>
             {
-                var rowSpan = Source.GetPixelRowSpan(y);
+                var rowSpan = _source.GetPixelRowSpan(y);
 
                 for (int x = 0; x < _tX; x++)
                 {
-                    _avgsMaster[x, y].FromRgba32(GetTileAverage(Source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height));
+                    _averageColors[x, y].FromRgba32(GetTileAverage(_source, x * _tileSize.Width, y * _tileSize.Height, _tileSize.Width, _tileSize.Height));
                 }
             });
         }
@@ -84,7 +84,7 @@ namespace Yugen.Mosaic.Uwp.Processors
 
             Parallel.For(y, y + height, h =>
             {
-                var rowSpan = Source.GetPixelRowSpan(h);
+                var rowSpan = _source.GetPixelRowSpan(h);
 
                 for (int w = x; w < x + width; w++)
                 {

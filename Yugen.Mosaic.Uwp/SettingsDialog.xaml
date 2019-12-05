@@ -100,7 +100,7 @@
                          FontWeight="SemiBold" />
                     <LineBreak />
                     <Run Text="{Binding Collaborator[0]}" />
-                    <Run Text="," />
+                    <LineBreak />
                     <Run Text="{Binding Collaborator[1]}" />
                 </TextBlock>
                 
