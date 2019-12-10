@@ -30,17 +30,17 @@
                   Background="{ThemeResource AppBackgroundBrush}"
                   BorderBrush="{ThemeResource AppBorderBrush}"
                   BorderThickness="0,0,0,.5">
-                
+
                 <StackPanel Orientation="Horizontal"
                             Margin="32,0,0,0">
-                    
+
                     <TextBlock Text="Yugen Mosaic"
                                VerticalAlignment="Center"
                                Foreground="{ThemeResource AppForegroundBrush}"
                                Style="{StaticResource BaseTextBlockStyle}" />
-                    
+
                 </StackPanel>
-                
+
             </Grid>
 
             <Grid Grid.Row="1"
@@ -77,7 +77,7 @@
                                   Background="{ThemeResource AppTransparentBackgroundBrush}"
                                   CornerRadius="2"
                                   Visibility="{x:Bind ViewModel.IsAddMasterUIVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                                
+
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Margin="25"
@@ -88,7 +88,7 @@
                                                TextWrapping="WrapWholeWords"
                                                TextAlignment="Center" />
                                 </StackPanel>
-                                
+
                             </Grid>
 
                         </Grid>
@@ -170,15 +170,12 @@
                   Grid.Column="2"
                   Padding="8">
                 
-                <validation:ValidatingForm x:Name="ValidatingForm">
-                    
-                    <Grid Background="{ThemeResource AppBackgroundBrush}"
-                      Padding="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <validation:ValidatingForm x:Name="ValidatingForm">
 
                     <StackPanel Spacing="10">
 
@@ -227,20 +224,20 @@
                         <Rectangle Height=".5"
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
-                        
+
                         <TextBlock Text="Mosaic Type"
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}" />
-                        
+
                         <ComboBox Margin="24,0,0,0"
                                   HorizontalAlignment="Stretch"
                                   ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
                                   SelectedItem="{x:Bind ViewModel.SelectedMosaicType, Mode=TwoWay}" />
-                        
+
                         <Rectangle Height=".5"
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
-                        
+
                         <TextBlock Text="Output Properties"
                                    Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}" />
@@ -305,7 +302,7 @@
                                     HorizontalAlignment="Stretch"
                                     Margin="0,0,5,0"
                                     Click="{x:Bind ViewModel.SaveButton_Click}" />
-                            
+
                             <Button Grid.Column="1"
                                     Content="Reset"
                                     HorizontalAlignment="Stretch"
@@ -322,23 +319,21 @@
 
                     </StackPanel>
 
-                    <Button Grid.Row="1"
-                            HorizontalAlignment="Stretch"
-                                Height="36"
-                                Click="{x:Bind ViewModel.SettingsButton_Click}">
-                        <StackPanel Orientation="Horizontal"
-                                    Spacing="5">
-                            <FontIcon Glyph="" />
-                            <TextBlock Text="Settings" />
-                        </StackPanel>
-                    </Button>
-
-                </Grid>
-                    
                 </validation:ValidatingForm>
-                
+
+                <Button Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        Height="36"
+                        Click="{x:Bind ViewModel.SettingsButton_Click}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="5">
+                        <FontIcon Glyph="" />
+                        <TextBlock Text="Settings" />
+                    </StackPanel>
+                </Button>
+
             </Grid>
-            
+
         </Grid>
 
     </Grid>
