@@ -323,6 +323,7 @@
 
                 <Button Grid.Row="1"
                         HorizontalAlignment="Stretch"
+                        Margin="5,0,0,5"
                         Height="36"
                         Click="{x:Bind ViewModel.SettingsButton_Click}">
                     <StackPanel Orientation="Horizontal"
