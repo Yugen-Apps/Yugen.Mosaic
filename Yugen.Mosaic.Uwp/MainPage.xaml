@@ -201,7 +201,7 @@
                             <validation:ValidatingTextBox Grid.Column="1"
                                                           Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
                                                           ValidationRules="{StaticResource IntValidationRule}"
-                                                          MandatoryValidationMessage="Mandatory"
+                                                          MandatoryValidationMessage=""
                                                           IsMandatory="True"
                                                           IsRealTimeValidationEnabled="True" />
 
@@ -215,7 +215,7 @@
                             <validation:ValidatingTextBox Grid.Column="3"
                                                           Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"
                                                           ValidationRules="{StaticResource IntValidationRule}"
-                                                          MandatoryValidationMessage="Mandatory"
+                                                          MandatoryValidationMessage=""
                                                           IsMandatory="True"
                                                           IsRealTimeValidationEnabled="True" />
 
@@ -260,7 +260,7 @@
                             <validation:ValidatingTextBox Grid.Column="1"
                                                           Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
                                                           ValidationRules="{StaticResource IntValidationRule}"
-                                                          MandatoryValidationMessage="Mandatory"
+                                                          MandatoryValidationMessage=""
                                                           IsMandatory="True"
                                                           IsRealTimeValidationEnabled="True" />
 
@@ -274,7 +274,7 @@
                             <validation:ValidatingTextBox Grid.Column="3"
                                                           Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
                                                           ValidationRules="{StaticResource IntValidationRule}"
-                                                          MandatoryValidationMessage="Mandatory"
+                                                          MandatoryValidationMessage=""
                                                           IsMandatory="True"
                                                           IsRealTimeValidationEnabled="True" />
 

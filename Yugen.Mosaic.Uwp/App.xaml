@@ -181,7 +181,7 @@
 
             <validation:ValidationRules x:Key="IntValidationRule">
                 <validation:ValidationRules.Rules>
-                    <validation:IntValidationRule />
+                    <validation:RegexValidationRule  RegexPattern="^[1-9]\d*$" />
                 </validation:ValidationRules.Rules>
             </validation:ValidationRules>
 
