@@ -90,8 +90,9 @@ namespace Yugen.Mosaic.Uwp
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
             new MosaicType { Id=0, Title="Classic" },
-            new MosaicType { Id=1, Title="AdjustHue" },
-            new MosaicType { Id=2, Title="Plain Color" }
+            new MosaicType { Id=1, Title="Random" },
+            new MosaicType { Id=2, Title="AdjustHue" },
+            new MosaicType { Id=3, Title="Plain Color" }
         };
 
         private MosaicType _selectedMosaicType;
