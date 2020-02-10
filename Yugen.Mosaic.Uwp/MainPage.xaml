@@ -8,6 +8,7 @@
       xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
+      xmlns:controls="using:Yugen.Mosaic.Uwp.Controls"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}">
 
@@ -146,22 +147,32 @@
             <Grid Grid.Row="1"
                   Grid.Column="1">
 
-                <ScrollViewer HorizontalScrollMode="Auto"
-                              HorizontalScrollBarVisibility="Auto">
+                <!--<ScrollViewer HorizontalScrollMode="Auto"
+                              HorizontalScrollBarVisibility="Auto">-->
 
-                    <Border Background="{ThemeResource AppWorkAreaBrush}"
-                            BorderBrush="{ThemeResource AppBorderBrush}"
-                            BorderThickness=".5"
-                            Height="400"
-                            Width="400">
+                <Border Background="{ThemeResource AppWorkAreaBrush}"
+                        BorderBrush="{ThemeResource AppBorderBrush}"
+                        BorderThickness=".5"
+                        Height="400"
+                        Width="400">
 
-                        <Image x:Name="outputImage"
-                               Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
-                               Stretch="Uniform" />
+                    <Image x:Name="outputImage"
+                           Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
+                           Stretch="Uniform" />
 
-                    </Border>
+                </Border>
 
-                </ScrollViewer>
+                <controls:AlignmentGrid Opacity="0.28"
+                                        LineBrush="Firebrick"
+                                        HorizontalStep="{x:Bind ViewModel.TileWidth, Mode=OneWay}"
+                                        VerticalStep="{x:Bind ViewModel.TileHeight, Mode=OneWay}"
+                                        Horizontal="{x:Bind ViewModel.OutputWidth, Mode=OneWay}"
+                                        Vertical="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
+                                        Height="400"
+                                        Width="400"
+                                        Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
+
+                <!--</ScrollViewer>-->
 
             </Grid>
 
@@ -169,7 +180,7 @@
                   Grid.Row="1"
                   Grid.Column="2"
                   Padding="8">
-                
+
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="Auto" />
@@ -291,6 +302,9 @@
                                                      Click="{x:Bind ViewModel.GenerateButton_Click}"
                                                      ValidatingForm="{x:Bind ValidatingForm}" />
 
+                        <CheckBox Content="Show Grid"
+                                  IsChecked="{x:Bind ViewModel.IsAlignmentGridVisibile,Mode=TwoWay}" />
+
                         <Grid Margin="5,0,0,0">
 
                             <Grid.ColumnDefinitions>
@@ -316,6 +330,18 @@
                                       Height="80"
                                       Margin="2"
                                       Width="80" />
+
+                        <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
+                                                           Foreground="Firebrick"
+                                                           Outline="LightGray"
+                                                           Thickness="4"
+                                                           Minimum="0"
+                                                           Maximum="100"
+                                                           Height="80"
+                                                           Width="80"
+                                                           Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
+                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />-->
 
                     </StackPanel>
 

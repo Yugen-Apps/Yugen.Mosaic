@@ -39,6 +39,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _isAddMasterUIVisible, value); }
         }
 
+
         private int _tileWidth = 25;
         public int TileWidth
         {
@@ -85,6 +86,14 @@ namespace Yugen.Mosaic.Uwp
         }
 
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
+
+
+        private bool _isAlignmentGridVisibile = true;
+        public bool IsAlignmentGridVisibile
+        {
+            get { return _isAlignmentGridVisibile; }
+            set { Set(ref _isAlignmentGridVisibile, value); }
+        }
 
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>

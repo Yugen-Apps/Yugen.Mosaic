@@ -131,6 +131,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AlignmentGrid.cs" />
+    <Compile Include="Helpers\RangeHelper.cs" />
     <Compile Include="Extensions\FileFormatExtensions.cs" />
     <Compile Include="Enums\FileFormat.cs" />
     <Compile Include="Extensions\SettingsStorageExtensions.cs" />
@@ -271,9 +273,7 @@
       <Version>1.0.16</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
