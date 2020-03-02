@@ -25,7 +25,7 @@ namespace Yugen.Mosaic.Uwp
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            AppCenter.Start("db37232b-835b-495d-b6ab-20c26f67c7e8",
+            AppCenter.Start("7df4b441-69ae-49c5-b27d-5a532f33b554",
                    typeof(Analytics), typeof(Crashes));
         }
 
