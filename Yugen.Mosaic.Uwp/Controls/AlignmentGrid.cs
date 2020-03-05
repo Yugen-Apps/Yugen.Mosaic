@@ -32,13 +32,18 @@ namespace Yugen.Mosaic.Uwp.Controls
             DependencyProperty.Register(nameof(VerticalStep), typeof(double),
                 typeof(AlignmentGrid), new PropertyMetadata(20.0, OnPropertyChanged));
 
-
-        public static readonly DependencyProperty HorizontalProperty =
-            DependencyProperty.Register(nameof(Horizontal), typeof(double),
+        /// <summary>
+        /// Identifies the <see cref="ContainerWidth"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ContainerWidthProperty =
+            DependencyProperty.Register(nameof(ContainerWidth), typeof(double),
                 typeof(AlignmentGrid), new PropertyMetadata(20.0, OnPropertyChanged));
 
-        public static readonly DependencyProperty VerticalProperty =
-            DependencyProperty.Register(nameof(Vertical), typeof(double),
+        /// <summary>
+        /// Identifies the <see cref="ContainerHeight"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ContainerHeightProperty =
+            DependencyProperty.Register(nameof(ContainerHeight), typeof(double),
                 typeof(AlignmentGrid), new PropertyMetadata(20.0, OnPropertyChanged));
 
         private static void OnPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
@@ -77,17 +82,22 @@ namespace Yugen.Mosaic.Uwp.Controls
             set { SetValue(VerticalStepProperty, value); }
         }
 
-
-        public double Horizontal
+        /// <summary>
+        /// Get or set the container width.
+        /// </summary>
+        public double ContainerWidth
         {
-            get { return (double)GetValue(HorizontalProperty); }
-            set { SetValue(HorizontalProperty, value); }
+            get { return (double)GetValue(ContainerWidthProperty); }
+            set { SetValue(ContainerWidthProperty, value); }
         }
 
-        public double Vertical
+        /// <summary>
+        /// Get or set the container height.
+        /// </summary>
+        public double ContainerHeight
         {
-            get { return (double)GetValue(VerticalProperty); }
-            set { SetValue(VerticalProperty, value); }
+            get { return (double)GetValue(ContainerHeightProperty); }
+            set { SetValue(ContainerHeightProperty, value); }
         }
 
         /// <summary>
@@ -115,7 +125,7 @@ namespace Yugen.Mosaic.Uwp.Controls
 
             if (horizontalStep > 0)
             {
-                for (double x = 0; x < Horizontal; x += HorizontalStep)
+                for (double x = 0; x < ContainerWidth; x += HorizontalStep)
                 {
                     var line = new Rectangle
                     {
@@ -123,8 +133,7 @@ namespace Yugen.Mosaic.Uwp.Controls
                         Height = ActualHeight,
                         Fill = brush
                     };
-                    Canvas.SetLeft(line, RangeHelper.Range(x, 0, Horizontal, 0, ActualWidth));
-
+                    Canvas.SetLeft(line, RangeHelper.Convert(x, 0, ContainerWidth, 0, ActualWidth));
 
                     containerCanvas.Children.Add(line);
                 }
@@ -132,7 +141,7 @@ namespace Yugen.Mosaic.Uwp.Controls
 
             if (verticalStep > 0)
             {
-                for (double y = 0; y < Vertical; y += VerticalStep)
+                for (double y = 0; y < ContainerHeight; y += VerticalStep)
                 {
                     var line = new Rectangle
                     {
@@ -140,7 +149,7 @@ namespace Yugen.Mosaic.Uwp.Controls
                         Height = 1,
                         Fill = brush
                     };
-                    Canvas.SetTop(line, RangeHelper.Range(y, 0, Vertical, 0, ActualHeight));
+                    Canvas.SetTop(line, RangeHelper.Convert(y, 0, ContainerHeight, 0, ActualHeight));
 
                     containerCanvas.Children.Add(line);
                 }

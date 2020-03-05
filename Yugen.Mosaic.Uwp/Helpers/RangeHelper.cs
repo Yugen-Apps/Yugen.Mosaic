@@ -3,16 +3,17 @@
     public static class RangeHelper
     {
         /// <summary>
-        /// min1 : min2 = max1 : max2
+        /// convert from one range to another
+        /// oldMin : oldValue : oldMax = newMin : newValue : newMax
         /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="min1"></param>
-        /// <param name="max1"></param>
-        /// <param name="min2"></param>
-        /// <param name="max2"></param>
-        /// <returns>x1 -> x2</returns>
-        public static double Range(double x1, double min1, double max1, double min2, double max2) =>
-            (x1 - min1) * (max2 - min2) /
-                (max1 - min1) + min2;
+        /// <param name="oldValue"></param>
+        /// <param name="oldMin"></param>
+        /// <param name="oldMax"></param>
+        /// <param name="newMin"></param>
+        /// <param name="newMax"></param>
+        /// <returns>newValue</returns>
+        public static double Convert(double oldValue, double oldMin, double oldMax, double newMin, double newMax) =>
+            (oldValue - oldMin) * (newMax - newMin) /
+                (oldMax - oldMin) + newMin;
     }
 }

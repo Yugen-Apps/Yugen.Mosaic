@@ -144,37 +144,35 @@
 
             </Grid>
 
-            <Grid Grid.Row="1"
-                  Grid.Column="1">
-
-                <!--<ScrollViewer HorizontalScrollMode="Auto"
-                              HorizontalScrollBarVisibility="Auto">-->
-
-                <Border Background="{ThemeResource AppWorkAreaBrush}"
-                        BorderBrush="{ThemeResource AppBorderBrush}"
-                        BorderThickness=".5"
+            <Viewbox Grid.Row="1"
+                        Grid.Column="1"
                         Height="400"
-                        Width="400">
+                        Width="400"
+                        Stretch="Uniform"
+                        StretchDirection="Both">
 
-                    <Image x:Name="outputImage"
-                           Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
-                           Stretch="Uniform" />
-
-                </Border>
-
-                <controls:AlignmentGrid Opacity="0.28"
-                                        LineBrush="Firebrick"
-                                        HorizontalStep="{x:Bind ViewModel.TileWidth, Mode=OneWay}"
-                                        VerticalStep="{x:Bind ViewModel.TileHeight, Mode=OneWay}"
-                                        Horizontal="{x:Bind ViewModel.OutputWidth, Mode=OneWay}"
-                                        Vertical="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
-                                        Height="400"
-                                        Width="400"
-                                        Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
-
-                <!--</ScrollViewer>-->
-
-            </Grid>
+                <Grid>
+                    <Border Background="{ThemeResource AppWorkAreaBrush}"
+                            BorderBrush="{ThemeResource AppBorderBrush}"
+                            BorderThickness=".5"
+                            Height="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
+                            Width="{x:Bind ViewModel.OutputWidth, Mode=OneWay}">
+                        
+                        <Image x:Name="outputImage"
+                                Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
+                                Stretch="Uniform" />
+                        </Border>
+                        
+                        <controls:AlignmentGrid Opacity="0.28"
+                                                LineBrush="Firebrick"
+                                                HorizontalStep="{x:Bind ViewModel.TileWidth, Mode=OneWay}"
+                                                VerticalStep="{x:Bind ViewModel.TileHeight, Mode=OneWay}"
+                                                ContainerWidth="{x:Bind ViewModel.OutputWidth, Mode=OneWay}"
+                                                ContainerHeight="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
+                                                Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
+                </Grid>
+                    
+            </Viewbox>
 
             <Grid Background="{ThemeResource AppBackgroundBrush}"
                   Grid.Row="1"
@@ -326,9 +324,9 @@
                         </Grid>
 
                         <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                      IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                       Height="80"
                                       Margin="2"
+                                      Style="{StaticResource ProgressRingStyle1}"
                                       Width="80" />
 
                         <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
