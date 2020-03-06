@@ -7,6 +7,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Services;
 
 namespace Yugen.Mosaic.Uwp
@@ -29,11 +30,6 @@ namespace Yugen.Mosaic.Uwp
                    typeof(Analytics), typeof(Crashes));
         }
 
-        private async void InitializeThemes()
-        {
-            await ThemeSelectorService.InitializeAsync();
-        }
-
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -41,7 +37,8 @@ namespace Yugen.Mosaic.Uwp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            InitializeThemes();
+            ThemeSelectorService.InitializeAsync().FireAndForgetSafeAsync();
+
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (!(Window.Current.Content is Frame rootFrame))

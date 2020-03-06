@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
@@ -38,6 +39,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _isAddMasterUIVisible, value); }
         }
 
+
         private int _tileWidth = 25;
         public int TileWidth
         {
@@ -52,7 +54,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _tileHeight, value); }
         }
 
-        private Size _tileSize => new Size(_tileWidth, _tileHeight);
+        private Size TileSize => new Size(_tileWidth, _tileHeight);
 
         private ObservableCollection<TileBmp> _tileBmpCollection = new ObservableCollection<TileBmp>();
         public ObservableCollection<TileBmp> TileBmpCollection
@@ -83,14 +85,23 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _outputHeight, value); }
         }
 
-        private Size outputSize => new Size(_outputWidth, _outputHeight);
+        private Size OutputSize => new Size(_outputWidth, _outputHeight);
+
+
+        private bool _isAlignmentGridVisibile = true;
+        public bool IsAlignmentGridVisibile
+        {
+            get { return _isAlignmentGridVisibile; }
+            set { Set(ref _isAlignmentGridVisibile, value); }
+        }
 
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
             new MosaicType { Id=0, Title="Classic" },
-            new MosaicType { Id=1, Title="AdjustHue" },
-            new MosaicType { Id=2, Title="Plain Color" }
+            new MosaicType { Id=1, Title="Random" },
+            new MosaicType { Id=2, Title="AdjustHue" },
+            new MosaicType { Id=3, Title="Plain Color" }
         };
 
         private MosaicType _selectedMosaicType;
@@ -108,7 +119,7 @@ namespace Yugen.Mosaic.Uwp
             set { Set(ref _isLoading, value); }
         }
 
-        private MosaicService _mosaicService = new MosaicService();
+        private readonly MosaicService _mosaicService = new MosaicService();
 
         private Image<Rgba32> _outputImage;
 
@@ -135,11 +146,54 @@ namespace Yugen.Mosaic.Uwp
         }
 
 
-        public async void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        public void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            AddMaster().FireAndForgetSafeAsync();
+        }
+
+        public void AddTilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddTiles((Button)sender).FireAndForgetSafeAsync();
+        }
+
+        public void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is TileBmp item)
+                RemoveTile(item).FireAndForgetSafeAsync();
+        }
+
+        public void GenerateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Generate((Button)sender).FireAndForgetSafeAsync();
+        }
+
+        public void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Save((Button)sender).FireAndForgetSafeAsync();
+        }
+
+        public void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mosaicService.Reset();
+
+            MasterBpmSource = null;
+            TileBmpCollection.Clear();
+        }
+
+        public void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings().FireAndForgetSafeAsync();
+        }
+
+
+        private async Task AddMaster()
+        {
+            IsLoading = true;
+
             var masterFile = await FilePickerHelper.OpenFile(
                 new List<string> { ".jpg", ".png" },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+
             if (masterFile != null)
             {
                 using (var inputStream = await masterFile.OpenReadAsync())
@@ -153,23 +207,26 @@ namespace Yugen.Mosaic.Uwp
                         await MasterBpmSource.SetSourceAsync(outputStream);
                     }
 
-                    var newSize = RatioHelper.Convert(image.Width, image.Height, outputSize.Width, outputSize.Height);
+                    var newSize = RatioHelper.Convert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
                     OutputWidth = newSize.Item1;
                     OutputHeight = newSize.Item2;
                 }
             }
 
             UpdateIsAddMasterUIVisible();
+
+            IsLoading = false;
         }
 
-        public async void AddTilesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async Task AddTiles(Button button)
         {
             var files = await FilePickerHelper.OpenFiles(
-                new List<string> { ".jpg", ".png" },
-                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+                          new List<string> { ".jpg", ".png" },
+                          Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (files == null)
                 return;
 
+            button.IsEnabled = false;
             IsLoading = true;
 
             foreach (var file in files)
@@ -192,31 +249,28 @@ namespace Yugen.Mosaic.Uwp
             }
 
             IsLoading = false;
+            button.IsEnabled = true;
         }
 
-        public async void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private async Task RemoveTile(TileBmp item)
         {
-            if (e.ClickedItem is TileBmp item)
-            {
-                await MessageDialogHelper.Confirm("Do you want to Remove this picture?",
-                    "",
-                    new UICommand("Yes",
-                        action =>
-                        {
-                            TileBmpCollection.Remove(item);
-                            _mosaicService.RemoveTileImage(item.Name);
-                        }),
-                    new UICommand("No"));
-            }
+            await MessageDialogHelper.Confirm("Do you want to Remove this picture?",
+                "",
+                new UICommand("Yes",
+                    action =>
+                    {
+                        TileBmpCollection.Remove(item);
+                        _mosaicService.RemoveTileImage(item.Name);
+                    }),
+                new UICommand("No"));
         }
 
-        public async void GenerateButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async Task Generate(Button button)
         {
+            button.IsEnabled = false;
             IsLoading = true;
 
-            await Task.Delay(1);
-
-            _outputImage = _mosaicService.GenerateMosaic(outputSize, _tileSize, SelectedMosaicType.Id);
+            await Task.Run(() => _outputImage = _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.Id));
 
             if (_outputImage != null)
             {
@@ -225,16 +279,20 @@ namespace Yugen.Mosaic.Uwp
             }
 
             IsLoading = false;
+            button.IsEnabled = true;
         }
 
-        public async void SaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async Task Save(Button button)
         {
+            button.IsEnabled = false;
+            IsLoading = true;
+
             var fileTypes = new Dictionary<string, List<string>>() {
                 { FileFormat.Png.ToString(), new List<string>() { FileFormat.Png.FileFormatToString() } },
                 { FileFormat.Jpg.ToString(), new List<string>() { FileFormat.Jpg.FileFormatToString() } }
             };
 
-            var file = await FilePickerHelper.SaveFile("Mosaic", fileTypes, 
+            var file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (file == null || _outputImage == null)
@@ -252,14 +310,15 @@ namespace Yugen.Mosaic.Uwp
                         break;
                 }
             }
+
+            IsLoading = false;
+            button.IsEnabled = true;
         }
 
-        public void ResetButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async Task Settings()
         {
-            _mosaicService.Reset();
-
-            MasterBpmSource = null;
-            TileBmpCollection.Clear();
+            SettingsDialog d = new SettingsDialog();
+            await d.ShowAsync();
         }
     }
 }

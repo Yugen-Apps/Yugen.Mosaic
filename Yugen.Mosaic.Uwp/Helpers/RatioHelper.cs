@@ -7,7 +7,7 @@ namespace Yugen.Mosaic.Uwp.Helpers
         public static Tuple<int, int> Convert(int width, int height, int newHeight, int newWidth)
         {
             //calculate the ratio
-            double ratio = width / height;
+            double ratio = (double)width / (double)height;
 
             //set height of image to boxHeight and check if resulting width is less than boxWidth, 
             //else set width of image to boxWidth and calculate new height

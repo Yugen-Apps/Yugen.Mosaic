@@ -49,9 +49,7 @@ namespace Yugen.Mosaic.Uwp.Extensions
 
         public static async Task<T> ReadAsync<T>(this ApplicationDataContainer settings, string key)
         {
-            object obj = null;
-
-            if (settings.Values.TryGetValue(key, out obj))
+            if (settings.Values.TryGetValue(key, out object obj))
             {
                 return await JsonProvider.ToObjectAsync<T>((string)obj);
             }

@@ -126,20 +126,54 @@ namespace Yugen.Mosaic.Uwp.Services
                     SearchAndReplaceClassic(outputImage, tileSize);
                     break;
                 case 1:
-                    SearchAndReplaceAdjustHue(outputImage, tileSize);
+                    SearchAndReplaceRandom(outputImage, tileSize);
                     break;
                 case 2:
+                    SearchAndReplaceAdjustHue(outputImage, tileSize);
+                    break;
+                case 3:
                     PlainColor(outputImage, tileSize);
                     break;
             }
         }
 
-        // Don't adjust hue - keep searching for a tile close enough
+
         private void SearchAndReplaceClassic(Image<Rgba32> outputImage, Size tileSize)
+        {
+            Parallel.For(0, _tX, x =>
+            {
+                for (int y = 0; y < _tY; y++)
+                {
+                    Tile tileFound = _tileImageList[0];
+                    var difference = 100;
+                    int index = 0;
+
+                    foreach (var tile in _tileImageList)
+                    {
+                        var newDifference = GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
+                        if (newDifference < difference)
+                        {
+                            tileFound = _tileImageList[index];
+                            difference = newDifference;
+                        }
+                        index++;
+                    }
+
+                    // Apply found tile to section
+                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                    tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                    _progress++;
+                }
+            });
+        }
+
+        // Don't adjust hue - keep searching for a tile close enough
+        private void SearchAndReplaceRandom(Image<Rgba32> outputImage, Size tileSize)
         {
             Random r = new Random();
 
-            for (int x = 0; x < _tX; x++)
+            Parallel.For(0, _tX, x =>
             {
                 for (int y = 0; y < _tY; y++)
                 {
@@ -147,6 +181,7 @@ namespace Yugen.Mosaic.Uwp.Services
                     int threshold = 0;
                     int searchCounter = 0;
                     Tile tileFound = null;
+
                     while (tileFound == null)
                     {
                         int index = r.Next(_tileImageList.Count);
@@ -169,7 +204,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
                     _progress++;
                 }
-            }
+            });
         }
 
         // Adjust hue - get the first (random) tile found and adjust its colours to suit the average
@@ -179,7 +214,7 @@ namespace Yugen.Mosaic.Uwp.Services
             List<Tile> tileQueue = new List<Tile>();
             int maxQueueLength = Math.Min(1000, Math.Max(0, _tileImageList.Count - 50));
 
-            for (int x = 0; x < _tX; x++)
+            Parallel.For(0, _tX, x =>
             {
                 for (int y = 0; y < _tY; y++)
                 {
@@ -210,13 +245,13 @@ namespace Yugen.Mosaic.Uwp.Services
 
                     _progress++;
                 }
-            }
+            });
         }
 
         // Use just mosic colored tiles
         private void PlainColor(Image<Rgba32> outputImage, Size tileSize)
         {
-            for (int x = 0; x < _tX; x++)
+            Parallel.For(0, _tX, x =>
             {
                 for (int y = 0; y < _tY; y++)
                 {
@@ -231,7 +266,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
                     _progress++;
                 }
-            }
+            });
         }
 
 
