@@ -1,0 +1,61 @@
+# Universal Windows Platform
+# Build a Universal Windows Platform project using Visual Studio.
+# Add steps that test and distribute an app, save build artifacts, and more:
+# https://aka.ms/yaml
+
+trigger:
+- realeases/appcenter
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'x86|x64|ARM'
+  buildConfiguration: 'Release'
+  appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
+  appxmanifest: '**/*.appxmanifest'
+  versionNumber: 'Set dynamically below in a task'
+
+name: '$(Rev:r)'
+
+steps:
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      [xml] $manifestXml = Get-Content '$(appxmanifest)'
+      $version = [version]$manifestXml.Package.Identity.Version
+
+      [string] $newVersion = "{0}.{1}.{2}.{3}" -f $version.Major, $version.Minor, $(Build.BuildNumber), 0
+      Write-Host "Setting the release version number variable to '$newVersion'."
+      Write-Host "##vso[task.setvariable variable=versionNumber]$newVersion"
+
+      Write-Host "Setting the name of the build to '$newVersion'."
+      Write-Host "##vso[build.updatebuildnumber]$newVersion"
+      
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VersionAPPX@2
+  displayName: 'Version MSIX'
+
+- task: VSBuild@1
+  inputs:
+    platform: 'x86'
+    solution: '$(solution)'
+    configuration: '$(buildConfiguration)'
+    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" 
+                  /p:AppxPackageDir="$(appxPackageDir)" 
+                  /p:AppxBundle=Always 
+                  /p:UapAppxPackageBuildMode=StoreUpload 
+                  /p:AppxPackageSigningEnabled=false'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\AppxPackages'
+    ArtifactName: 'drop'
