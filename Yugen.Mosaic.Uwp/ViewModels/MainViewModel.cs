@@ -176,8 +176,10 @@ namespace Yugen.Mosaic.Uwp
         {
             _mosaicService.Reset();
 
-            MasterBpmSource = null;
+            MasterBpmSource = new BitmapImage();
             TileBmpCollection.Clear();
+
+            UpdateIsAddMasterUIVisible();
         }
 
         public void SettingsButton_Click(object sender, RoutedEventArgs e)

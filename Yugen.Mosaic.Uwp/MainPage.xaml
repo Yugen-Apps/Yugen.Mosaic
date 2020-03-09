@@ -145,11 +145,10 @@
             </Grid>
 
             <Viewbox Grid.Row="1"
-                        Grid.Column="1"
-                        Height="400"
-                        Width="400"
-                        Stretch="Uniform"
-                        StretchDirection="Both">
+                     Grid.Column="1"
+                     Margin="40"
+                     Stretch="Uniform"
+                     StretchDirection="Both">
 
                 <Grid>
                     <Border Background="{ThemeResource AppWorkAreaBrush}"
@@ -157,21 +156,21 @@
                             BorderThickness=".5"
                             Height="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
                             Width="{x:Bind ViewModel.OutputWidth, Mode=OneWay}">
-                        
+
                         <Image x:Name="outputImage"
-                                Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
-                                Stretch="Uniform" />
-                        </Border>
-                        
-                        <controls:AlignmentGrid Opacity="0.28"
-                                                LineBrush="Firebrick"
-                                                HorizontalStep="{x:Bind ViewModel.TileWidth, Mode=OneWay}"
-                                                VerticalStep="{x:Bind ViewModel.TileHeight, Mode=OneWay}"
-                                                ContainerWidth="{x:Bind ViewModel.OutputWidth, Mode=OneWay}"
-                                                ContainerHeight="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
-                                                Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
+                               Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
+                               Stretch="Uniform" />
+                    </Border>
+
+                    <controls:AlignmentGrid Opacity="0.28"
+                                            LineBrush="Firebrick"
+                                            HorizontalStep="{x:Bind ViewModel.TileWidth, Mode=OneWay}"
+                                            VerticalStep="{x:Bind ViewModel.TileHeight, Mode=OneWay}"
+                                            ContainerWidth="{x:Bind ViewModel.OutputWidth, Mode=OneWay}"
+                                            ContainerHeight="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
+                                            Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
                 </Grid>
-                    
+
             </Viewbox>
 
             <Grid Background="{ThemeResource AppBackgroundBrush}"
