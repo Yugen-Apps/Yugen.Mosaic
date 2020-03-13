@@ -135,36 +135,39 @@ namespace Yugen.Mosaic.Uwp.Services
                     PlainColor(outputImage, tileSize);
                     break;
             }
+
+            GC.Collect();
         }
 
 
         private void SearchAndReplaceClassic(Image<Rgba32> outputImage, Size tileSize)
         {
-            Parallel.For(0, _tX, x =>
+            Parallel.For(0, _tX * _tY, xy =>
             {
-                for (int y = 0; y < _tY; y++)
+                int y = xy / _tX;
+                int x = xy % _tX;
+
+                int index = 0;
+                int difference = 100;
+                Tile tileFound = _tileImageList[0];
+
+                // Search for a tile with a similar color
+                foreach (var tile in _tileImageList)
                 {
-                    Tile tileFound = _tileImageList[0];
-                    var difference = 100;
-                    int index = 0;
-
-                    foreach (var tile in _tileImageList)
+                    var newDifference = GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
+                    if (newDifference < difference)
                     {
-                        var newDifference = GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
-                        if (newDifference < difference)
-                        {
-                            tileFound = _tileImageList[index];
-                            difference = newDifference;
-                        }
-                        index++;
+                        tileFound = _tileImageList[index];
+                        difference = newDifference;
                     }
-
-                    // Apply found tile to section
-                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                    tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
-
-                    _progress++;
+                    index++;
                 }
+
+                // Apply found tile to section
+                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                _progress++;
             });
         }
 
@@ -173,37 +176,38 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             Random r = new Random();
 
-            Parallel.For(0, _tX, x =>
+            Parallel.For(0, _tX * _tY, xy =>
             {
-                for (int y = 0; y < _tY; y++)
+                int y = xy / _tX;
+                int x = xy % _tX;
+
+                // Reset searching variables
+                int threshold = 0;
+                int searchCounter = 0;
+                Tile tileFound = null;
+
+                // Search for a tile with a similar color
+                while (tileFound == null)
                 {
-                    // Reset searching threshold
-                    int threshold = 0;
-                    int searchCounter = 0;
-                    Tile tileFound = null;
-
-                    while (tileFound == null)
+                    int index = r.Next(_tileImageList.Count);
+                    var difference = GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
+                    if (difference < threshold)
                     {
-                        int index = r.Next(_tileImageList.Count);
-                        var difference = GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
-                        if (difference < threshold)
-                        {
-                            tileFound = _tileImageList[index];
-                        }
-                        else
-                        {
-                            searchCounter++;
-                            if (searchCounter >= _tileImageList.Count)
-                                threshold += 5;
-                        }
+                        tileFound = _tileImageList[index];
                     }
-
-                    // Apply found tile to section
-                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                    tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
-
-                    _progress++;
+                    else
+                    {
+                        searchCounter++;
+                        if (searchCounter >= _tileImageList.Count)
+                            threshold += 5;
+                    }
                 }
+
+                // Apply found tile to section
+                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                _progress++;
             });
         }
 
@@ -214,58 +218,59 @@ namespace Yugen.Mosaic.Uwp.Services
             List<Tile> tileQueue = new List<Tile>();
             int maxQueueLength = Math.Min(1000, Math.Max(0, _tileImageList.Count - 50));
 
-            Parallel.For(0, _tX, x =>
+            Parallel.For(0, _tX * _tY, xy =>
             {
-                for (int y = 0; y < _tY; y++)
+                int y = xy / _tX;
+                int x = xy % _tX;
+
+                int index = 0;
+
+                // Check if it's the same as the last (X)?
+                if (tileQueue.Count > 1)
                 {
-                    int index = 0;
-                    // Check if it's the same as the last (X)?
-                    if (tileQueue.Count > 1)
+                    while (tileQueue.Contains(_tileImageList[index]))
                     {
-                        while (tileQueue.Contains(_tileImageList[index]))
-                        {
-                            index = r.Next(_tileImageList.Count);
-                        }
+                        index = r.Next(_tileImageList.Count);
                     }
-
-                    // Add to the 'queue'
-                    Tile tileFound = _tileImageList[index];
-                    if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
-                        tileQueue.RemoveAt(0);
-                    tileQueue.Add(tileFound);
-
-                    // Adjust the hue
-                    Image<Rgba32> adjustedImage = new Image<Rgba32>(tileFound.ResizedImage.Width, tileFound.ResizedImage.Height);
-                    var adjustHueProcessor = new AdjustHueProcessor(tileFound.ResizedImage, _avgsMaster[x, y]);
-                    adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
-
-                    // Apply found tile to section
-                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                    adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
-
-                    _progress++;
                 }
+
+                // Add to the 'queue'
+                Tile tileFound = _tileImageList[index];
+                if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
+                    tileQueue.RemoveAt(0);
+                tileQueue.Add(tileFound);
+
+                // Adjust the hue
+                Image<Rgba32> adjustedImage = new Image<Rgba32>(tileFound.ResizedImage.Width, tileFound.ResizedImage.Height);
+                var adjustHueProcessor = new AdjustHueProcessor(tileFound.ResizedImage, _avgsMaster[x, y]);
+                adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
+
+                // Apply found tile to section
+                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                _progress++;
             });
         }
 
         // Use just mosic colored tiles
         private void PlainColor(Image<Rgba32> outputImage, Size tileSize)
         {
-            Parallel.For(0, _tX, x =>
+            Parallel.For(0, _tX * _tY, xy =>
             {
-                for (int y = 0; y < _tY; y++)
-                {
-                    // Adjust the hue
-                    Image<Rgba32> adjustedImage = new Image<Rgba32>(tileSize.Width, tileSize.Height);
-                    var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
-                    adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
+                int y = xy / _tX;
+                int x = xy % _tX;
 
-                    // Apply found tile to section
-                    var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                    adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+                // Generate colored tile
+                Image<Rgba32> adjustedImage = new Image<Rgba32>(tileSize.Width, tileSize.Height);
+                var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
+                adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
 
-                    _progress++;
-                }
+                // Apply found tile to section
+                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                _progress++;
             });
         }
 

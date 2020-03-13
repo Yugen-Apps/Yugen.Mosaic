@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using Microsoft.Toolkit.Uwp.Helpers;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.Primitives;
 using System;
@@ -177,7 +178,9 @@ namespace Yugen.Mosaic.Uwp
             _mosaicService.Reset();
 
             MasterBpmSource = new BitmapImage();
-            TileBmpCollection.Clear();
+            TileBmpCollection = new ObservableCollection<TileBmp>();
+
+            GC.Collect();
 
             UpdateIsAddMasterUIVisible();
         }
@@ -231,24 +234,29 @@ namespace Yugen.Mosaic.Uwp
             button.IsEnabled = false;
             IsLoading = true;
 
-            foreach (var file in files)
-            {
-                using (var inputStream = await file.OpenReadAsync())
-                using (var stream = inputStream.AsStreamForRead())
+            await Task.Run(() =>
+                Parallel.ForEach(files, async file =>
                 {
-                    var image = _mosaicService.AddTileImage(file.DisplayName, stream);
-
-                    using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
+                    using (var inputStream = await file.OpenReadAsync())
+                    using (var stream = inputStream.AsStreamForRead())
                     {
-                        InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
+                        var image = _mosaicService.AddTileImage(file.DisplayName, stream);
 
-                        var bmp = new BitmapImage();
-                        await bmp.SetSourceAsync(outputStream);
+                        using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
+                        {
+                            InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
 
-                        TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
+                            await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                            {
+                                var bmp = new BitmapImage();
+                                await bmp.SetSourceAsync(outputStream);
+
+                                TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
+                            });
+                        }
                     }
-                }
-            }
+                })
+            );
 
             IsLoading = false;
             button.IsEnabled = true;
