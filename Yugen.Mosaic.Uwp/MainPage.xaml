@@ -9,8 +9,10 @@
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       xmlns:controls="using:Yugen.Mosaic.Uwp.Controls"
+      xmlns:winUiControls="using:Microsoft.UI.Xaml.Controls"
       mc:Ignorable="d"
-      Background="{ThemeResource AppWorkBackgroundBrush}">
+      Background="{ThemeResource AppWorkBackgroundBrush}"
+      Loaded="Page_Loaded">
 
     <Grid>
 
@@ -56,18 +58,19 @@
 
                 <StackPanel Spacing="5">
 
-                    <TextBlock Text="Master Image"
+                    <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
                                Style="{StaticResource CaptionTextBlockStyle}"
-                               Foreground="{ThemeResource AppForegroundBrush}" />
+                               Text="Master Image" />
 
                     <Border Height="230"
                             Width="230">
 
-                        <Grid PointerEntered="{x:Bind ViewModel.Grid_PointerEntered}"
-                              PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
-                              Tapped="{x:Bind ViewModel.AddMasterGrid_Tapped}"
+                        <Grid x:Name="MasterImageGrid"
+                              CornerRadius="2"
                               extensions:Mouse.Cursor="Hand"
-                              CornerRadius="2">
+                              PointerEntered="{x:Bind ViewModel.Grid_PointerEntered}"
+                              PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
+                              Tapped="{x:Bind ViewModel.AddMasterGrid_Tapped}">
 
                             <Grid.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
@@ -102,12 +105,13 @@
                             Spacing="5"
                             Margin="0,25,0,10">
 
-                    <TextBlock Text="Tiles list"
+                    <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
                                Style="{StaticResource CaptionTextBlockStyle}"
-                               Foreground="{ThemeResource AppForegroundBrush}" />
+                               Text="Tiles list" />
 
-                    <Button HorizontalAlignment="Stretch"
-                            Click="{x:Bind ViewModel.AddTilesButton_Click}">
+                    <Button x:Name="AddTilesButton" 
+                            Click="{x:Bind ViewModel.AddTilesButton_Click}"
+                            HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="5">
                             <FontIcon Glyph="" />
@@ -181,17 +185,18 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <validation:ValidatingForm x:Name="ValidatingForm">
 
                     <StackPanel Spacing="10">
 
-                        <TextBlock Text="Tile Properties"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   Text="Tile Properties" />
 
-                        <Grid>
+                        <Grid x:Name="TilePropertiesGrid">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -233,24 +238,25 @@
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
 
-                        <TextBlock Text="Mosaic Type"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   Text="Mosaic Type" />
 
-                        <ComboBox Margin="24,0,0,0"
+                        <ComboBox x:Name="MosaicTypeComboBox" 
                                   HorizontalAlignment="Stretch"
                                   ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
+                                  Margin="24,0,0,0"
                                   SelectedItem="{x:Bind ViewModel.SelectedMosaicType, Mode=TwoWay}" />
 
                         <Rectangle Height=".5"
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
 
-                        <TextBlock Text="Output Properties"
-                                   Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   Text="Output Properties"/>
 
-                        <Grid>
+                        <Grid x:Name="OutputPropertiesGrid">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -292,11 +298,12 @@
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
 
-                        <validation:ValidatingButton Content="Generate"
+                        <validation:ValidatingButton x:Name="GenerateButton" 
+                                                     Click="{x:Bind ViewModel.GenerateButton_Click}"
+                                                     Content="Generate"
                                                      HorizontalAlignment="Stretch"
                                                      Margin="5,0,0,0"
                                                      Style="{ThemeResource AccentButtonStyle}"
-                                                     Click="{x:Bind ViewModel.GenerateButton_Click}"
                                                      ValidatingForm="{x:Bind ValidatingForm}" />
 
                         <CheckBox Content="Show Grid"
@@ -309,7 +316,8 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <Button Content="Save"
+                            <Button x:Name="SaveButton" 
+                                    Content="Save"
                                     HorizontalAlignment="Stretch"
                                     Margin="0,0,5,0"
                                     Click="{x:Bind ViewModel.SaveButton_Click}" />
@@ -348,6 +356,18 @@
                         HorizontalAlignment="Stretch"
                         Margin="5,0,0,5"
                         Height="36"
+                        Click="{x:Bind ViewModel.HelpButton_Click}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="5">
+                        <FontIcon Glyph="&#xE897;" />
+                        <TextBlock Text="Help" />
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Row="2"
+                        HorizontalAlignment="Stretch"
+                        Margin="5,0,0,5"
+                        Height="36"
                         Click="{x:Bind ViewModel.SettingsButton_Click}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
@@ -359,6 +379,16 @@
             </Grid>
 
         </Grid>
+
+        <winUiControls:TeachingTip IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
+                                   Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
+                                   Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
+                                   Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
+                                   Closing="{x:Bind ViewModel.TeachingTip_Closing}"
+                                   Closed="{x:Bind ViewModel.TeachingTip_Closed}"
+                                   CloseButtonContent="Next"
+                                   ActionButtonContent="Skip Tutorial"
+                                   ActionButtonClick="{x:Bind ViewModel.TeachingTip_ActionButtonClick}"/>
 
     </Grid>
 

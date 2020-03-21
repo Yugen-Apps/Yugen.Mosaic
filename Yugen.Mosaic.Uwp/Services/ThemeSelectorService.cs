@@ -63,7 +63,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private static async Task<ElementTheme> LoadThemeFromSettingsAsync()
         {
             ElementTheme cacheTheme = ElementTheme.Default;
-            string themeName = await ApplicationData.Current.LocalSettings.ReadAsync<string>(SettingsKey);
+            string themeName = await SettingsHelper.ReadAsync<string>(SettingsKey);
 
             if (!string.IsNullOrEmpty(themeName))
             {
@@ -75,7 +75,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private static async Task SaveThemeInSettingsAsync(ElementTheme theme)
         {
-            await ApplicationData.Current.LocalSettings.SaveAsync(SettingsKey, theme.ToString());
+            await SettingsHelper.WriteAsync(SettingsKey, theme.ToString());
         }
 
         private static T GetThemeResource<T>(ElementTheme theme, string resKey)

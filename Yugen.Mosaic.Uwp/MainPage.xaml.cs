@@ -1,5 +1,7 @@
 ﻿using Windows.ApplicationModel.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Yugen.Mosaic.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp
 {
@@ -18,8 +20,26 @@ namespace Yugen.Mosaic.Uwp
 
         private void ExtendToTitleBar()
         {
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var frameworkElements = new FrameworkElement[]
+            {
+                MasterImageGrid,
+                AddTilesButton,
+                TilePropertiesGrid,
+                MosaicTypeComboBox,
+                OutputPropertiesGrid,
+                GenerateButton,
+                SaveButton
+            };
+
+            OnboardingHelper.Init(frameworkElements);
+
+            ViewModel.ShowTeachingTip();
         }
     }
 }
