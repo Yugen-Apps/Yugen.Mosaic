@@ -34,7 +34,19 @@ steps:
 
       Write-Host "Setting the name of the build to '$newVersion'."
       Write-Host "##vso[build.updatebuildnumber]$newVersion"
-      
+     
+- task: DownloadSecureFile@1
+  name: signingCert
+  displayName: 'Download CA certificate'
+  inputs:
+    secureFile: 'YugenCert.cer'
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Agent.TempDirectory)'
+    Contents: '*.cer'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
