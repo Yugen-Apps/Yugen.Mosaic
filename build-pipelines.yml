@@ -45,7 +45,7 @@ steps:
   inputs:
     sourceFolder: '$(Agent.TempDirectory)'
     Contents: '*.cer'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\AppxPackages'
 
 - task: NuGetToolInstaller@1
 
