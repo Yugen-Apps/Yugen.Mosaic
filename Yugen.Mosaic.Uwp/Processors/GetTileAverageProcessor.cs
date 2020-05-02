@@ -1,11 +1,11 @@
 ﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.Primitives;
 using System;
 using System.Threading.Tasks;
+using Rectangle = SixLabors.ImageSharp.Rectangle;
 
 namespace Yugen.Mosaic.Uwp.Processors
 {
@@ -29,13 +29,13 @@ namespace Yugen.Mosaic.Uwp.Processors
         }
 
         /// <inheritdoc/>
-        public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Image<TPixel> source, Rectangle sourceRectangle) where TPixel : struct, IPixel<TPixel>
+        public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Configuration configuration, Image<TPixel> source, Rectangle sourceRectangle) where TPixel : unmanaged, IPixel<TPixel>
         {
-            return new GetTileAverageProcessor<TPixel>(this, source, sourceRectangle);
+            return new GetTileAverageProcessor<TPixel>(configuration, this, source, sourceRectangle);
         }
     }
 
-    public class GetTileAverageProcessor<TPixel> : IImageProcessor<TPixel> where TPixel : struct, IPixel<TPixel>
+    public class GetTileAverageProcessor<TPixel> : IImageProcessor<TPixel> where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
         /// The source <see cref="Image{TPixel}"/> instance to modify
@@ -56,7 +56,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="definition">The <see cref="HlslGaussianBlurProcessor"/> defining the processor parameters</param>
         /// <param name="source">The source <see cref="Image{TPixel}"/> for the current processor instance</param>
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
-        public GetTileAverageProcessor(GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
+        public GetTileAverageProcessor(Configuration configuration, GetTileAverageProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
             _source = source;
 
@@ -70,7 +70,7 @@ namespace Yugen.Mosaic.Uwp.Processors
         }
         
         /// <inheritdoc/>
-        public void Apply()
+        public void Execute()
         {
             _resizedImage.Mutate(x => x.Resize(_width, _height));
 

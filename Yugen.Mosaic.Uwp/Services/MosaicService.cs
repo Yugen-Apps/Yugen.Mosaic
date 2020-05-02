@@ -11,6 +11,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Processors;
+using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp.Services
 {

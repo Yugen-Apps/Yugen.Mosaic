@@ -1,8 +1,6 @@
 ﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing.Processors;
-using SixLabors.Primitives;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -11,27 +9,26 @@ namespace Yugen.Mosaic.Uwp.Processors
 {
     public sealed class PlainColorProcessor : IImageProcessor
     {
-        public Rgba32 AverageColor { get; }
-
         public PlainColorProcessor(Rgba32 averageColor)
         {
             AverageColor = averageColor;
         }
 
-        /// <inheritdoc/>
-        public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Image<TPixel> source, Rectangle sourceRectangle) where TPixel : struct, IPixel<TPixel>
-        {
-            return new PlainColorProcessor<TPixel>(this, source, sourceRectangle);
+        public Rgba32 AverageColor { get; }
+
+        /// <inheritdoc />
+        public IImageProcessor<TPixel> CreatePixelSpecificProcessor<TPixel>(Configuration configuration, Image<TPixel> source, Rectangle sourceRectangle) where TPixel : unmanaged, IPixel<TPixel>
+        { 
+            return new PlainColorProcessor<TPixel>(configuration, this, source, sourceRectangle);
         }
     }
 
-    public class PlainColorProcessor<TPixel> : IImageProcessor<TPixel> where TPixel : struct, IPixel<TPixel>
+    public class PlainColorProcessor<TPixel> : IImageProcessor<TPixel> where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
         /// The source <see cref="Image{TPixel}"/> instance to modify
         /// </summary>
         private readonly Image<TPixel> _source;
-
         private readonly Rgba32 _averageColor;
 
         /// <summary>
@@ -40,14 +37,13 @@ namespace Yugen.Mosaic.Uwp.Processors
         /// <param name="definition">The <see cref="PlainColorProcessor"/> defining the processor parameters</param>
         /// <param name="source">The source <see cref="Image{TPixel}"/> for the current processor instance</param>
         /// <param name="sourceRectangle">The source area to process for the current processor instance</param>
-        public PlainColorProcessor(PlainColorProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
+        public PlainColorProcessor(Configuration configuration, PlainColorProcessor definition, Image<TPixel> source, Rectangle sourceRectangle)
         {
             _source = source;
             _averageColor = definition.AverageColor;
         }
 
-        /// <inheritdoc/>
-        public void Apply()
+        public void Execute()
         {
             int width = _source.Width;
             Image<TPixel> source = _source;
@@ -75,3 +71,5 @@ namespace Yugen.Mosaic.Uwp.Processors
         public void Dispose() { }
     }
 }
+
+

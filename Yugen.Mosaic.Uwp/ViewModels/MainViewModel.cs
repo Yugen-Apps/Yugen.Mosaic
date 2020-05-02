@@ -21,6 +21,7 @@ using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
+using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp
 {

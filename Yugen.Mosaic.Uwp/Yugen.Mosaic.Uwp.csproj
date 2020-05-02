@@ -233,13 +233,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>3.0.0</Version>
+      <Version>3.2.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>3.0.0</Version>
+      <Version>3.2.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
       <Version>6.0.0</Version>
@@ -254,7 +254,7 @@
       <Version>2.3.200213001</Version>
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp">
-      <Version>1.0.0-beta0007</Version>
+      <Version>1.0.0-rc0001</Version>
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp.Drawing">
       <Version>1.0.0-beta0007</Version>
@@ -263,13 +263,13 @@
       <Version>1.6.5</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Standard">
-      <Version>1.0.20</Version>
+      <Version>1.0.22</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Uwp">
-      <Version>1.0.20</Version>
+      <Version>1.0.22</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Uwp.Controls">
-      <Version>1.0.20</Version>
+      <Version>1.0.22</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
