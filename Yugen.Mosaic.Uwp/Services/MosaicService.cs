@@ -1,11 +1,11 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
@@ -168,7 +168,25 @@ namespace Yugen.Mosaic.Uwp.Services
                 var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
                 tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
 
+                //this.ApplyTileFoundProcessor(x, y, tileFound.ResizedImage, outputImage);
+
                 _progress++;
+            });
+        }
+
+        private void ApplyTileFoundProcessor(int x, int y, Image<Rgba32> source, Image<Rgba32> destination)
+        {
+            destination.Mutate(c =>
+            {
+                //for (int h = 0; h < _tY; h++)
+                //{
+                //    for (int w = 0; w < _tX; w++)
+                //    {
+                        var point = new Point(x * source.Width, y * source.Height);
+
+                        c.DrawImage(source, point, 1);
+                //    }
+                //}
             });
         }
 
@@ -264,8 +282,18 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 // Generate colored tile
                 Image<Rgba32> adjustedImage = new Image<Rgba32>(tileSize.Width, tileSize.Height);
-                var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
-                adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
+                //var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
+                //adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
+
+                Vector4 averageColor4 = _avgsMaster[x, y].ToVector4();
+
+                adjustedImage.Mutate(c => c.ProcessPixelRowsAsVector4(row =>
+                {
+                    foreach (ref Vector4 pixel in row)
+                    {
+                        pixel = (pixel + averageColor4) / 2;
+                    }
+                }));
 
                 // Apply found tile to section
                 var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
