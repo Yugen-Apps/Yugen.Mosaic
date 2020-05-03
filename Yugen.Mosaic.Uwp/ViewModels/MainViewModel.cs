@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -27,6 +28,7 @@ namespace Yugen.Mosaic.Uwp
     public class MainViewModel : BaseViewModel
     {
         private BitmapImage _masterBmpSource = new BitmapImage();
+
         public BitmapImage MasterBpmSource
         {
             get { return _masterBmpSource; }
@@ -34,6 +36,7 @@ namespace Yugen.Mosaic.Uwp
         }
 
         private bool _isAddMasterUIVisible = true;
+
         public bool IsAddMasterUIVisible
         {
             get { return _isAddMasterUIVisible; }
@@ -42,6 +45,7 @@ namespace Yugen.Mosaic.Uwp
 
 
         private int _tileWidth = 25;
+
         public int TileWidth
         {
             get { return _tileWidth; }
@@ -49,6 +53,7 @@ namespace Yugen.Mosaic.Uwp
         }
 
         private int _tileHeight = 25;
+
         public int TileHeight
         {
             get { return _tileHeight; }
@@ -58,6 +63,7 @@ namespace Yugen.Mosaic.Uwp
         private Size TileSize => new Size(_tileWidth, _tileHeight);
 
         private ObservableCollection<TileBmp> _tileBmpCollection = new ObservableCollection<TileBmp>();
+
         public ObservableCollection<TileBmp> TileBmpCollection
         {
             get { return _tileBmpCollection; }
@@ -66,6 +72,7 @@ namespace Yugen.Mosaic.Uwp
 
 
         private BitmapImage _outputBmpSource = new BitmapImage();
+
         public BitmapImage OutputBmpSource
         {
             get { return _outputBmpSource; }
@@ -73,6 +80,7 @@ namespace Yugen.Mosaic.Uwp
         }
 
         private int _outputWidth = 1000;
+
         public int OutputWidth
         {
             get { return _outputWidth; }
@@ -80,6 +88,7 @@ namespace Yugen.Mosaic.Uwp
         }
 
         private int _outputHeight = 1000;
+
         public int OutputHeight
         {
             get { return _outputHeight; }
@@ -90,6 +99,7 @@ namespace Yugen.Mosaic.Uwp
 
 
         private bool _isAlignmentGridVisibile = true;
+
         public bool IsAlignmentGridVisibile
         {
             get { return _isAlignmentGridVisibile; }
@@ -99,13 +109,14 @@ namespace Yugen.Mosaic.Uwp
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
-            new MosaicType { Id=0, Title="Classic" },
-            new MosaicType { Id=1, Title="Random" },
-            new MosaicType { Id=2, Title="AdjustHue" },
-            new MosaicType { Id=3, Title="Plain Color" }
+            new MosaicType {Id = 0, Title = "Classic"},
+            new MosaicType {Id = 1, Title = "Random"},
+            new MosaicType {Id = 2, Title = "AdjustHue"},
+            new MosaicType {Id = 3, Title = "Plain Color"}
         };
 
         private MosaicType _selectedMosaicType;
+
         public MosaicType SelectedMosaicType
         {
             get { return _selectedMosaicType; }
@@ -114,6 +125,7 @@ namespace Yugen.Mosaic.Uwp
 
 
         private bool _isLoading;
+
         public bool IsLoading
         {
             get { return _isLoading; }
@@ -123,6 +135,39 @@ namespace Yugen.Mosaic.Uwp
         private readonly MosaicService _mosaicService = new MosaicService();
 
         private Image<Rgba32> _outputImage;
+
+
+        private bool _isTeachingTipOpen;
+
+        public bool IsTeachingTipOpen
+        {
+            get { return _isTeachingTipOpen; }
+            set { Set(ref _isTeachingTipOpen, value); }
+        }
+
+        private string _teachingTipTitle;
+
+        public string TeachingTipTitle
+        {
+            get { return _teachingTipTitle; }
+            set { Set(ref _teachingTipTitle, value); }
+        }
+
+        private string _teachingTipSubTitle;
+
+        public string TeachingTipSubTitle
+        {
+            get { return _teachingTipSubTitle; }
+            set { Set(ref _teachingTipSubTitle, value); }
+        }
+
+        private FrameworkElement _teachingTipTarget;
+
+        public FrameworkElement TeachingTipTarget
+        {
+            get { return _teachingTipTarget; }
+            set { Set(ref _teachingTipTarget, value); }
+        }
 
 
         public MainViewModel()
@@ -154,7 +199,7 @@ namespace Yugen.Mosaic.Uwp
 
         public void AddTilesButton_Click(object sender, RoutedEventArgs e)
         {
-            AddTiles((Button)sender).FireAndForgetSafeAsync();
+            AddTiles((Button) sender).FireAndForgetSafeAsync();
         }
 
         public void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -165,12 +210,12 @@ namespace Yugen.Mosaic.Uwp
 
         public void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            Generate((Button)sender).FireAndForgetSafeAsync();
+            Generate((Button) sender).FireAndForgetSafeAsync();
         }
 
         public void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Save((Button)sender).FireAndForgetSafeAsync();
+            Save((Button) sender).FireAndForgetSafeAsync();
         }
 
         public void ResetButton_Click(object sender, RoutedEventArgs e)
@@ -185,6 +230,12 @@ namespace Yugen.Mosaic.Uwp
             UpdateIsAddMasterUIVisible();
         }
 
+        public void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            OnboardingHelper.IsDisabled = false;
+            ShowTeachingTip();
+        }
+
         public void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             Settings().FireAndForgetSafeAsync();
@@ -196,7 +247,7 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = true;
 
             var masterFile = await FilePickerHelper.OpenFile(
-                new List<string> { ".jpg", ".png" },
+                new List<string> {".jpg", ".png"},
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (masterFile != null)
@@ -226,8 +277,8 @@ namespace Yugen.Mosaic.Uwp
         private async Task AddTiles(Button button)
         {
             var files = await FilePickerHelper.OpenFiles(
-                          new List<string> { ".jpg", ".png" },
-                          Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+                new List<string> {".jpg", ".png"},
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (files == null)
                 return;
 
@@ -280,7 +331,8 @@ namespace Yugen.Mosaic.Uwp
             button.IsEnabled = false;
             IsLoading = true;
 
-            await Task.Run(() => _outputImage = _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.Id));
+            await Task.Run(() =>
+                _outputImage = _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.Id));
 
             if (_outputImage != null)
             {
@@ -297,9 +349,10 @@ namespace Yugen.Mosaic.Uwp
             button.IsEnabled = false;
             IsLoading = true;
 
-            var fileTypes = new Dictionary<string, List<string>>() {
-                { FileFormat.Png.ToString(), new List<string>() { FileFormat.Png.FileFormatToString() } },
-                { FileFormat.Jpg.ToString(), new List<string>() { FileFormat.Jpg.FileFormatToString() } }
+            var fileTypes = new Dictionary<string, List<string>>()
+            {
+                {FileFormat.Png.ToString(), new List<string>() {FileFormat.Png.FileFormatToString()}},
+                {FileFormat.Jpg.ToString(), new List<string>() {FileFormat.Jpg.FileFormatToString()}}
             };
 
             var file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,
@@ -327,8 +380,38 @@ namespace Yugen.Mosaic.Uwp
 
         private async Task Settings()
         {
-            SettingsDialog d = new SettingsDialog();
+            var d = new SettingsDialog();
             await d.ShowAsync();
+        }
+
+
+        public void ShowTeachingTip()
+        {
+            var onboardingElement = OnboardingHelper.ShowTeachingTip();
+            if (onboardingElement == null) return;
+            TeachingTipTitle = onboardingElement.Title;
+            TeachingTipSubTitle = onboardingElement.Subtitle;
+            TeachingTipTarget = onboardingElement.Target;
+            IsTeachingTipOpen = true;
+        }
+
+        public void TeachingTip_Closing(TeachingTip sender, TeachingTipClosingEventArgs args)
+        {
+            TeachingTipTitle = "";
+            TeachingTipSubTitle = "";
+            TeachingTipTarget = null;
+            IsTeachingTipOpen = false;
+        }
+
+        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+        {
+            ShowTeachingTip();
+        }
+
+        public void TeachingTip_ActionButtonClick(TeachingTip sender, object args)
+        {
+            OnboardingHelper.IsDisabled = true;
+            IsTeachingTipOpen = false;
         }
     }
 }

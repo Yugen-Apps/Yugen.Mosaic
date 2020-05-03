@@ -165,10 +165,10 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
 
                 // Apply found tile to section
-                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                //tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
 
-                //this.ApplyTileFoundProcessor(x, y, tileFound.ResizedImage, outputImage);
+                this.ApplyTileFoundProcessor(x, y, tileFound.ResizedImage, outputImage);
 
                 _progress++;
             });
@@ -223,8 +223,10 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
 
                 // Apply found tile to section
-                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                //tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                this.ApplyTileFoundProcessor(x, y, tileFound.ResizedImage, outputImage);
 
                 _progress++;
             });
@@ -235,29 +237,30 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             Random r = new Random();
             List<Tile> tileQueue = new List<Tile>();
-            int maxQueueLength = Math.Min(1000, Math.Max(0, _tileImageList.Count - 50));
+            //int maxQueueLength = Math.Min(1000, Math.Max(0, _tileImageList.Count - 50));
 
             Parallel.For(0, _tX * _tY, xy =>
             {
                 int y = xy / _tX;
                 int x = xy % _tX;
 
-                int index = 0;
+                // (R * ColCount) + C
+                int index = ((y * _tX) + x) % _tileImageList.Count;
 
                 // Check if it's the same as the last (X)?
-                if (tileQueue.Count > 1)
-                {
-                    while (tileQueue.Contains(_tileImageList[index]))
-                    {
-                        index = r.Next(_tileImageList.Count);
-                    }
-                }
+                //if (tileQueue.Count > 1)
+                //{
+                //    while (tileQueue.Contains(_tileImageList[index]))
+                //    {
+                //        index = r.Next(_tileImageList.Count);
+                //    }
+                //}
 
                 // Add to the 'queue'
                 Tile tileFound = _tileImageList[index];
-                if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
-                    tileQueue.RemoveAt(0);
-                tileQueue.Add(tileFound);
+                //if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
+                //    tileQueue.RemoveAt(0);
+                //tileQueue.Add(tileFound);
 
                 // Adjust the hue
                 Image<Rgba32> adjustedImage = new Image<Rgba32>(tileFound.ResizedImage.Width, tileFound.ResizedImage.Height);
@@ -265,8 +268,10 @@ namespace Yugen.Mosaic.Uwp.Services
                 adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
 
                 // Apply found tile to section
-                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                //adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                this.ApplyTileFoundProcessor(x, y, adjustedImage, outputImage);
 
                 _progress++;
             });
@@ -296,8 +301,10 @@ namespace Yugen.Mosaic.Uwp.Services
                 }));
 
                 // Apply found tile to section
-                var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
+                //adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
+
+                this.ApplyTileFoundProcessor(x, y, adjustedImage, outputImage);
 
                 _progress++;
             });

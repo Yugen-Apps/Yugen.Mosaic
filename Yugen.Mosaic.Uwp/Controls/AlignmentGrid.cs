@@ -133,7 +133,7 @@ namespace Yugen.Mosaic.Uwp.Controls
                         Height = ActualHeight,
                         Fill = brush
                     };
-                    Canvas.SetLeft(line, RangeHelper.Convert(x, 0, ContainerWidth, 0, ActualWidth));
+                    Canvas.SetLeft(line, MathHelper.RangesConverter(x, 0, ContainerWidth, 0, ActualWidth));
 
                     containerCanvas.Children.Add(line);
                 }
@@ -149,7 +149,7 @@ namespace Yugen.Mosaic.Uwp.Controls
                         Height = 1,
                         Fill = brush
                     };
-                    Canvas.SetTop(line, RangeHelper.Convert(y, 0, ContainerHeight, 0, ActualHeight));
+                    Canvas.SetTop(line, MathHelper.RangesConverter(y, 0, ContainerHeight, 0, ActualHeight));
 
                     containerCanvas.Children.Add(line);
                 }

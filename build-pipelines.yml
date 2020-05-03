@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- releases/store
+- release/*
 
 pool:
   vmImage: 'windows-latest'
