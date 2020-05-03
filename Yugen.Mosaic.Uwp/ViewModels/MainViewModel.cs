@@ -389,6 +389,7 @@ namespace Yugen.Mosaic.Uwp
         {
             var onboardingElement = OnboardingHelper.ShowTeachingTip();
             if (onboardingElement == null) return;
+
             TeachingTipTitle = onboardingElement.Title;
             TeachingTipSubTitle = onboardingElement.Subtitle;
             TeachingTipTarget = onboardingElement.Target;
