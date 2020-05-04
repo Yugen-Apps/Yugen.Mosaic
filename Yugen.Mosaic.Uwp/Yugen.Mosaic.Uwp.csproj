@@ -152,7 +152,14 @@
     <Compile Include="Processors\AdjustHueProcessor.cs" />
     <Compile Include="Processors\GetTileAverageProcessor.cs" />
     <Compile Include="Processors\GetTilesAverageProcessor.cs" />
+    <Compile Include="Services\AdjustHueSearchAndReplaceService.cs" />
+    <Compile Include="Services\ClassicSearchAndReplaceService.cs" />
+    <Compile Include="Interfaces\ISearchAndReplaceService.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Services\MosaicService.cs" />
+    <Compile Include="Services\PlainColorSearchAndReplaceService.cs" />
+    <Compile Include="Services\RandomSearchAndReplaceService.cs" />
+    <Compile Include="Services\SearchAndReplaceService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
