@@ -63,7 +63,7 @@
 
 //            _outputImage = definition.OutputImage;
 //        }
-        
+
 //        /// <inheritdoc/>
 //        public void Execute()
 //        {

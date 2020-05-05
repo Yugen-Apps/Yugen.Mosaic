@@ -9,12 +9,9 @@ namespace Yugen.Mosaic.Uwp
     {
         public SettingsDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        private void Button_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Hide();
-        }
+        private void Button_Tapped(object sender, TappedRoutedEventArgs e) => Hide();
     }
 }

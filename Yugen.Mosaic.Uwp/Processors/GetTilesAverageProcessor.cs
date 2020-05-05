@@ -4,7 +4,6 @@
 //using System;
 //using System.Threading.Tasks;
 //using Rectangle = SixLabors.ImageSharp.Rectangle;
-//using Size = SixLabors.ImageSharp.Size;
 
 //namespace Yugen.Mosaic.Uwp.Processors
 //{

@@ -9,7 +9,7 @@ using Yugen.Toolkit.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.ViewModels
 {
-    public class SettingsViewModel: BaseViewModel
+    public class SettingsViewModel : BaseViewModel
     {
         private const string STORE_REVIEWFORMAT = "ms-windows-store:REVIEW?PFN={0}";
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
@@ -18,8 +18,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         public ElementTheme ElementTheme
         {
-            get { return _elementTheme; }
-            set { Set(ref _elementTheme, value); }
+            get => _elementTheme;
+            set => Set(ref _elementTheme, value);
         }
         public ICommand SwitchThemeCommand
         {

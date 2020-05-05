@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -18,22 +17,22 @@ namespace Yugen.Mosaic.Uwp.Services
         // Don't adjust hue - keep searching for a tile close enough
         public override void SearchAndReplace()
         {
-            Random r = new Random();
+            var r = new Random();
 
             Parallel.For(0, _tX * _tY, xy =>
             {
-                int y = xy / _tX;
-                int x = xy % _tX;
+                var y = xy / _tX;
+                var x = xy % _tX;
 
                 // Reset searching variables
-                int threshold = 0;
-                int searchCounter = 0;
+                var threshold = 0;
+                var searchCounter = 0;
                 Tile tileFound = null;
 
                 // Search for a tile with a similar color
                 while (tileFound == null)
                 {
-                    int index = r.Next(_tileImageList.Count);
+                    var index = r.Next(_tileImageList.Count);
                     var difference = ColorHelper.GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
                     if (difference < threshold)
                     {
@@ -43,7 +42,9 @@ namespace Yugen.Mosaic.Uwp.Services
                     {
                         searchCounter++;
                         if (searchCounter >= _tileImageList.Count)
+                        {
                             threshold += 5;
+                        }
                     }
                 }
 
@@ -51,7 +52,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
                 //tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
 
-                this.ApplyTileFoundProcessor(x, y, tileFound.ResizedImage);
+                ApplyTileFoundProcessor(x, y, tileFound.ResizedImage);
 
                 //_progress++;
             });
