@@ -150,6 +150,7 @@
     <Compile Include="Services\ClassicSearchAndReplaceService.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceService.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Interfaces\IMosaicService.cs" />
     <Compile Include="Services\MosaicService.cs" />
     <Compile Include="Services\PlainColorSearchAndReplaceService.cs" />
     <Compile Include="Services\RandomSearchAndReplaceService.cs" />

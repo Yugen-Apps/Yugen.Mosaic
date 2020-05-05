@@ -67,7 +67,7 @@
 //                    int B = Math.Min(255, Math.Max(0, (pixel.B + _averageColor.B) / 2));
 
 //                    Color clAvg = new Rgba32(Convert.ToByte(R), Convert.ToByte(G), Convert.ToByte(B));
-                    
+
 //                    TPixel pixelColor = clAvg.ToPixel<TPixel>();
 //                    _source[w, h] = pixelColor;
 //                }

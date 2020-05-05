@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
-using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -20,7 +19,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public static async Task InitializeAsync()
         {
-            var theme = await LoadThemeFromSettingsAsync();
+            ElementTheme theme = await LoadThemeFromSettingsAsync();
             await SetThemeAsync(theme);
         }
 
@@ -31,7 +30,7 @@ namespace Yugen.Mosaic.Uwp.Services
             await SetRequestedThemeAsync();
             await SaveThemeInSettingsAsync(Theme);
 
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
             //Active
             titleBar.BackgroundColor = Colors.Transparent;
@@ -48,7 +47,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public static async Task SetRequestedThemeAsync()
         {
-            foreach (var view in CoreApplication.Views)
+            foreach (CoreApplicationView view in CoreApplication.Views)
             {
                 await view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
@@ -63,7 +62,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private static async Task<ElementTheme> LoadThemeFromSettingsAsync()
         {
             ElementTheme cacheTheme = ElementTheme.Default;
-            string themeName = await SettingsHelper.ReadAsync<string>(SettingsKey);
+            var themeName = await SettingsHelper.ReadAsync<string>(SettingsKey);
 
             if (!string.IsNullOrEmpty(themeName))
             {
@@ -73,17 +72,14 @@ namespace Yugen.Mosaic.Uwp.Services
             return cacheTheme;
         }
 
-        private static async Task SaveThemeInSettingsAsync(ElementTheme theme)
-        {
-            await SettingsHelper.WriteAsync(SettingsKey, theme.ToString());
-        }
+        private static async Task SaveThemeInSettingsAsync(ElementTheme theme) => await SettingsHelper.WriteAsync(SettingsKey, theme.ToString());
 
         private static T GetThemeResource<T>(ElementTheme theme, string resKey)
         {
-            bool isLightTheme = (theme == ElementTheme.Default)
+            var isLightTheme = (theme == ElementTheme.Default)
                 ? (IsSystemThemeLight())
                 : (theme == ElementTheme.Light);
-            string themeKey = isLightTheme ? "Light" : "Dark";
+            var themeKey = isLightTheme ? "Light" : "Dark";
             var themeDictionary = (ResourceDictionary)Application.Current.Resources.ThemeDictionaries[themeKey];
             return (T)themeDictionary[resKey];
         }

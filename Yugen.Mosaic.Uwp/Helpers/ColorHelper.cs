@@ -20,11 +20,11 @@ namespace Yugen.Mosaic.Uwp.Helpers
 
             Parallel.For(startY, endY, h =>
             {
-                var rowSpan = source.GetPixelRowSpan(h);
+                Span<Rgba32> rowSpan = source.GetPixelRowSpan(h);
 
-                for (int w = startX; w < endX; w++)
+                for (var w = startX; w < endX; w++)
                 {
-                    Rgba32 pixel = new Rgba32();
+                    var pixel = new Rgba32();
                     rowSpan[w].ToRgba32(ref pixel);
 
                     aR += pixel.R;
@@ -43,10 +43,10 @@ namespace Yugen.Mosaic.Uwp.Helpers
 
         public static int GetDifference(Rgba32 source, Rgba32 target)
         {
-            int dR = Math.Abs(source.R - target.R);
-            int dG = Math.Abs(source.G - target.G);
-            int dB = Math.Abs(source.B - target.B);
-            int diff = Math.Max(dR, dG);
+            var dR = Math.Abs(source.R - target.R);
+            var dG = Math.Abs(source.G - target.G);
+            var dB = Math.Abs(source.B - target.B);
+            var diff = Math.Max(dR, dG);
             return Math.Max(diff, dB);
         }
     }

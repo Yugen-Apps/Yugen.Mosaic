@@ -18,9 +18,7 @@ namespace Yugen.Mosaic.Uwp.Helpers
         private static int _step;
         private static OnboardingElement[] _onboardingElements;
 
-        public static void Init(FrameworkElement[] frameworkElements)
-        {
-            _onboardingElements = new OnboardingElement[]
+        public static void Init(FrameworkElement[] frameworkElements) => _onboardingElements = new OnboardingElement[]
             {
                 new OnboardingElement(
                     frameworkElements[0],
@@ -44,14 +42,15 @@ namespace Yugen.Mosaic.Uwp.Helpers
                     frameworkElements[6],
                     OnboardingStage.Save),
             };
-        }
 
         public static OnboardingElement ShowTeachingTip()
         {
             OnboardingElement onboardingElement = null;
 
             if (_step < 0 || IsDisabled)
+            {
                 return onboardingElement;
+            }
 
             if (_step < _onboardingElements.Length)
             {
