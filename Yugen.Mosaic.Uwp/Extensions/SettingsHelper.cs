@@ -21,18 +21,12 @@ namespace Yugen.Mosaic.Uwp.Extensions
             LocalSettings.Values[key] = valueString;
         }
 
-        public static async Task<T> ReadAsync<T>(string key)
-        {
-            return LocalSettings.Values.TryGetValue(key, out object value)
-                ? await JsonProvider.ToObjectAsync<T>((string) value)
+        public static async Task<T> ReadAsync<T>(string key) => LocalSettings.Values.TryGetValue(key, out var value)
+                ? await JsonProvider.ToObjectAsync<T>((string)value)
                 : default;
-        }
 
-        public static T Read<T>(string key)
-        {
-            return LocalSettings.Values.TryGetValue(key, out object value)
-                ? JsonConvert.DeserializeObject<T>((string) value)
+        public static T Read<T>(string key) => LocalSettings.Values.TryGetValue(key, out var value)
+                ? JsonConvert.DeserializeObject<T>((string)value)
                 : default;
-        }
     }
 }

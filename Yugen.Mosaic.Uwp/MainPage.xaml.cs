@@ -14,13 +14,13 @@ namespace Yugen.Mosaic.Uwp
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             ExtendToTitleBar();
         }
 
         private void ExtendToTitleBar()
         {
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
         }
 
