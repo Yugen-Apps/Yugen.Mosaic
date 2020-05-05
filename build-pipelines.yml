@@ -40,7 +40,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'custom'
-    arguments: 'restore $(solution) -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/sixlabors/api/v3/index.json'
+    arguments: 'restore d:\a\1\s\Yugen.Mosaic.Uwp.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/sixlabors/api/v3/index.json'
 
 - task: VersionAPPX@2
   displayName: 'Version MSIX'
