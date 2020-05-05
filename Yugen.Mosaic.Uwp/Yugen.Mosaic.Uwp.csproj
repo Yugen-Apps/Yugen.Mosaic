@@ -264,9 +264,6 @@
     <PackageReference Include="SixLabors.ImageSharp">
       <Version>1.0.0-rc0001</Version>
     </PackageReference>
-    <PackageReference Include="SixLabors.ImageSharp.Drawing">
-      <Version>1.0.0-unstable0446</Version>
-    </PackageReference>
     <PackageReference Include="WriteableBitmapEx">
       <Version>1.6.5</Version>
     </PackageReference>
