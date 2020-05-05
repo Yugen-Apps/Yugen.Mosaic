@@ -1,11 +1,10 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -30,17 +29,34 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public virtual void SearchAndReplace() { }
 
-        // TODO: check this out
+        // TODO: c.DrawImage crash (System.NullReferenceException) 
+        // with the current SixLabors.ImageSharp.Drawing preview version
+        //internal void ApplyTileFoundProcessor(int x, int y, Image<Rgba32> source)
+        //{
+        //    _outputImage.Mutate(c =>
+        //    {
+        //        var point = new Point(x * source.Width, y * source.Height);
+        //        try
+        //        {
+        //            c.DrawImage(source, point, 1);
+        //        }
+        //        catch { }
+        //    });
+        //}
+
         internal void ApplyTileFoundProcessor(int x, int y, Image<Rgba32> source)
         {
-            _outputImage.Mutate(c =>
+            Parallel.For(0, source.Height, h =>
             {
-                var point = new Point(x * source.Width, y * source.Height);
-                try
+                Span<Rgba32> rowSpan = source.GetPixelRowSpan(h);
+
+                for (var w = 0; w < source.Width; w++)
                 {
-                    c.DrawImage(source, point, 1);
+                    var pixel = new Rgba32();
+                    rowSpan[w].ToRgba32(ref pixel);
+
+                    _outputImage[x * source.Width + w, y * source.Height + h] = pixel;
                 }
-                catch { }
             });
         }
     }
