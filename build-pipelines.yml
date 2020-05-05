@@ -39,6 +39,11 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
+    command: 'custom'
+    arguments: 'sources add -Name myget -Source https://www.myget.org/F/sixlabors/api/v3/index.json'
+
+- task: NuGetCommand@2
+  inputs:
     restoreSolution: '$(solution)'
 
 - task: VersionAPPX@2
