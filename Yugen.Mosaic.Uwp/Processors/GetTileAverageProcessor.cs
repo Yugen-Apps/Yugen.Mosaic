@@ -67,7 +67,7 @@
 //            _resizedImage = definition.ResizedImage;
 //            _averageColor = definition.AverageColor;
 //        }
-        
+
 //        /// <inheritdoc/>
 //        public void Execute()
 //        {

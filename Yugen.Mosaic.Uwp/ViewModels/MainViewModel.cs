@@ -21,7 +21,6 @@ using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp
 {
@@ -31,16 +30,16 @@ namespace Yugen.Mosaic.Uwp
 
         public BitmapImage MasterBpmSource
         {
-            get { return _masterBmpSource; }
-            set { Set(ref _masterBmpSource, value); }
+            get => _masterBmpSource;
+            set => Set(ref _masterBmpSource, value);
         }
 
         private bool _isAddMasterUIVisible = true;
 
         public bool IsAddMasterUIVisible
         {
-            get { return _isAddMasterUIVisible; }
-            set { Set(ref _isAddMasterUIVisible, value); }
+            get => _isAddMasterUIVisible;
+            set => Set(ref _isAddMasterUIVisible, value);
         }
 
 
@@ -48,16 +47,16 @@ namespace Yugen.Mosaic.Uwp
 
         public int TileWidth
         {
-            get { return _tileWidth; }
-            set { Set(ref _tileWidth, value); }
+            get => _tileWidth;
+            set => Set(ref _tileWidth, value);
         }
 
         private int _tileHeight = 25;
 
         public int TileHeight
         {
-            get { return _tileHeight; }
-            set { Set(ref _tileHeight, value); }
+            get => _tileHeight;
+            set => Set(ref _tileHeight, value);
         }
 
         private Size TileSize => new Size(_tileWidth, _tileHeight);
@@ -66,8 +65,8 @@ namespace Yugen.Mosaic.Uwp
 
         public ObservableCollection<TileBmp> TileBmpCollection
         {
-            get { return _tileBmpCollection; }
-            set { Set(ref _tileBmpCollection, value); }
+            get => _tileBmpCollection;
+            set => Set(ref _tileBmpCollection, value);
         }
 
 
@@ -75,24 +74,24 @@ namespace Yugen.Mosaic.Uwp
 
         public BitmapImage OutputBmpSource
         {
-            get { return _outputBmpSource; }
-            set { Set(ref _outputBmpSource, value); }
+            get => _outputBmpSource;
+            set => Set(ref _outputBmpSource, value);
         }
 
         private int _outputWidth = 1000;
 
         public int OutputWidth
         {
-            get { return _outputWidth; }
-            set { Set(ref _outputWidth, value); }
+            get => _outputWidth;
+            set => Set(ref _outputWidth, value);
         }
 
         private int _outputHeight = 1000;
 
         public int OutputHeight
         {
-            get { return _outputHeight; }
-            set { Set(ref _outputHeight, value); }
+            get => _outputHeight;
+            set => Set(ref _outputHeight, value);
         }
 
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
@@ -102,8 +101,8 @@ namespace Yugen.Mosaic.Uwp
 
         public bool IsAlignmentGridVisibile
         {
-            get { return _isAlignmentGridVisibile; }
-            set { Set(ref _isAlignmentGridVisibile, value); }
+            get => _isAlignmentGridVisibile;
+            set => Set(ref _isAlignmentGridVisibile, value);
         }
 
 
@@ -119,8 +118,8 @@ namespace Yugen.Mosaic.Uwp
 
         public MosaicType SelectedMosaicType
         {
-            get { return _selectedMosaicType; }
-            set { Set(ref _selectedMosaicType, value); }
+            get => _selectedMosaicType;
+            set => Set(ref _selectedMosaicType, value);
         }
 
 
@@ -128,8 +127,8 @@ namespace Yugen.Mosaic.Uwp
 
         public bool IsLoading
         {
-            get { return _isLoading; }
-            set { Set(ref _isLoading, value); }
+            get => _isLoading;
+            set => Set(ref _isLoading, value);
         }
 
         private readonly MosaicService _mosaicService = new MosaicService();
@@ -141,32 +140,32 @@ namespace Yugen.Mosaic.Uwp
 
         public bool IsTeachingTipOpen
         {
-            get { return _isTeachingTipOpen; }
-            set { Set(ref _isTeachingTipOpen, value); }
+            get => _isTeachingTipOpen;
+            set => Set(ref _isTeachingTipOpen, value);
         }
 
         private string _teachingTipTitle;
 
         public string TeachingTipTitle
         {
-            get { return _teachingTipTitle; }
-            set { Set(ref _teachingTipTitle, value); }
+            get => _teachingTipTitle;
+            set => Set(ref _teachingTipTitle, value);
         }
 
         private string _teachingTipSubTitle;
 
         public string TeachingTipSubTitle
         {
-            get { return _teachingTipSubTitle; }
-            set { Set(ref _teachingTipSubTitle, value); }
+            get => _teachingTipSubTitle;
+            set => Set(ref _teachingTipSubTitle, value);
         }
 
         private FrameworkElement _teachingTipTarget;
 
         public FrameworkElement TeachingTipTarget
         {
-            get { return _teachingTipTarget; }
-            set { Set(ref _teachingTipTarget, value); }
+            get => _teachingTipTarget;
+            set => Set(ref _teachingTipTarget, value);
         }
 
 
@@ -176,47 +175,28 @@ namespace Yugen.Mosaic.Uwp
         }
 
 
-        public void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            IsAddMasterUIVisible = true;
-        }
+        public void Grid_PointerEntered(object sender, PointerRoutedEventArgs e) => IsAddMasterUIVisible = true;
 
-        public void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            UpdateIsAddMasterUIVisible();
-        }
+        public void Grid_PointerExited(object sender, PointerRoutedEventArgs e) => UpdateIsAddMasterUIVisible();
 
-        private void UpdateIsAddMasterUIVisible()
-        {
-            IsAddMasterUIVisible = (MasterBpmSource.PixelWidth > 0 && MasterBpmSource.PixelHeight > 0) ? false : true;
-        }
+        private void UpdateIsAddMasterUIVisible() => IsAddMasterUIVisible = (MasterBpmSource.PixelWidth > 0 && MasterBpmSource.PixelHeight > 0) ? false : true;
 
 
-        public void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            AddMaster().FireAndForgetSafeAsync();
-        }
+        public void AddMasterGrid_Tapped(object sender, TappedRoutedEventArgs e) => AddMaster().FireAndForgetSafeAsync();
 
-        public void AddTilesButton_Click(object sender, RoutedEventArgs e)
-        {
-            AddTiles((Button) sender).FireAndForgetSafeAsync();
-        }
+        public void AddTilesButton_Click(object sender, RoutedEventArgs e) => AddTiles((Button)sender).FireAndForgetSafeAsync();
 
         public void AdaptiveGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (e.ClickedItem is TileBmp item)
+            {
                 RemoveTile(item).FireAndForgetSafeAsync();
+            }
         }
 
-        public void GenerateButton_Click(object sender, RoutedEventArgs e)
-        {
-            Generate((Button) sender).FireAndForgetSafeAsync();
-        }
+        public void GenerateButton_Click(object sender, RoutedEventArgs e) => Generate((Button)sender).FireAndForgetSafeAsync();
 
-        public void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            Save((Button) sender).FireAndForgetSafeAsync();
-        }
+        public void SaveButton_Click(object sender, RoutedEventArgs e) => Save((Button)sender).FireAndForgetSafeAsync();
 
         public void ResetButton_Click(object sender, RoutedEventArgs e)
         {
@@ -236,26 +216,23 @@ namespace Yugen.Mosaic.Uwp
             ShowTeachingTip();
         }
 
-        public void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            Settings().FireAndForgetSafeAsync();
-        }
+        public void SettingsButton_Click(object sender, RoutedEventArgs e) => Settings().FireAndForgetSafeAsync();
 
 
         private async Task AddMaster()
         {
             IsLoading = true;
 
-            var masterFile = await FilePickerHelper.OpenFile(
-                new List<string> {".jpg", ".png"},
+            StorageFile masterFile = await FilePickerHelper.OpenFile(
+                new List<string> { ".jpg", ".png" },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (masterFile != null)
             {
-                using (var inputStream = await masterFile.OpenReadAsync())
-                using (var stream = inputStream.AsStreamForRead())
+                using (IRandomAccessStreamWithContentType inputStream = await masterFile.OpenReadAsync())
+                using (Stream stream = inputStream.AsStreamForRead())
                 {
-                    var image = _mosaicService.AddMasterImage(stream);
+                    Image<Rgba32> image = _mosaicService.AddMasterImage(stream);
 
                     using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 400))
                     {
@@ -263,7 +240,7 @@ namespace Yugen.Mosaic.Uwp
                         await MasterBpmSource.SetSourceAsync(outputStream);
                     }
 
-                    var newSize = RatioHelper.Convert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
+                    Tuple<int, int> newSize = RatioHelper.Convert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
                     OutputWidth = newSize.Item1;
                     OutputHeight = newSize.Item2;
                 }
@@ -276,11 +253,13 @@ namespace Yugen.Mosaic.Uwp
 
         private async Task AddTiles(Button button)
         {
-            var files = await FilePickerHelper.OpenFiles(
-                new List<string> {".jpg", ".png"},
+            IReadOnlyList<StorageFile> files = await FilePickerHelper.OpenFiles(
+                new List<string> { ".jpg", ".png" },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             if (files == null)
+            {
                 return;
+            }
 
             button.IsEnabled = false;
             IsLoading = true;
@@ -288,10 +267,10 @@ namespace Yugen.Mosaic.Uwp
             await Task.Run(() =>
                 Parallel.ForEach(files, async file =>
                 {
-                    using (var inputStream = await file.OpenReadAsync())
-                    using (var stream = inputStream.AsStreamForRead())
+                    using (IRandomAccessStreamWithContentType inputStream = await file.OpenReadAsync())
+                    using (Stream stream = inputStream.AsStreamForRead())
                     {
-                        var image = _mosaicService.AddTileImage(file.DisplayName, stream);
+                        Image<Rgba32> image = _mosaicService.AddTileImage(file.DisplayName, stream);
 
                         using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
                         {
@@ -355,13 +334,15 @@ namespace Yugen.Mosaic.Uwp
                 {FileFormat.Jpg.ToString(), new List<string>() {FileFormat.Jpg.FileFormatToString()}}
             };
 
-            var file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,
+            StorageFile file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (file == null || _outputImage == null)
+            {
                 return;
+            }
 
-            using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
                 switch (file.FileType)
                 {
@@ -387,8 +368,11 @@ namespace Yugen.Mosaic.Uwp
 
         public void ShowTeachingTip()
         {
-            var onboardingElement = OnboardingHelper.ShowTeachingTip();
-            if (onboardingElement == null) return;
+            OnboardingElement onboardingElement = OnboardingHelper.ShowTeachingTip();
+            if (onboardingElement == null)
+            {
+                return;
+            }
 
             TeachingTipTitle = onboardingElement.Title;
             TeachingTipSubTitle = onboardingElement.Subtitle;
@@ -404,10 +388,7 @@ namespace Yugen.Mosaic.Uwp
             IsTeachingTipOpen = false;
         }
 
-        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
-        {
-            ShowTeachingTip();
-        }
+        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
 
         public void TeachingTip_ActionButtonClick(TeachingTip sender, object args)
         {

@@ -11,11 +11,10 @@ using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
-    public class MosaicService
+    public class MosaicService : IMosaicService
     {
         private Image<Rgba32> _masterImage;
 
@@ -45,9 +44,11 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public void RemoveTileImage(string name)
         {
-            var item = _tileImageList.FirstOrDefault(x => x.Name.Equals(name));
+            Tile item = _tileImageList.FirstOrDefault(x => x.Name.Equals(name));
             if (item != null)
+            {
                 _tileImageList.Remove(item);
+            }
         }
 
         public Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size)
@@ -63,7 +64,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public InMemoryRandomAccessStream GetStream(Image<Rgba32> image)
         {
-            InMemoryRandomAccessStream outputStream = new InMemoryRandomAccessStream();
+            var outputStream = new InMemoryRandomAccessStream();
             image.SaveAsJpeg(outputStream.AsStreamForWrite());
             outputStream.Seek(0);
             return outputStream;
@@ -73,7 +74,9 @@ namespace Yugen.Mosaic.Uwp.Services
         public Image<Rgba32> GenerateMosaic(Size outputSize, Size tileSize, int mosaicType)
         {
             if (_masterImage == null || (mosaicType != 2 && _tileImageList.Count < 1))
+            {
                 return null;
+            }
 
             Image<Rgba32> resizedMasterImage = _masterImage.Clone(x => x.Resize(outputSize.Width, outputSize.Height));
 
@@ -92,28 +95,26 @@ namespace Yugen.Mosaic.Uwp.Services
         }
 
 
-        private void GetTilesAverage(Image<Rgba32> masterImage)
-        {
+        private void GetTilesAverage(Image<Rgba32> masterImage) =>
             //var getTilesAverageProcessor = new GetTilesAverageProcessor(_tX, _tY, _tileSize, _avgsMaster);
             //masterImage.Mutate(c => c.ApplyProcessor(getTilesAverageProcessor));
 
             Parallel.For(0, _tY, y =>
             {
-                var rowSpan = masterImage.GetPixelRowSpan(y);
+                Span<Rgba32> rowSpan = masterImage.GetPixelRowSpan(y);
 
-                for (int x = 0; x < _tX; x++)
+                for (var x = 0; x < _tX; x++)
                 {
                     _avgsMaster[x, y].FromRgba32(ColorHelper.GetAverageColor(masterImage, x, y, _tileSize));
                 }
             });
-        }
 
         private void LoadTilesAndResize()
         {
             _progressMax = _tileImageList.Count;
             _progress = 0;
 
-            foreach (var tile in _tileImageList)
+            foreach (Tile tile in _tileImageList)
             {
                 //var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, _tileSize.Width, _tileSize.Height, tile.OriginalImage);
                 //tile.OriginalImage.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Models;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -24,11 +23,11 @@ namespace Yugen.Mosaic.Uwp.Services
                 int x = xy % _tX;
 
                 // Generate colored tile
-                Image<Rgba32> adjustedImage = new Image<Rgba32>(_tileSize.Width, _tileSize.Height);
+                var adjustedImage = new Image<Rgba32>(_tileSize.Width, _tileSize.Height);
                 //var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
                 //adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
 
-                Vector4 averageColor4 = _avgsMaster[x, y].ToVector4();
+                var averageColor4 = _avgsMaster[x, y].ToVector4();
 
                 adjustedImage.Mutate(c => c.ProcessPixelRowsAsVector4(row =>
                 {
@@ -42,7 +41,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
                 //adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
 
-                this.ApplyTileFoundProcessor(x, y, adjustedImage);
+                ApplyTileFoundProcessor(x, y, adjustedImage);
 
                 //_progress++;
             });

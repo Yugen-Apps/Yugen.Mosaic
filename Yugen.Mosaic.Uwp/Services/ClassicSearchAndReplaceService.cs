@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace Yugen.Mosaic.Uwp.Services
 {

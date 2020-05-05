@@ -156,6 +156,7 @@
     <Compile Include="Services\ClassicSearchAndReplaceService.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceService.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Interfaces\IMosaicService.cs" />
     <Compile Include="Services\MosaicService.cs" />
     <Compile Include="Services\PlainColorSearchAndReplaceService.cs" />
     <Compile Include="Services\RandomSearchAndReplaceService.cs" />
@@ -270,7 +271,7 @@
       <Version>1.0.0-rc0001</Version>
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp.Drawing">
-      <Version>1.0.0-unstable0436</Version>
+      <Version>1.0.0-beta0007</Version>
     </PackageReference>
     <PackageReference Include="WriteableBitmapEx">
       <Version>1.6.5</Version>
