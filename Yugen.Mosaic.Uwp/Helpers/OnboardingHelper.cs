@@ -1,5 +1,4 @@
 ﻿using Windows.UI.Xaml;
-using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Helpers

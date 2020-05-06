@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Yugen.Toolkit.Standard.Providers;
 
-namespace Yugen.Mosaic.Uwp.Extensions
+namespace Yugen.Mosaic.Uwp.Helpers
 {
     public static class SettingsHelper
     {

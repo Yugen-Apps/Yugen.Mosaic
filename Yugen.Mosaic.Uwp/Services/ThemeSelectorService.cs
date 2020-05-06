@@ -5,7 +5,7 @@ using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Yugen.Mosaic.Uwp.Extensions;
+using Yugen.Mosaic.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Services
 {

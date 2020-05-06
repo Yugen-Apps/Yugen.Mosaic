@@ -10,6 +10,8 @@
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       xmlns:controls="using:Yugen.Mosaic.Uwp.Controls"
       xmlns:winUiControls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}"
       Loaded="Page_Loaded">
@@ -67,10 +69,18 @@
 
                         <Grid x:Name="MasterImageGrid"
                               CornerRadius="2"
-                              extensions:Mouse.Cursor="Hand"
-                              PointerEntered="{x:Bind ViewModel.Grid_PointerEntered}"
-                              PointerExited="{x:Bind ViewModel.Grid_PointerExited}"
-                              Tapped="{x:Bind ViewModel.AddMasterGrid_Tapped}">
+                              extensions:Mouse.Cursor="Hand">
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.AddMasterImmageCommand}" />
+                                </core:EventTriggerBehavior>
+                                <core:EventTriggerBehavior EventName="PointerEntered">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.PointerEnteredCommand}" />
+                                </core:EventTriggerBehavior>
+                                <core:EventTriggerBehavior EventName="PointerExited">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.PointerExitedCommand}" />
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
 
                             <Grid.Background>
                                 <ImageBrush ImageSource="{x:Bind ViewModel.MasterBpmSource, Mode=OneWay}"
@@ -109,8 +119,8 @@
                                Style="{StaticResource CaptionTextBlockStyle}"
                                Text="Tiles list" />
 
-                    <Button x:Name="AddTilesButton" 
-                            Click="{x:Bind ViewModel.AddTilesButton_Click}"
+                    <Button x:Name="AddTilesButton"
+                            Command="{x:Bind ViewModel.AddTilesCommand}"
                             HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="5">
@@ -125,7 +135,7 @@
                                                   DesiredWidth="120"
                                                   StretchContentForSingleRow="False"
                                                   ItemsSource="{x:Bind ViewModel.TileBmpCollection, Mode=OneWay}"
-                                                  ItemClick="{x:Bind ViewModel.AdaptiveGridView_ItemClick}"
+                                                  ItemClickCommand="{x:Bind ViewModel.ClickTileCommand}"
                                                   IsItemClickEnabled="True">
 
                     <toolkitControls:AdaptiveGridView.ItemTemplate>
@@ -242,7 +252,7 @@
                                    Style="{StaticResource CaptionTextBlockStyle}"
                                    Text="Mosaic Type" />
 
-                        <ComboBox x:Name="MosaicTypeComboBox" 
+                        <ComboBox x:Name="MosaicTypeComboBox"
                                   HorizontalAlignment="Stretch"
                                   ItemsSource="{x:Bind ViewModel.MosaicTypeList, Mode=OneWay}"
                                   Margin="24,0,0,0"
@@ -254,7 +264,7 @@
 
                         <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
                                    Style="{StaticResource CaptionTextBlockStyle}"
-                                   Text="Output Properties"/>
+                                   Text="Output Properties" />
 
                         <Grid x:Name="OutputPropertiesGrid">
 
@@ -298,8 +308,8 @@
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
 
-                        <validation:ValidatingButton x:Name="GenerateButton" 
-                                                     Click="{x:Bind ViewModel.GenerateButton_Click}"
+                        <validation:ValidatingButton x:Name="GenerateButton"
+                                                     Command="{x:Bind ViewModel.GenerateCommand}"
                                                      Content="Generate"
                                                      HorizontalAlignment="Stretch"
                                                      Margin="5,0,0,0"
@@ -316,17 +326,17 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="SaveButton" 
+                            <Button x:Name="SaveButton"
                                     Content="Save"
                                     HorizontalAlignment="Stretch"
                                     Margin="0,0,5,0"
-                                    Click="{x:Bind ViewModel.SaveButton_Click}" />
+                                    Command="{x:Bind ViewModel.SaveCommand}" />
 
                             <Button Grid.Column="1"
                                     Content="Reset"
                                     HorizontalAlignment="Stretch"
                                     Margin="5,0,0,0"
-                                    Click="{x:Bind ViewModel.ResetButton_Click}" />
+                                    Command="{x:Bind ViewModel.ResetCommand}" />
 
                         </Grid>
 
@@ -356,7 +366,7 @@
                         HorizontalAlignment="Stretch"
                         Margin="5,0,0,5"
                         Height="36"
-                        Click="{x:Bind ViewModel.HelpButton_Click}">
+                        Command="{x:Bind ViewModel.HelpCommand}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="&#xE897;" />
@@ -368,7 +378,7 @@
                         HorizontalAlignment="Stretch"
                         Margin="5,0,0,5"
                         Height="36"
-                        Click="{x:Bind ViewModel.SettingsButton_Click}">
+                        Command="{x:Bind ViewModel.SettingsCommand}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="" />
@@ -388,7 +398,7 @@
                                    Closed="{x:Bind ViewModel.TeachingTip_Closed}"
                                    CloseButtonContent="Next"
                                    ActionButtonContent="Skip Tutorial"
-                                   ActionButtonClick="{x:Bind ViewModel.TeachingTip_ActionButtonClick}"/>
+                                   ActionButtonClick="{x:Bind ViewModel.TeachingTip_ActionButtonClick}" />
 
     </Grid>
 
