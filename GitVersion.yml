@@ -1,1 +1,1 @@
-assembly-file-versioning-format: '{Major}.{Minor}.{env:BUILD_NUMBER}.0'
+assembly-file-versioning-format: '{Major}.{Minor}.{BuildMetaData ?? 0}.0'
