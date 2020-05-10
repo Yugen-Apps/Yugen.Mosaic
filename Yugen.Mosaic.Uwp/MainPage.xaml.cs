@@ -10,14 +10,13 @@ namespace Yugen.Mosaic.Uwp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainViewModel ViewModel { get; set; } = new MainViewModel();
-
         public MainPage()
         {
             InitializeComponent();
             ExtendToTitleBar();
         }
 
+        public MainViewModel ViewModel => new MainViewModel();
         private void ExtendToTitleBar()
         {
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
