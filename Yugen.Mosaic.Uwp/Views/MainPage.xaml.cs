@@ -3,7 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Yugen.Mosaic.Uwp.Helpers;
 
-namespace Yugen.Mosaic.Uwp
+namespace Yugen.Mosaic.Uwp.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -16,7 +16,8 @@ namespace Yugen.Mosaic.Uwp
             ExtendToTitleBar();
         }
 
-        public MainViewModel ViewModel => new MainViewModel();
+        public MainViewModel ViewModel { get; set; } = new MainViewModel();
+
         private void ExtendToTitleBar()
         {
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;

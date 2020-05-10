@@ -49,10 +49,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 }
 
                 // Apply found tile to section
-                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                //tileFound.ResizedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
-
-                ApplyTileFoundProcessor(x, y, tileFound.ResizedImage);
+                ApplyTileFound(x, y, tileFound.ResizedImage);
 
                 //_progress++;
             });

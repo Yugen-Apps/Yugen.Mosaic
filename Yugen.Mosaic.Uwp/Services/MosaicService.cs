@@ -16,18 +16,16 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class MosaicService : IMosaicService
     {
-        private Image<Rgba32> _masterImage;
-
-        internal List<Tile> _tileImageList { get; set; } = new List<Tile>();
-        private Size _tileSize;
-
+        internal Rgba32[,] _avgsMaster;
+        internal int _progress;
         internal int _tX;
         internal int _tY;
-        internal Rgba32[,] _avgsMaster;
 
-        internal int _progress;
+        private Image<Rgba32> _masterImage;
         private int _progressMax;
+        private Size _tileSize;
 
+        internal List<Tile> _tileImageList { get; set; } = new List<Tile>();
 
         public Image<Rgba32> AddMasterImage(Stream stream)
         {
@@ -42,13 +40,25 @@ namespace Yugen.Mosaic.Uwp.Services
             return image;
         }
 
-        public void RemoveTileImage(string name)
+        public Image<Rgba32> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
         {
-            Tile item = _tileImageList.FirstOrDefault(x => x.Name.Equals(name));
-            if (item != null)
+            if (_masterImage == null || (selectedMosaicType != MosaicTypeEnum.PlainColor && _tileImageList.Count < 1))
             {
-                _tileImageList.Remove(item);
+                return null;
             }
+
+            Image<Rgba32> resizedMasterImage = _masterImage.Clone(x => x.Resize(outputSize.Width, outputSize.Height));
+
+            _tileSize = tileSize;
+            _tX = resizedMasterImage.Width / tileSize.Width;
+            _tY = resizedMasterImage.Height / tileSize.Height;
+            _avgsMaster = new Rgba32[_tX, _tY];
+
+            GetTilesAverage(resizedMasterImage);
+
+            LoadTilesAndResize();
+
+            return SearchAndReplace(tileSize, selectedMosaicType, outputSize);
         }
 
         public Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size)
@@ -70,35 +80,23 @@ namespace Yugen.Mosaic.Uwp.Services
             return outputStream;
         }
 
-
-        public Image<Rgba32> GenerateMosaic(Size outputSize, Size tileSize, int mosaicType)
+        public void RemoveTileImage(string name)
         {
-            if (_masterImage == null || (mosaicType != 2 && _tileImageList.Count < 1))
+            Tile item = _tileImageList.FirstOrDefault(x => x.Name.Equals(name));
+            if (item != null)
             {
-                return null;
+                _tileImageList.Remove(item);
             }
-
-            Image<Rgba32> resizedMasterImage = _masterImage.Clone(x => x.Resize(outputSize.Width, outputSize.Height));
-
-            _tileSize = tileSize;
-            _tX = resizedMasterImage.Width / tileSize.Width;
-            _tY = resizedMasterImage.Height / tileSize.Height;
-            _avgsMaster = new Rgba32[_tX, _tY];
-
-            GetTilesAverage(resizedMasterImage);
-
-            LoadTilesAndResize();
-
-            var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
-            SearchAndReplace(outputImage, tileSize, mosaicType);
-            return outputImage;
         }
 
+        public void Reset()
+        {
+            _masterImage = null;
+            _tileImageList.Clear();
+        }
 
-        private void GetTilesAverage(Image<Rgba32> masterImage) =>
-            //var getTilesAverageProcessor = new GetTilesAverageProcessor(_tX, _tY, _tileSize, _avgsMaster);
-            //masterImage.Mutate(c => c.ApplyProcessor(getTilesAverageProcessor));
-
+        private void GetTilesAverage(Image<Rgba32> masterImage)
+        {
             Parallel.For(0, _tY, y =>
             {
                 Span<Rgba32> rowSpan = masterImage.GetPixelRowSpan(y);
@@ -108,6 +106,7 @@ namespace Yugen.Mosaic.Uwp.Services
                     _avgsMaster[x, y].FromRgba32(ColorHelper.GetAverageColor(masterImage, x, y, _tileSize));
                 }
             });
+        }
 
         private void LoadTilesAndResize()
         {
@@ -116,11 +115,6 @@ namespace Yugen.Mosaic.Uwp.Services
 
             foreach (Tile tile in _tileImageList)
             {
-                //var getTileAverageProcessor = new GetTileAverageProcessor(0, 0, _tileSize.Width, _tileSize.Height, tile.OriginalImage);
-                //tile.OriginalImage.Mutate(c => c.ApplyProcessor(getTileAverageProcessor));
-                //tile.ResizedImage = getTileAverageProcessor.ResizedImage;
-                //tile.AverageColor = getTileAverageProcessor.AverageColor[0];
-
                 tile.ResizedImage = tile.OriginalImage.CloneAs<Rgba32>(); ;
                 tile.ResizedImage.Mutate(x => x.Resize(_tileSize.Width, _tileSize.Height));
                 tile.AverageColor = ColorHelper.GetAverageColor(tile.ResizedImage);
@@ -129,42 +123,40 @@ namespace Yugen.Mosaic.Uwp.Services
             }
         }
 
-
-        private void SearchAndReplace(Image<Rgba32> outputImage, Size tileSize, int mosaicType)
+        private Image<Rgba32> SearchAndReplace(Size tileSize, MosaicTypeEnum selectedMosaicType, Size outputSize)
         {
+            var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
             _progressMax = _tileImageList.Count;
             _progress = 0;
 
             ISearchAndReplaceService SearchAndReplaceService;
 
-            switch (mosaicType)
+            switch (selectedMosaicType)
             {
-                case 0:
+                case MosaicTypeEnum.Classic:
                     SearchAndReplaceService = new ClassicSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
-                case 1:
+
+                case MosaicTypeEnum.Random:
                     SearchAndReplaceService = new RandomSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
-                case 2:
+
+                case MosaicTypeEnum.AdjustHue:
                     SearchAndReplaceService = new AdjustHueSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
-                case 3:
+
+                case MosaicTypeEnum.PlainColor:
                     SearchAndReplaceService = new PlainColorSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
             }
 
             GC.Collect();
-        }
 
-
-        public void Reset()
-        {
-            _masterImage = null;
-            _tileImageList.Clear();
+            return outputImage;
         }
     }
 }
