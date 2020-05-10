@@ -24,9 +24,6 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 // Generate colored tile
                 var adjustedImage = new Image<Rgba32>(_tileSize.Width, _tileSize.Height);
-                //var plainColorProcessor = new PlainColorProcessor(_avgsMaster[x, y]);
-                //adjustedImage.Mutate(c => c.ApplyProcessor(plainColorProcessor));
-
                 var averageColor4 = _avgsMaster[x, y].ToVector4();
 
                 adjustedImage.Mutate(c => c.ProcessPixelRowsAsVector4(row =>
@@ -38,10 +35,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 }));
 
                 // Apply found tile to section
-                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                //adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
-
-                ApplyTileFoundProcessor(x, y, adjustedImage);
+                ApplyTileFound(x, y, adjustedImage);
 
                 //_progress++;
             });

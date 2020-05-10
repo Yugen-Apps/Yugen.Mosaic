@@ -13,6 +13,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Mosaic.Uwp.Controls;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Helpers;
@@ -91,10 +92,10 @@ namespace Yugen.Mosaic.Uwp
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
         {
-            new MosaicType {Id = 0, Title = "Classic"},
-            new MosaicType {Id = 1, Title = "Random"},
-            new MosaicType {Id = 2, Title = "AdjustHue"},
-            new MosaicType {Id = 3, Title = "Plain Color"}
+           new MosaicType(MosaicTypeEnum.Classic),
+           new MosaicType(MosaicTypeEnum.Random),
+           new MosaicType(MosaicTypeEnum.AdjustHue),
+           new MosaicType(MosaicTypeEnum.PlainColor)
         };
 
         public BitmapImage OutputBmpSource
@@ -268,7 +269,7 @@ namespace Yugen.Mosaic.Uwp
             IsLoading = true;
 
             await Task.Run(() =>
-                _outputImage = _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.Id));
+                _outputImage = _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
 
             if (_outputImage != null)
             {

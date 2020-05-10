@@ -46,17 +46,10 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 // Adjust the hue
                 var adjustedImage = new Image<Rgba32>(tileFound.ResizedImage.Width, tileFound.ResizedImage.Height);
-
-                //var adjustHueProcessor = new AdjustHueProcessor(tileFound.ResizedImage, _avgsMaster[x, y]);
-                //adjustedImage.Mutate(c => c.ApplyProcessor(adjustHueProcessor));
-
                 AdjustHue(tileFound.ResizedImage, adjustedImage, _avgsMaster[x, y]);
 
                 // Apply found tile to section
-                //var applyTileFoundProcessor = new ApplyTileFoundProcessor(x, y, tileSize.Width, tileSize.Height, outputImage);
-                //adjustedImage.Mutate(c => c.ApplyProcessor(applyTileFoundProcessor));
-
-                ApplyTileFoundProcessor(x, y, adjustedImage);
+                ApplyTileFound(x, y, adjustedImage);
 
                 //_progress++;
             });

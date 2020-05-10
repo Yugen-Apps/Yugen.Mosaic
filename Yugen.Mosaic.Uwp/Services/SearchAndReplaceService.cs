@@ -10,12 +10,12 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public abstract class SearchAndReplaceService : ISearchAndReplaceService
     {
+        internal readonly Rgba32[,] _avgsMaster;
         internal readonly Image<Rgba32> _outputImage;
+        internal readonly List<Tile> _tileImageList;
         internal readonly Size _tileSize;
         internal readonly int _tX;
         internal readonly int _tY;
-        internal readonly List<Tile> _tileImageList;
-        internal readonly Rgba32[,] _avgsMaster;
 
         public SearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster)
         {
@@ -27,11 +27,13 @@ namespace Yugen.Mosaic.Uwp.Services
             _avgsMaster = avgsMaster;
         }
 
-        public virtual void SearchAndReplace() { }
+        public virtual void SearchAndReplace()
+        {
+        }
 
-        // TODO: c.DrawImage crash (System.NullReferenceException) 
+        // TODO: c.DrawImage crash (System.NullReferenceException)
         // with the current SixLabors.ImageSharp.Drawing preview version
-        //internal void ApplyTileFoundProcessor(int x, int y, Image<Rgba32> source)
+        //internal void ApplyTileFound(int x, int y, Image<Rgba32> source)
         //{
         //    _outputImage.Mutate(c =>
         //    {
@@ -44,7 +46,7 @@ namespace Yugen.Mosaic.Uwp.Services
         //    });
         //}
 
-        internal void ApplyTileFoundProcessor(int x, int y, Image<Rgba32> source)
+        internal void ApplyTileFound(int x, int y, Image<Rgba32> source)
         {
             Parallel.For(0, source.Height, h =>
             {

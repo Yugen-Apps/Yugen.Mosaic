@@ -3,20 +3,20 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Yugen.Mosaic.Uwp.Helpers;
 
-namespace Yugen.Mosaic.Uwp
+namespace Yugen.Mosaic.Uwp.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainViewModel ViewModel { get; set; } = new MainViewModel();
-
         public MainPage()
         {
             InitializeComponent();
             ExtendToTitleBar();
         }
+
+        public MainViewModel ViewModel { get; set; } = new MainViewModel();
 
         private void ExtendToTitleBar()
         {

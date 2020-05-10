@@ -1,10 +1,16 @@
-﻿namespace Yugen.Mosaic.Uwp.Models
+﻿using Yugen.Mosaic.Uwp.Extensions;
+
+namespace Yugen.Mosaic.Uwp.Models
 {
     public class MosaicType
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
+        public MosaicType(MosaicTypeEnum mosaicTypeEnum)
+        {
+            MosaicTypeEnum = mosaicTypeEnum;
+        }
 
-        public override string ToString() => Title;
+        public MosaicTypeEnum MosaicTypeEnum { get; set; }
+
+        public override string ToString() => MosaicTypeEnum.GetStringRepresentation();
     }
 }
