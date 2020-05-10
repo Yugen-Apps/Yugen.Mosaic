@@ -118,45 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="OnboardingStageAddTilesDescription" xml:space="preserve">
-    <value>Add a list of Tile Images, Yugen Mosaic will use as tiles to build your mosaic</value>
+    <value>Add images, Yugen Mosaic will use them as tiles to build your mosaic. More tiles you choose, better result you get!</value>
   </data>
   <data name="OnboardingStageAddTilesTitle" xml:space="preserve">
-    <value>Create a Tile Images List</value>
+    <value>Create a list of tiles</value>
   </data>
   <data name="OnboardingStageGenerateDescription" xml:space="preserve">
-    <value>Create the mosaic.</value>
+    <value>Once you finished to setup all parameters, click and the app will start to create the mosaic for you. It can take more or less time according to your pc hardware and the parameters you set!</value>
   </data>
   <data name="OnboardingStageGenerateTitle" xml:space="preserve">
-    <value>Create the Mosaic</value>
+    <value>Create the mosaic.</value>
   </data>
   <data name="OnboardingStageMasterImageDescription" xml:space="preserve">
-    <value>Choose what image you want to use as the Matrix of the mosaic. Yugen Mosaic will create a mosaic as close as possible to the main image.</value>
+    <value>Choose the master image you want to use as the matrix of the mosaic. Yugen Mosaic will create a mosaic as close as possible to this image.</value>
   </data>
   <data name="OnboardingStageMasterImageTitle" xml:space="preserve">
-    <value>Select the Main Image</value>
+    <value>Select the master image</value>
   </data>
   <data name="OnboardingStageMosaicTypeDescription" xml:space="preserve">
-    <value>Choose the tpe of mosaic.</value>
+    <value>Choose the type of mosaic:
+- Classic: the app will automatically choose the best fitting image to apply in every tile.
+- Random: the app will randomly choose between possible fitting images, it's faster than classic but less precise.
+- Adjust Hue: the app will insert all the tiles you choose, adapting the color to the master image.
+- Plain Color: the app will create a mosaic with plain colors, based on the master image, no tiles pictures needed.</value>
   </data>
   <data name="OnboardingStageMosaicTypeTitle" xml:space="preserve">
-    <value>MosaicType</value>
+    <value>Mosaic type</value>
   </data>
   <data name="OnboardingStageOutputPropertiesDescription" xml:space="preserve">
-    <value>Choose the size of the mosaic.</value>
+    <value>Choose the resolution of the final mosaic picture.</value>
   </data>
   <data name="OnboardingStageOutputPropertiesTitle" xml:space="preserve">
     <value>Set the parameters of the Mosaic</value>
   </data>
   <data name="OnboardingStageSaveDescription" xml:space="preserve">
-    <value>The last step is to save the mosaic.</value>
+    <value>This is the last step, if you like the result, you can click and save the mosaic picture on your device.</value>
   </data>
   <data name="OnboardingStageSaveTitle" xml:space="preserve">
-    <value>Save the Mosaic</value>
+    <value>Save the mosaic</value>
   </data>
   <data name="OnboardingStageTilePropertiesDescription" xml:space="preserve">
-    <value>After you created the Tile Images List, it is necessary to set all the parameters of the mosaic. Here you can set the size of every single tile</value>
+    <value>After you have created your list of tiles, it is necessary to set all the mosaic parameters. Here you can set the size of every single tile, smaller size will give you a more detailed mosaic!</value>
   </data>
   <data name="OnboardingStageTilePropertiesTitle" xml:space="preserve">
-    <value>TileProperties</value>
+    <value>Tile properties</value>
   </data>
 </root>
