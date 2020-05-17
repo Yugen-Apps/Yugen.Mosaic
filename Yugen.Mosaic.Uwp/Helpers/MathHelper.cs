@@ -1,4 +1,6 @@
-﻿namespace Yugen.Mosaic.Uwp.Helpers
+﻿using System;
+
+namespace Yugen.Mosaic.Uwp.Helpers
 {
     public static class MathHelper
     {
@@ -12,8 +14,20 @@
         /// <param name="newMin"></param>
         /// <param name="newMax"></param>
         /// <returns>newValue</returns>
-        public static double RangesConverter(double oldValue, double oldMin, double oldMax, double newMin, double newMax) =>
+        public static double RangeConvert(double oldValue, double oldMin, double oldMax, double newMin, double newMax) =>
             (oldValue - oldMin) * (newMax - newMin) /
                 (oldMax - oldMin) + newMin;
+
+        public static Tuple<int, int> RatioConvert(int width, int height, int newHeight, int newWidth)
+        {
+            //calculate the ratio
+            var ratio = (double)width / (double)height;
+
+            //set height of image to boxHeight and check if resulting width is less than boxWidth, 
+            //else set width of image to boxWidth and calculate new height
+            return (int)(newHeight * ratio) <= newWidth
+                ? new Tuple<int, int>((int)(newHeight * ratio), newHeight)
+                : new Tuple<int, int>(newWidth, (int)(newWidth / ratio));
+        }
     }
 }

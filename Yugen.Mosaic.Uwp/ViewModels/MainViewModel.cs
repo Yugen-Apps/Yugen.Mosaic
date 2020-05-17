@@ -198,7 +198,7 @@ namespace Yugen.Mosaic.Uwp
                         await MasterBpmSource.SetSourceAsync(outputStream);
                     }
 
-                    Tuple<int, int> newSize = RatioHelper.Convert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
+                    Tuple<int, int> newSize = MathHelper.RatioConvert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
                     OutputWidth = newSize.Item1;
                     OutputHeight = newSize.Item2;
                 }

@@ -6,6 +6,7 @@ namespace Yugen.Mosaic.Uwp.Helpers
     {
         private static readonly ResourceLoader _resourceLoader = _resourceLoader ?? new ResourceLoader();
 
-        public static string GetText(string key) => _resourceLoader.GetString(key);
+        public static string GetText(string key) => 
+            _resourceLoader.GetString(key);
     }
 }
