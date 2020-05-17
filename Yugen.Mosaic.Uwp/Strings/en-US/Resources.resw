@@ -146,7 +146,7 @@
     <value>Set the mosaic type</value>
   </data>
   <data name="OnboardingStageOutputPropertiesDescription" xml:space="preserve">
-    <value>The last step, if you like the result, is to click ‘Save’ to store your mosaic picture on your device. Then you can share it with the universe!</value>
+    <value>Next choose the resolution of the final mosaic picture. This will determine your art’s height and width.</value>
   </data>
   <data name="OnboardingStageOutputPropertiesTitle" xml:space="preserve">
     <value>Set the mosaic parameters</value>
