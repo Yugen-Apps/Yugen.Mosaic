@@ -131,13 +131,11 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
-    <Compile Include="Extensions\FileFormatExtensions.cs" />
     <Compile Include="Enums\FileFormat.cs" />
-    <Compile Include="Extensions\SettingsStorageExtensions.cs" />
-    <Compile Include="Models\MosaicTypeEnum.cs" />
+    <Compile Include="Enums\MosaicTypeEnum.cs" />
     <Compile Include="Models\OnboardingElement.cs" />
     <Compile Include="Helpers\OnboardingHelper.cs" />
-    <Compile Include="Models\OnboardingStage.cs" />
+    <Compile Include="Enums\OnboardingStage.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

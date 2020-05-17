@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
+using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;

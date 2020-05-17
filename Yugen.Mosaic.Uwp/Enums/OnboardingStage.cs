@@ -1,4 +1,4 @@
-﻿namespace Yugen.Mosaic.Uwp.Models
+﻿namespace Yugen.Mosaic.Uwp.Enums
 {
     public enum OnboardingStage
     {

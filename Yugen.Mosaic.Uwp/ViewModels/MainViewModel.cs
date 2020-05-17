@@ -288,8 +288,8 @@ namespace Yugen.Mosaic.Uwp
 
             var fileTypes = new Dictionary<string, List<string>>()
             {
-                {FileFormat.Png.ToString(), new List<string>() {FileFormat.Png.FileFormatToString()}},
-                {FileFormat.Jpg.ToString(), new List<string>() {FileFormat.Jpg.FileFormatToString()}}
+                {FileFormat.Png.ToString(), new List<string>() {FileFormat.Png.GetStringRepresentation()}},
+                {FileFormat.Jpg.ToString(), new List<string>() {FileFormat.Jpg.GetStringRepresentation()}}
             };
 
             StorageFile file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,

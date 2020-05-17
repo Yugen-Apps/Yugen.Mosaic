@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Yugen.Mosaic.Uwp.Models
+namespace Yugen.Mosaic.Uwp.Enums
 {
     public enum MosaicTypeEnum
     {
