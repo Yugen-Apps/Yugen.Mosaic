@@ -5,13 +5,14 @@
 
 trigger:
 - release/*
+pr: none
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
-  buildPlatform: 'x86|x64|ARM'
+  buildPlatform: 'x86|x64|ARM64'
   buildConfiguration: 'Release'
   appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
   appxmanifest: '**/*.appxmanifest'
@@ -36,6 +37,11 @@ steps:
       Write-Host "##vso[build.updatebuildnumber]$newVersion"
 
 - task: NuGetToolInstaller@1
+
+# - task: NuGetCommand@2
+#   inputs:
+#     command: 'custom'
+#     arguments: 'restore d:\a\1\s\Yugen.Mosaic.Uwp.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/sixlabors/api/v3/index.json'
 
 - task: NuGetCommand@2
   inputs:

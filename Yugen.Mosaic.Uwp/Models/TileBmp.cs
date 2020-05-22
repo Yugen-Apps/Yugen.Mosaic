@@ -4,13 +4,13 @@ namespace Yugen.Mosaic.Uwp.Models
 {
     public class TileBmp
     {
-        public string Name { get; set; }
-        public BitmapImage Image { get; set; }
-
         public TileBmp(string name, BitmapImage image)
         {
             Name = name;
             Image = image;
         }
+
+        public BitmapImage Image { get; set; }
+        public string Name { get; set; }
     }
 }

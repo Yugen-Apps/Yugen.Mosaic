@@ -7,7 +7,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-        Name="30978emiliano84.YugenMosaic"
+    Name="30978emiliano84.YugenMosaic"
     Publisher="CN=0259C6DD-5945-485D-962F-C84F7531D6C4"
     Version="1.1.1.0" />
 

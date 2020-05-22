@@ -7,15 +7,17 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Yugen.Mosaic.Uwp.Helpers;
+using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Services;
+using Yugen.Mosaic.Uwp.Views;
+using Yugen.Toolkit.Standard.Extensions;
 
 namespace Yugen.Mosaic.Uwp
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    public sealed partial class App : Application
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -23,8 +25,8 @@ namespace Yugen.Mosaic.Uwp
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
 
             AppCenter.Start("7df4b441-69ae-49c5-b27d-5a532f33b554",
                    typeof(Analytics), typeof(Crashes));
@@ -76,10 +78,7 @@ namespace Yugen.Mosaic.Uwp
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e) => throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
@@ -90,7 +89,7 @@ namespace Yugen.Mosaic.Uwp
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
+            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }

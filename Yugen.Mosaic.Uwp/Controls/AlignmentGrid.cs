@@ -60,8 +60,8 @@ namespace Yugen.Mosaic.Uwp.Controls
         /// </summary>
         public Brush LineBrush
         {
-            get { return (Brush)GetValue(LineBrushProperty); }
-            set { SetValue(LineBrushProperty, value); }
+            get => (Brush)GetValue(LineBrushProperty);
+            set => SetValue(LineBrushProperty, value);
         }
 
         /// <summary>
@@ -69,8 +69,8 @@ namespace Yugen.Mosaic.Uwp.Controls
         /// </summary>
         public double HorizontalStep
         {
-            get { return (double)GetValue(HorizontalStepProperty); }
-            set { SetValue(HorizontalStepProperty, value); }
+            get => (double)GetValue(HorizontalStepProperty);
+            set => SetValue(HorizontalStepProperty, value);
         }
 
         /// <summary>
@@ -78,8 +78,8 @@ namespace Yugen.Mosaic.Uwp.Controls
         /// </summary>
         public double VerticalStep
         {
-            get { return (double)GetValue(VerticalStepProperty); }
-            set { SetValue(VerticalStepProperty, value); }
+            get => (double)GetValue(VerticalStepProperty);
+            set => SetValue(VerticalStepProperty, value);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace Yugen.Mosaic.Uwp.Controls
         /// </summary>
         public double ContainerWidth
         {
-            get { return (double)GetValue(ContainerWidthProperty); }
-            set { SetValue(ContainerWidthProperty, value); }
+            get => (double)GetValue(ContainerWidthProperty);
+            set => SetValue(ContainerWidthProperty, value);
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace Yugen.Mosaic.Uwp.Controls
         /// </summary>
         public double ContainerHeight
         {
-            get { return (double)GetValue(ContainerHeightProperty); }
-            set { SetValue(ContainerHeightProperty, value); }
+            get => (double)GetValue(ContainerHeightProperty);
+            set => SetValue(ContainerHeightProperty, value);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Yugen.Mosaic.Uwp.Controls
             containerCanvas.Children.Clear();
             var horizontalStep = HorizontalStep;
             var verticalStep = VerticalStep;
-            var brush = LineBrush ?? (Brush)Application.Current.Resources["ApplicationForegroundThemeBrush"];
+            Brush brush = LineBrush ?? (Brush)Application.Current.Resources["ApplicationForegroundThemeBrush"];
 
             if (horizontalStep > 0)
             {
@@ -133,7 +133,7 @@ namespace Yugen.Mosaic.Uwp.Controls
                         Height = ActualHeight,
                         Fill = brush
                     };
-                    Canvas.SetLeft(line, MathHelper.RangesConverter(x, 0, ContainerWidth, 0, ActualWidth));
+                    Canvas.SetLeft(line, MathHelper.RangeConvert(x, 0, ContainerWidth, 0, ActualWidth));
 
                     containerCanvas.Children.Add(line);
                 }
@@ -149,16 +149,13 @@ namespace Yugen.Mosaic.Uwp.Controls
                         Height = 1,
                         Fill = brush
                     };
-                    Canvas.SetTop(line, MathHelper.RangesConverter(y, 0, ContainerHeight, 0, ActualHeight));
+                    Canvas.SetTop(line, MathHelper.RangeConvert(y, 0, ContainerHeight, 0, ActualHeight));
 
                     containerCanvas.Children.Add(line);
                 }
             }
         }
 
-        private void AlignmentGrid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Rebuild();
-        }
+        private void AlignmentGrid_SizeChanged(object sender, SizeChangedEventArgs e) => Rebuild();
     }
 }
