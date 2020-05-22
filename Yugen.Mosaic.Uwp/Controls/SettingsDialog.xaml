@@ -86,26 +86,33 @@
                     <Run Text="{x:Bind ViewModel.AppVersion}" />
                 </TextBlock>
                 
-                <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource CaptionTextBlockStyle}">
-                    <Run Text="Developed by"
-                         FontWeight="SemiBold" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.Publisher}" />
-                </TextBlock>
 
                 <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource CaptionTextBlockStyle}">
-                    <Run Text="Colaborators"
-                         FontWeight="SemiBold" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.Collaborator[0]}" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.Collaborator[1]}" />
-                </TextBlock>
-                
+                           Style="{StaticResource BodyTextBlockStyle}"
+                           Text="Developed by" />
+                <HyperlinkButton Content="{x:Bind ViewModel.Publisher}"
+                                 Foreground="{ThemeResource DefaultTextForegroundThemeBrush}"
+                                 Margin="0,-8,0,0"
+                                 NavigateUri="http://www.yugenapps.com"/>
+
+                <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
+                           Style="{StaticResource BodyTextBlockStyle}"
+                           Text="UI" />
+                <HyperlinkButton Content="Leisvan"
+                                 Foreground="{ThemeResource DefaultTextForegroundThemeBrush}"
+                                 Margin="0,-8,0,0" />
+
+                <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
+                           Style="{StaticResource BodyTextBlockStyle}" 
+                           Text="Icon"/>
+                <HyperlinkButton Content="Yoshi"
+                                 Foreground="{ThemeResource DefaultTextForegroundThemeBrush}"
+                                 Margin="0,-8,0,0"
+                                 NavigateUri="http://www.yoshi.com"/>
+
                 <HyperlinkButton Content="Rate and review"
-                                 Command="{x:Bind ViewModel.LaunchRateAndReviewCommand}" />
+                                 Command="{x:Bind ViewModel.LaunchRateAndReviewCommand}"
+                                 Foreground="{ThemeResource DefaultTextForegroundThemeBrush}"/>
                 
             </StackPanel>
             
