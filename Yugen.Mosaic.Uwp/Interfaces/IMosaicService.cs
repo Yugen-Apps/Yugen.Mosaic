@@ -2,7 +2,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
 using Windows.Storage.Streams;
-using Yugen.Mosaic.Uwp.Models;
+using Yugen.Mosaic.Uwp.Enums;
 
 namespace Yugen.Mosaic.Uwp.Interfaces
 {

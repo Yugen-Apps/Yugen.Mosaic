@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml;
+using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Models;
 
 namespace Yugen.Mosaic.Uwp.Helpers
@@ -7,15 +8,14 @@ namespace Yugen.Mosaic.Uwp.Helpers
     public static class OnboardingHelper
     {
         private const string SettingsKey = "OnboardingIsEnabled";
+        private static OnboardingElement[] _onboardingElements;
+        private static int _step;
 
         public static bool IsDisabled
         {
             get => SettingsHelper.Read<bool>(SettingsKey);
             set => SettingsHelper.Write<bool>(SettingsKey, value);
         }
-
-        private static int _step;
-        private static OnboardingElement[] _onboardingElements;
 
         public static void Init(FrameworkElement[] frameworkElements) => _onboardingElements = new OnboardingElement[]
             {

@@ -198,7 +198,7 @@ namespace Yugen.Mosaic.Uwp
                         await MasterBpmSource.SetSourceAsync(outputStream);
                     }
 
-                    Tuple<int, int> newSize = RatioHelper.Convert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
+                    Tuple<int, int> newSize = MathHelper.RatioConvert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
                     OutputWidth = newSize.Item1;
                     OutputHeight = newSize.Item2;
                 }
@@ -288,8 +288,8 @@ namespace Yugen.Mosaic.Uwp
 
             var fileTypes = new Dictionary<string, List<string>>()
             {
-                {FileFormat.Png.ToString(), new List<string>() {FileFormat.Png.FileFormatToString()}},
-                {FileFormat.Jpg.ToString(), new List<string>() {FileFormat.Jpg.FileFormatToString()}}
+                {FileFormat.Png.ToString(), new List<string>() {FileFormat.Png.GetStringRepresentation()}},
+                {FileFormat.Jpg.ToString(), new List<string>() {FileFormat.Jpg.GetStringRepresentation()}}
             };
 
             StorageFile file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,

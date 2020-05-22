@@ -40,7 +40,6 @@ namespace Yugen.Mosaic.Uwp.Helpers
             return new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
         }
 
-
         public static int GetDifference(Rgba32 source, Rgba32 target)
         {
             var dR = Math.Abs(source.R - target.R);
