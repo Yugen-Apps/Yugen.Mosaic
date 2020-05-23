@@ -35,7 +35,7 @@ steps:
 
       Write-Host "Setting the name of the build to '$newVersion'."
       Write-Host "##vso[build.updatebuildnumber]$newVersion"
-      
+
 - task: NuGetToolInstaller@1
 
 # - task: NuGetCommand@2

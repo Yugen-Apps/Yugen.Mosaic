@@ -39,10 +39,9 @@
                 <StackPanel Orientation="Horizontal"
                             Margin="32,0,0,0">
 
-                    <TextBlock Text="Yugen Mosaic"
+                    <TextBlock x:Uid="MainTitleTextBlock"
                                VerticalAlignment="Center"
-                               Foreground="{ThemeResource AppForegroundBrush}"
-                               Style="{StaticResource BaseTextBlockStyle}" />
+                               Style="{StaticResource YugenBaseTextBlockStyle}" />
 
                 </StackPanel>
 
@@ -60,9 +59,8 @@
 
                 <StackPanel Spacing="5">
 
-                    <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                               Style="{StaticResource CaptionTextBlockStyle}"
-                               Text="Master Image" />
+                    <TextBlock x:Uid="MainMasterImageTextBlock"
+                               Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                     <Border Height="230"
                             Width="230">
@@ -98,7 +96,7 @@
                                             Spacing="10">
                                     <FontIcon Glyph=""
                                               FontSize="32" />
-                                    <TextBlock Text="Click here to choose a Master image"
+                                    <TextBlock x:Uid="MainAddMasterTextBlock"
                                                TextWrapping="WrapWholeWords"
                                                TextAlignment="Center" />
                                 </StackPanel>
@@ -115,9 +113,8 @@
                             Spacing="5"
                             Margin="0,25,0,10">
 
-                    <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                               Style="{StaticResource CaptionTextBlockStyle}"
-                               Text="Tiles list" />
+                    <TextBlock x:Uid="MainTilesListTextBlock" 
+                               Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                     <Button x:Name="AddTilesButton"
                             Command="{x:Bind ViewModel.AddTilesCommand}"
@@ -125,7 +122,7 @@
                         <StackPanel Orientation="Horizontal"
                                     Spacing="5">
                             <FontIcon Glyph="" />
-                            <TextBlock Text="Add Tiles" />
+                            <TextBlock x:Uid="MainAddTilesTextBlock" />
                         </StackPanel>
                     </Button>
 
@@ -176,7 +173,7 @@
                                Stretch="Uniform" />
                     </Border>
 
-                    <controls:AlignmentGrid Opacity="0.28"
+                    <controls:AlignmentGrid Opacity="0.3"
                                             LineBrush="Firebrick"
                                             HorizontalStep="{x:Bind ViewModel.TileWidth, Mode=OneWay}"
                                             VerticalStep="{x:Bind ViewModel.TileHeight, Mode=OneWay}"
@@ -202,9 +199,8 @@
 
                     <StackPanel Spacing="10">
 
-                        <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Text="Tile Properties" />
+                        <TextBlock x:Uid="MainTileProperties" 
+                                   Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                         <Grid x:Name="TilePropertiesGrid">
 
@@ -215,10 +211,9 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="W:"
+                            <TextBlock x:Uid="MainWidthTextBlock"
                                        VerticalAlignment="Center"
-                                       Foreground="{ThemeResource AppForegroundBrush}"
-                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Style="{StaticResource YugenCaptionTextBlockStyle}"
                                        Margin="5,0,5,0" />
 
                             <validation:ValidatingTextBox Grid.Column="1"
@@ -229,10 +224,9 @@
                                                           IsRealTimeValidationEnabled="True" />
 
                             <TextBlock Grid.Column="2"
-                                       Text="H:"
+                                       x:Uid="MainHeightTextBlock"
                                        VerticalAlignment="Center"
-                                       Foreground="{ThemeResource AppForegroundBrush}"
-                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Style="{StaticResource YugenCaptionTextBlockStyle}"
                                        Margin="5,0,5,0" />
 
                             <validation:ValidatingTextBox Grid.Column="3"
@@ -248,9 +242,8 @@
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
 
-                        <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Text="Mosaic Type" />
+                        <TextBlock x:Uid="MainMosaicTypeTextBlock"
+                                   Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                         <ComboBox x:Name="MosaicTypeComboBox"
                                   HorizontalAlignment="Stretch"
@@ -262,9 +255,8 @@
                                    Fill="{ThemeResource AppBorderBrush}"
                                    Margin="0,15,0,0" />
 
-                        <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                                   Style="{StaticResource CaptionTextBlockStyle}"
-                                   Text="Output Properties" />
+                        <TextBlock x:Uid="MainOutputPropertiesTextBlock"
+                                   Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                         <Grid x:Name="OutputPropertiesGrid">
 
@@ -275,10 +267,9 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="W:"
+                            <TextBlock x:Uid="MainWidthTextBlock"
                                        VerticalAlignment="Center"
-                                       Foreground="{ThemeResource AppForegroundBrush}"
-                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Style="{StaticResource YugenCaptionTextBlockStyle}"
                                        Margin="5,0,5,0" />
 
                             <validation:ValidatingTextBox Grid.Column="1"
@@ -289,10 +280,9 @@
                                                           IsRealTimeValidationEnabled="True" />
 
                             <TextBlock Grid.Column="2"
-                                       Text="H:"
+                                       x:Uid="MainHeightTextBlock"
                                        VerticalAlignment="Center"
-                                       Foreground="{ThemeResource AppForegroundBrush}"
-                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                       Style="{StaticResource YugenCaptionTextBlockStyle}"
                                        Margin="5,0,5,0" />
 
                             <validation:ValidatingTextBox Grid.Column="3"
@@ -309,14 +299,14 @@
                                    Margin="0,15,0,0" />
 
                         <validation:ValidatingButton x:Name="GenerateButton"
+                                                     x:Uid="MainGenerateButton"
                                                      Command="{x:Bind ViewModel.GenerateCommand}"
-                                                     Content="Generate"
                                                      HorizontalAlignment="Stretch"
                                                      Margin="5,0,0,0"
                                                      Style="{ThemeResource AccentButtonStyle}"
                                                      ValidatingForm="{x:Bind ValidatingForm}" />
 
-                        <CheckBox Content="Show Grid"
+                        <CheckBox x:Uid="MainShowGridCheckBox"
                                   IsChecked="{x:Bind ViewModel.IsAlignmentGridVisibile,Mode=TwoWay}" />
 
                         <Grid Margin="5,0,0,0">
@@ -327,13 +317,13 @@
                             </Grid.ColumnDefinitions>
 
                             <Button x:Name="SaveButton"
-                                    Content="Save"
+                                    x:Uid="MainSaveButton"
                                     HorizontalAlignment="Stretch"
                                     Margin="0,0,5,0"
                                     Command="{x:Bind ViewModel.SaveCommand}" />
 
                             <Button Grid.Column="1"
-                                    Content="Reset"
+                                    x:Uid="MainResetButton"
                                     HorizontalAlignment="Stretch"
                                     Margin="5,0,0,0"
                                     Command="{x:Bind ViewModel.ResetCommand}" />
@@ -343,7 +333,7 @@
                         <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                       Height="80"
                                       Margin="2"
-                                      Style="{StaticResource ProgressRingStyle1}"
+                                      Style="{StaticResource YugenProgressRingStyle}"
                                       Width="80" />
 
                         <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
@@ -370,7 +360,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="&#xE897;" />
-                        <TextBlock Text="Help" />
+                        <TextBlock x:Uid="MainHelpTextBlock" />
                     </StackPanel>
                 </Button>
 
@@ -382,7 +372,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="" />
-                        <TextBlock Text="Settings" />
+                        <TextBlock x:Uid="MainSettingsTextBlock" />
                     </StackPanel>
                 </Button>
 
