@@ -117,6 +117,54 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MainAddMasterTextBlock.Text" xml:space="preserve">
+    <value>Click here to choose a Master image</value>
+  </data>
+  <data name="MainAddTilesTextBlock.Text" xml:space="preserve">
+    <value>Add Tiles</value>
+  </data>
+  <data name="MainGenerateButton.Content" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="MainHeightTextBlock.Text" xml:space="preserve">
+    <value>H:</value>
+  </data>
+  <data name="MainHelpTextBlock.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MainMasterImageTextBlock.Text" xml:space="preserve">
+    <value>Master Image</value>
+  </data>
+  <data name="MainMosaicTypeTextBlock.Text" xml:space="preserve">
+    <value>MosaicType</value>
+  </data>
+  <data name="MainOutputPropertiesTextBlock.Text" xml:space="preserve">
+    <value>Output Properties</value>
+  </data>
+  <data name="MainResetButton.Content" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="MainSaveButton.Content" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="MainSettingsTextBlock.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MainShowGridCheckBox.Content" xml:space="preserve">
+    <value>Show Grid</value>
+  </data>
+  <data name="MainTileProperties.Text" xml:space="preserve">
+    <value>Tile Properties</value>
+  </data>
+  <data name="MainTilesListTextBlock.Text" xml:space="preserve">
+    <value>Tiles list</value>
+  </data>
+  <data name="MainTitleTextBlock.Text" xml:space="preserve">
+    <value>Yugen Mosaic</value>
+  </data>
+  <data name="MainWidthTextBlock.Text" xml:space="preserve">
+    <value>W:</value>
+  </data>
   <data name="OnboardingStageAddTilesDescription" xml:space="preserve">
     <value>Then add images. Yugen Mosaic will use them as tiles to build your mosaic. The more tiles you choose, the better result you will get!</value>
   </data>
@@ -162,5 +210,56 @@
   </data>
   <data name="OnboardingStageTilePropertiesTitle" xml:space="preserve">
     <value>Set the tile properties</value>
+  </data>
+  <data name="SettingsAboutTextBlock.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="SettingsAppNameTextBlock.Text" xml:space="preserve">
+    <value>Yugen Mosaic</value>
+  </data>
+  <data name="SettingsDevelopedHyperlink.Content" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SettingsDevelopedHyperlink.NavigateUri" xml:space="preserve">
+    <value>http://www.yugenapps.com</value>
+  </data>
+  <data name="SettingsDevelopedTextBlock.Text" xml:space="preserve">
+    <value>Developed By</value>
+  </data>
+  <data name="SettingsIconHyperlink.Content" xml:space="preserve">
+    <value>Yoshi</value>
+  </data>
+  <data name="SettingsIconHyperlink.NavigateUri" xml:space="preserve">
+    <value>https://github.com/yoshiask</value>
+  </data>
+  <data name="SettingsIconTextBlock.Text" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="SettingsRateHyperlink.Content" xml:space="preserve">
+    <value>Rate and review</value>
+  </data>
+  <data name="SettingsThemeDarkTextBlock.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="SettingsThemeDefaultTextBlock.Content" xml:space="preserve">
+    <value>System Default</value>
+  </data>
+  <data name="SettingsThemeLightTextBlock.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="SettingsThemeTextBlock.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsTitleTextBlock.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsUIHyperlink.Content" xml:space="preserve">
+    <value>Leisvan</value>
+  </data>
+  <data name="SettingsUIHyperlink.NavigateUri" xml:space="preserve">
+    <value>https://twitter.com/leisvanCT</value>
+  </data>
+  <data name="SettingsUITextBlock.Text" xml:space="preserve">
+    <value>UI</value>
   </data>
 </root>
