@@ -109,7 +109,7 @@
                         </Setter>
                     </Style>
 
-                    <Style x:Key="ProgressRingStyle1"
+                    <Style x:Key="YugenProgressRingStyle"
                            TargetType="ProgressRing">
                         <Setter Property="Background"
                                 Value="Transparent" />
@@ -238,6 +238,53 @@
                         </Setter>
                     </Style>
 
+                    <Style x:Key="YugenHyperlinkButtonStyle"
+                           TargetType="HyperlinkButton">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource DefaultTextForegroundThemeBrush}" />
+                    </Style>
+
+                    <Style x:Key="YugenBodyTextBlockStyle"
+                           BasedOn="{StaticResource BodyTextBlockStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource AppForegroundBrush}" />
+                    </Style>
+
+                    <Style x:Key="YugenCaptionTextBlockStyle"
+                           BasedOn="{StaticResource CaptionTextBlockStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource AppForegroundBrush}" />
+                    </Style>
+
+                    <Style x:Key="YugenSubtitleTextBlockStyle"
+                           BasedOn="{StaticResource SubtitleTextBlockStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource AppForegroundBrush}" />
+                    </Style>
+
+                    <Style x:Key="YugenTitleTextBlockStyle"
+                           BasedOn="{StaticResource TitleTextBlockStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource AppForegroundBrush}" />
+                    </Style>
+
+                    <Style x:Key="YugenBaseTextBlockStyle"
+                           BasedOn="{StaticResource BaseTextBlockStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource AppForegroundBrush}" />
+                    </Style>
+
+                    <Style x:Key="YugenRadioButtonStyle"
+                           TargetType="RadioButton">
+                        <Setter Property="Foreground"
+                                Value="{ThemeResource AppForegroundBrush}" />
+                    </Style>
+                    
                 </ResourceDictionary>
 
             </ResourceDictionary.MergedDictionaries>

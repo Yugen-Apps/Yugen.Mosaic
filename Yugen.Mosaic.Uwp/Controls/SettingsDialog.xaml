@@ -12,100 +12,101 @@
     <ContentDialog.Resources>
         <Thickness x:Key="ContentDialogPadding">0</Thickness>
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"
-                                        EnumType="ElementTheme" />
+                                           EnumType="ElementTheme" />
     </ContentDialog.Resources>
     
     <ContentDialog.DataContext>
         <vm:SettingsViewModel />
     </ContentDialog.DataContext>
     
-    <Grid Padding="15,15,15,30"
+    <Grid Padding="16,16,16,32"
           Background="{ThemeResource AppDeepBackgroundBrush}">
         
         <StackPanel Orientation="Vertical"
-                    Spacing="15"
+                    Spacing="16"
                     MaxWidth="360">
             
             <Grid>
-                <TextBlock Text="Settings"
+
+                <TextBlock x:Uid="SettingsTitleTextBlock"
                            Style="{ThemeResource TitleTextBlockStyle}"
-                           Foreground="{ThemeResource AppForegroundBrush}"
                            HorizontalAlignment="Left"
-                           Margin="5,0,0,0" />
+                           Margin="4,0,0,0" />
                 <Button Style="{StaticResource SoftRevealButtonStyle}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Command="{x:Bind HideCommand}">
                     <FontIcon Glyph="" />
                 </Button>
+                
             </Grid>
             
-            <StackPanel Spacing="5"
-                        Padding="15,0,15,0">
-                <TextBlock Text="Theme"
-                           Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource SubtitleTextBlockStyle}" />
-                <RadioButton Content="Light"
+            <StackPanel Spacing="4"
+                        Padding="16,0">
+
+                <TextBlock x:Uid="SettingsThemeTextBlock"
+                           Style="{StaticResource YugenSubtitleTextBlockStyle}" />
+                <RadioButton x:Uid="SettingsThemeLightTextBlock"
                              Command="{x:Bind ViewModel.SwitchThemeCommand}"
                              IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
-                             Foreground="{ThemeResource AppForegroundBrush}">
+                             Style="{ThemeResource YugenRadioButtonStyle}">
                     <RadioButton.CommandParameter>
                         <xaml:ElementTheme>Light</xaml:ElementTheme>
                     </RadioButton.CommandParameter>
                 </RadioButton>
-                <RadioButton Content="Dark"
+                <RadioButton x:Uid="SettingsThemeDarkTextBlock"
                              Command="{x:Bind ViewModel.SwitchThemeCommand}"
                              IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
-                             Foreground="{ThemeResource AppForegroundBrush}">
+                             Style="{ThemeResource YugenRadioButtonStyle}">
                     <RadioButton.CommandParameter>
                         <xaml:ElementTheme>Dark</xaml:ElementTheme>
                     </RadioButton.CommandParameter>
                 </RadioButton>
-                <RadioButton Content="Default"
+                <RadioButton x:Uid="SettingsThemeDefaultTextBlock"
                              Command="{x:Bind ViewModel.SwitchThemeCommand}"
                              IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
-                             Foreground="{ThemeResource AppForegroundBrush}">
+                             Style="{ThemeResource YugenRadioButtonStyle}">
                     <RadioButton.CommandParameter>
                         <xaml:ElementTheme>Default</xaml:ElementTheme>
                     </RadioButton.CommandParameter>
                 </RadioButton>
+                
             </StackPanel>
             
-            <StackPanel Spacing="5"
-                        Padding="15,0,15,0">
-                
-                <TextBlock Text="About"
-                           Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource SubtitleTextBlockStyle}" />
-                
-                <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource CaptionTextBlockStyle}">
-                    <Run Text="{x:Bind ViewModel.AppName}"
-                         FontWeight="SemiBold" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.AppVersion}" />
-                </TextBlock>
-                
-                <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource CaptionTextBlockStyle}">
-                    <Run Text="Developed by"
-                         FontWeight="SemiBold" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.Publisher}" />
-                </TextBlock>
+            <StackPanel Spacing="4"
+                        Padding="16,0">
 
-                <TextBlock Foreground="{ThemeResource AppForegroundBrush}"
-                           Style="{StaticResource CaptionTextBlockStyle}">
-                    <Run Text="Colaborators"
-                         FontWeight="SemiBold" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.Collaborator[0]}" />
-                    <LineBreak />
-                    <Run Text="{x:Bind ViewModel.Collaborator[1]}" />
-                </TextBlock>
-                
-                <HyperlinkButton Content="Rate and review"
-                                 Command="{x:Bind ViewModel.LaunchRateAndReviewCommand}" />
+                <TextBlock x:Uid="SettingsAboutTextBlock"
+                           Style="{StaticResource YugenSubtitleTextBlockStyle}" />
+
+                <TextBlock x:Uid="SettingsAppNameTextBlock"
+                           Style="{StaticResource YugenBodyTextBlockStyle}" />
+                <TextBlock Style="{StaticResource YugenCaptionTextBlockStyle}"
+                           Text="{x:Bind ViewModel.AppVersion}" />
+
+                <TextBlock x:Uid="SettingsDevelopedTextBlock"
+                           Margin="0,4,0,0"
+                           Style="{StaticResource YugenBodyTextBlockStyle}"/>
+                <HyperlinkButton x:Uid="SettingsDevelopedHyperlink" 
+                                 Content="{x:Bind ViewModel.Publisher}"
+                                 Margin="0,-8,0,0"
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
+
+                <TextBlock x:Uid="SettingsUITextBlock"
+                           Style="{StaticResource YugenBodyTextBlockStyle}" />
+                <HyperlinkButton x:Uid="SettingsUIHyperlink"
+                                 Margin="0,-8,0,0"
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}" />
+
+                <TextBlock x:Uid="SettingsIconTextBlock"
+                           Style="{StaticResource YugenBodyTextBlockStyle}" />
+                <HyperlinkButton x:Uid="SettingsIconHyperlink"
+                                 Margin="0,-8,0,0"
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
+
+                <HyperlinkButton x:Uid="SettingsRateHyperlink"
+                                 NavigateUri="{x:Bind ViewModel.RateAndReviewUri}"
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
                 
             </StackPanel>
             
