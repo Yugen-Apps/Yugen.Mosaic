@@ -13,8 +13,8 @@ The project has been primarily built for the universal Windows platform (UWP), s
 Get the latest version in the [Microsoft Store.](https://www.microsoft.com/store/apps/9PF0S24CX0D4)
 
 ## Dependencies and References
-[Yugen Toolkit](https://github.com/emiliano84/Yugen.Toolkit)
-[ImageSharp](https://github.com/SixLabors/ImageSharp) is licensed under the [Apache 2.0 License.](Imagesharp-LICENSE)
+- [Yugen Toolkit](https://github.com/emiliano84/Yugen.Toolkit)
+- [ImageSharp](https://github.com/SixLabors/ImageSharp) is licensed under the [Apache 2.0 License.](Imagesharp-LICENSE)
 
 ## Special Thanks
 - Icon: [Yoshi](https://github.com/yoshiask)
