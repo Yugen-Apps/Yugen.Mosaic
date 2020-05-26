@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.ApplicationModel;
-using Windows.System;
 using Windows.UI.Xaml;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Standard.Commands;
@@ -18,7 +15,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         public string AppVersion => SystemHelper.AppVersion;
         public string Publisher => SystemHelper.Publisher;
-        public string RateAndReviewUri => $"ms-windows-store:REVIEW?PFN={Package.Current.Id.FamilyName}";
+        public string RateAndReviewUri => SystemHelper.RateAndReviewUri;
 
         public ElementTheme ElementTheme
         {

@@ -15,11 +15,12 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Controls;
 using Yugen.Mosaic.Uwp.Enums;
-using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Standard.Commands;
+using Yugen.Toolkit.Standard.Extensions;
+using Yugen.Toolkit.Standard.Helpers;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.ViewModels;
 
