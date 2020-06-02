@@ -8,7 +8,7 @@
       xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
-      xmlns:controls="using:Yugen.Mosaic.Uwp.Controls"
+      xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
       xmlns:winUiControls="using:Microsoft.UI.Xaml.Controls"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"

@@ -1,5 +1,5 @@
 ﻿using Yugen.Mosaic.Uwp.Enums;
-using Yugen.Mosaic.Uwp.Extensions;
+using Yugen.Toolkit.Standard.Extensions;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
