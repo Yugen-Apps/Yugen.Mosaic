@@ -3,12 +3,12 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Standard.Commands;
+using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
 using Yugen.Toolkit.Uwp.Helpers;
-using Yugen.Toolkit.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.ViewModels
 {
-    public class SettingsViewModel : BaseViewModel
+    public class SettingsViewModel : ViewModelBase
     {
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
         private ICommand _switchThemeCommand;

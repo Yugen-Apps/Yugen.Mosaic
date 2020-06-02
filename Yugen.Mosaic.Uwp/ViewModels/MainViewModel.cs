@@ -21,12 +21,13 @@ using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Standard.Commands;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Helpers;
+using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
+using Yugen.Toolkit.Standard.Mvvm.Input;
 using Yugen.Toolkit.Uwp.Helpers;
-using Yugen.Toolkit.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : ViewModelBase
     {
         private readonly MosaicService _mosaicService = new MosaicService();
         private bool _isAddMasterUIVisible = true;
@@ -375,6 +376,6 @@ namespace Yugen.Mosaic.Uwp
         }
 
 
-        private void UpdateIsAddMasterUIVisible() => IsAddMasterUIVisible = (MasterBpmSource.PixelWidth > 0 && MasterBpmSource.PixelHeight > 0) ? false : true;
+        private void UpdateIsAddMasterUIVisible() => IsAddMasterUIVisible = MasterBpmSource.PixelWidth <= 0 || MasterBpmSource.PixelHeight <= 0;
     }
 }
