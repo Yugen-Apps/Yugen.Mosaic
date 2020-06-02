@@ -217,13 +217,10 @@
   <data name="SettingsAppNameTextBlock.Text" xml:space="preserve">
     <value>Yugen Mosaic</value>
   </data>
-  <data name="SettingsDevelopedHyperlink.Content" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SettingsDevelopedHyperlink.NavigateUri" xml:space="preserve">
+  <data name="SettingsDevelopedByHyperlink.NavigateUri" xml:space="preserve">
     <value>http://www.yugenapps.com</value>
   </data>
-  <data name="SettingsDevelopedTextBlock.Text" xml:space="preserve">
+  <data name="SettingsDevelopedByTextBlock.Text" xml:space="preserve">
     <value>Developed By</value>
   </data>
   <data name="SettingsIconHyperlink.Content" xml:space="preserve">

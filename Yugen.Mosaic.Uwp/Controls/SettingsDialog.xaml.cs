@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using Yugen.Mosaic.Uwp.ViewModels;
-using Yugen.Toolkit.Standard.Commands;
+using Yugen.Toolkit.Standard.Mvvm.Input;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

@@ -84,10 +84,10 @@
                 <TextBlock Style="{StaticResource YugenCaptionTextBlockStyle}"
                            Text="{x:Bind ViewModel.AppVersion}" />
 
-                <TextBlock x:Uid="SettingsDevelopedTextBlock"
+                <TextBlock x:Uid="SettingsDevelopedByTextBlock"
                            Margin="0,4,0,0"
                            Style="{StaticResource YugenBodyTextBlockStyle}"/>
-                <HyperlinkButton x:Uid="SettingsDevelopedHyperlink" 
+                <HyperlinkButton x:Uid="SettingsDevelopedByHyperlink" 
                                  Content="{x:Bind ViewModel.Publisher}"
                                  Margin="0,-8,0,0"
                                  Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
