@@ -189,21 +189,23 @@ namespace Yugen.Mosaic.Uwp
 
             if (masterFile != null)
             {
-                using (IRandomAccessStreamWithContentType inputStream = await masterFile.OpenReadAsync())
-                using (Stream stream = inputStream.AsStreamForRead())
+                using (var inputStream = await masterFile.OpenReadAsync())
                 {
-                    Image<Rgba32> image = _mosaicService.AddMasterImage(stream);
-
-                    using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 400))
+                    await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
                     {
-                        InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
-                        await MasterBpmSource.SetSourceAsync(outputStream);
-                    }
-
-                    Tuple<int, int> newSize = MathHelper.RatioConvert(image.Width, image.Height, OutputSize.Width, OutputSize.Height);
-                    OutputWidth = newSize.Item1;
-                    OutputHeight = newSize.Item2;
+                        var bmp = new BitmapImage
+                        {
+                            DecodePixelHeight = 400
+                        };
+                        await MasterBpmSource.SetSourceAsync(inputStream);
+                    });
                 }
+
+                var masterImageSize = await _mosaicService.AddMasterImage(masterFile);
+
+                Tuple<int, int> newSize = MathHelper.RatioConvert(masterImageSize.Width, masterImageSize.Height, OutputSize.Width, OutputSize.Height);
+                OutputWidth = newSize.Item1;
+                OutputHeight = newSize.Item2;
             }
 
             UpdateIsAddMasterUIVisible();
@@ -227,24 +229,21 @@ namespace Yugen.Mosaic.Uwp
             await Task.Run(() =>
                 Parallel.ForEach(files, async file =>
                 {
-                    using (IRandomAccessStreamWithContentType inputStream = await file.OpenReadAsync())
-                    using (Stream stream = inputStream.AsStreamForRead())
+                    using (var inputStream = await file.OpenReadAsync())
                     {
-                        Image<Rgba32> image = _mosaicService.AddTileImage(file.DisplayName, stream);
-
-                        using (Image<Rgba32> copy = _mosaicService.GetResizedImage(image, 200))
+                        await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
                         {
-                            InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(copy);
-
-                            await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                            var bmp = new BitmapImage
                             {
-                                var bmp = new BitmapImage();
-                                await bmp.SetSourceAsync(outputStream);
+                                DecodePixelHeight = 120
+                            };
+                            await bmp.SetSourceAsync(inputStream);
 
-                                TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
-                            });
-                        }
+                            TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
+                        });
                     }
+
+                    _mosaicService.AddTileImage(file.DisplayName, file);
                 })
             );
 
@@ -270,8 +269,8 @@ namespace Yugen.Mosaic.Uwp
             //button.IsEnabled = false;
             IsLoading = true;
 
-            await Task.Run(() =>
-                _outputImage = _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
+            await Task.Run(async () =>
+                _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
 
             if (_outputImage != null)
             {

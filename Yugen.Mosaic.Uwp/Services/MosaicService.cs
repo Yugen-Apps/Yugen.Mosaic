@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
@@ -28,20 +29,23 @@ namespace Yugen.Mosaic.Uwp.Services
 
         internal List<Tile> _tileImageList { get; set; } = new List<Tile>();
 
-        public Image<Rgba32> AddMasterImage(Stream stream)
+        public async Task<Size> AddMasterImage(StorageFile file)
         {
-            _masterImage = Image.Load<Rgba32>(stream);
-            return _masterImage;
+            using (var inputStream = await file.OpenReadAsync())
+            using (var stream = inputStream.AsStreamForRead())
+            {
+                _masterImage = Image.Load<Rgba32>(stream);
+            }
+
+            return _masterImage.Size();
         }
 
-        public Image<Rgba32> AddTileImage(string name, Stream stream)
+        public void AddTileImage(string name, StorageFile file)
         {
-            var image = Image.Load<Rgba32>(stream);
-            _tileImageList.Add(new Tile(image, name));
-            return image;
+            _tileImageList.Add(new Tile(name, file));
         }
 
-        public Image<Rgba32> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
+        public async Task<Image<Rgba32>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
         {
             if (_masterImage == null || (selectedMosaicType != MosaicTypeEnum.PlainColor && _tileImageList.Count < 1))
             {
@@ -57,7 +61,10 @@ namespace Yugen.Mosaic.Uwp.Services
 
             GetTilesAverage(resizedMasterImage);
 
-            LoadTilesAndResize();
+            if (selectedMosaicType != MosaicTypeEnum.PlainColor)
+            {
+                await LoadTilesAndResize();
+            }
 
             return SearchAndReplace(tileSize, selectedMosaicType, outputSize);
         }
@@ -109,20 +116,19 @@ namespace Yugen.Mosaic.Uwp.Services
             });
         }
 
-        private void LoadTilesAndResize()
+        private async Task LoadTilesAndResize()
         {
             _progressMax = _tileImageList.Count;
             _progress = 0;
 
-            foreach (Tile tile in _tileImageList)
-            {
-                tile.ResizedImage = tile.OriginalImage.CloneAs<Rgba32>(); ;
-                tile.ResizedImage.Mutate(x => x.Resize(_tileSize.Width, _tileSize.Height));
-                tile.AverageColor = ColorHelper.GetAverageColor(tile.ResizedImage);
+            var processTiles = _tileImageList.Select(Process).ToArray();
+            await Task.WhenAll(processTiles);
 
-                _progress++;
-            }
+            _progress++;
         }
+
+        private async Task Process(Tile tile) =>
+                await tile.Process(_tileSize);
 
         private Image<Rgba32> SearchAndReplace(Size tileSize, MosaicTypeEnum selectedMosaicType, Size outputSize)
         {

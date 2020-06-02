@@ -138,8 +138,7 @@
                     <toolkitControls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate x:DataType="models:TileBmp">
                             <Grid>
-                                <Image Source="{x:Bind Image}"
-                                       Height="120" />
+                                <Image Source="{x:Bind Image}" />
                                 <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
                                         Padding="5"
                                         VerticalAlignment="Bottom">
