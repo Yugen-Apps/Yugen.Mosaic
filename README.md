@@ -29,3 +29,16 @@ The licence for this repository is a [GNU Affero General Public Licence version 
 - Icon: [Yoshi](https://github.com/yoshiask)
 - UI: [Leisvan](https://twitter.com/leisvanCT)
 - Code Help: [Sergio](https://github.com/Sergio0694)
+
+## Dependencies and References
+
+| Name                                                          | License         |
+| ------------------------------------------------------------- | --------------- |
+| [Yugen Toolkit](https://github.com/emiliano84/Yugen.Toolkit)  | GNU GPL 3.0     |
+| [ImageSharp](https://github.com/SixLabors/ImageSharp)         | Apache 2.0      |
+
+[Third Party Notices](ThirdPartyNotices)
+
+## License details
+
+The licence for this repository is a [GNU Affero General Public Licence version 3](https://www.gnu.org/licenses/agpl-3.0.html) (SPDX: AGPL-3.0). Please see the [LICENSE](LICENSE) file for full reference.
