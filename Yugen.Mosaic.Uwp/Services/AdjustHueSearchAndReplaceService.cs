@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Models;
 
@@ -18,31 +19,20 @@ namespace Yugen.Mosaic.Uwp.Services
         public override void SearchAndReplace()
         {
             var r = new Random();
-            var tileQueue = new List<Tile>();
-            //int maxQueueLength = Math.Min(1000, Math.Max(0, _tileImageList.Count - 50));
+            var seq = Enumerable.Range(0, _tX * _tY).Select(x => x % _tileImageList.Count);
+            var tileShuffledList = seq.OrderBy(a => r.Next());
 
             Parallel.For(0, _tX * _tY, xy =>
             {
                 var y = xy / _tX;
                 var x = xy % _tX;
 
-                // (R * ColCount) + C
-                var index = ((y * _tX) + x) % _tileImageList.Count;
+                // tile coordinates (Row * ColCount) + Column
+                var tileXY = (y * _tX) + x;
+                var index = tileShuffledList.ElementAt(tileXY);
 
-                // Check if it's the same as the last (X)?
-                //if (tileQueue.Count > 1)
-                //{
-                //    while (tileQueue.Contains(_tileImageList[index]))
-                //    {
-                //        index = r.Next(_tileImageList.Count);
-                //    }
-                //}
-
-                // Add to the 'queue'
+                // Get tile from index
                 Tile tileFound = _tileImageList[index];
-                //if (tileQueue.Count >= maxQueueLength && tileQueue.Count > 0)
-                //    tileQueue.RemoveAt(0);
-                //tileQueue.Add(tileFound);
 
                 // Adjust the hue
                 var adjustedImage = new Image<Rgba32>(tileFound.ResizedImage.Width, tileFound.ResizedImage.Height);
