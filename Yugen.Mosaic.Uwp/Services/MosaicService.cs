@@ -121,13 +121,13 @@ namespace Yugen.Mosaic.Uwp.Services
             _progressMax = _tileImageList.Count;
             _progress = 0;
 
-            var processTiles = _tileImageList.Select(Process).ToArray();
+            var processTiles = _tileImageList.Select(ProcessTile).ToArray();
             await Task.WhenAll(processTiles);
 
             _progress++;
         }
 
-        private async Task Process(Tile tile) =>
+        private async Task ProcessTile(Tile tile) =>
                 await tile.Process(_tileSize);
 
         private Image<Rgba32> SearchAndReplace(Size tileSize, MosaicTypeEnum selectedMosaicType, Size outputSize)

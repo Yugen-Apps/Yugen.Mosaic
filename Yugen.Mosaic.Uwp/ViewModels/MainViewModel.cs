@@ -197,7 +197,8 @@ namespace Yugen.Mosaic.Uwp
                         {
                             DecodePixelHeight = 400
                         };
-                        await MasterBpmSource.SetSourceAsync(inputStream);
+                        await bmp.SetSourceAsync(inputStream);
+                        MasterBpmSource = bmp;
                     });
                 }
 
@@ -218,6 +219,7 @@ namespace Yugen.Mosaic.Uwp
             IReadOnlyList<StorageFile> files = await FilePickerHelper.OpenFiles(
                 new List<string> { ".jpg", ".png" },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+
             if (files == null)
             {
                 return;
