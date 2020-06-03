@@ -123,7 +123,7 @@
   <data name="MainAddTilesTextBlock.Text" xml:space="preserve">
     <value>Add Tiles</value>
   </data>
-  <data name="MainGenerateButton.Content" xml:space="preserve">
+  <data name="MainGenerateTextBlock.Text" xml:space="preserve">
     <value>Generate</value>
   </data>
   <data name="MainHeightTextBlock.Text" xml:space="preserve">
@@ -141,10 +141,10 @@
   <data name="MainOutputPropertiesTextBlock.Text" xml:space="preserve">
     <value>Output Properties</value>
   </data>
-  <data name="MainResetButton.Content" xml:space="preserve">
+  <data name="MainResetTextBlock.Text" xml:space="preserve">
     <value>Reset</value>
   </data>
-  <data name="MainSaveButton.Content" xml:space="preserve">
+  <data name="MainSaveTextBlock.Text" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="MainSettingsTextBlock.Text" xml:space="preserve">

@@ -113,11 +113,12 @@
                             Spacing="5"
                             Margin="0,25,0,10">
 
-                    <TextBlock x:Uid="MainTilesListTextBlock" 
+                    <TextBlock x:Uid="MainTilesListTextBlock"
                                Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                     <Button x:Name="AddTilesButton"
                             Command="{x:Bind ViewModel.AddTilesCommand}"
+                            IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
                             HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="5">
@@ -198,7 +199,7 @@
 
                     <StackPanel Spacing="10">
 
-                        <TextBlock x:Uid="MainTileProperties" 
+                        <TextBlock x:Uid="MainTileProperties"
                                    Style="{StaticResource YugenCaptionTextBlockStyle}" />
 
                         <Grid x:Name="TilePropertiesGrid">
@@ -298,12 +299,18 @@
                                    Margin="0,15,0,0" />
 
                         <validation:ValidatingButton x:Name="GenerateButton"
-                                                     x:Uid="MainGenerateButton"
                                                      Command="{x:Bind ViewModel.GenerateCommand}"
                                                      HorizontalAlignment="Stretch"
+                                                     IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
                                                      Margin="5,0,0,0"
-                                                     Style="{ThemeResource AccentButtonStyle}"
-                                                     ValidatingForm="{x:Bind ValidatingForm}" />
+                                                     Style="{ThemeResource ButtonRevealStyle}"
+                                                     ValidatingForm="{x:Bind ValidatingForm}">
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="5">
+                                <FontIcon Glyph="&#xE768;" />
+                                <TextBlock x:Uid="MainGenerateTextBlock" />
+                            </StackPanel>
+                        </validation:ValidatingButton>
 
                         <CheckBox x:Uid="MainShowGridCheckBox"
                                   IsChecked="{x:Bind ViewModel.IsAlignmentGridVisibile,Mode=TwoWay}" />
@@ -316,16 +323,28 @@
                             </Grid.ColumnDefinitions>
 
                             <Button x:Name="SaveButton"
-                                    x:Uid="MainSaveButton"
+                                    Command="{x:Bind ViewModel.SaveCommand}"
                                     HorizontalAlignment="Stretch"
-                                    Margin="0,0,5,0"
-                                    Command="{x:Bind ViewModel.SaveCommand}" />
+                                    IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                                    Margin="0,0,5,0">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="5">
+                                    <FontIcon Glyph="&#xE74E;" />
+                                    <TextBlock x:Uid="MainSaveTextBlock" />
+                                </StackPanel>
+                            </Button>
 
                             <Button Grid.Column="1"
-                                    x:Uid="MainResetButton"
+                                    Command="{x:Bind ViewModel.ResetCommand}"
                                     HorizontalAlignment="Stretch"
-                                    Margin="5,0,0,0"
-                                    Command="{x:Bind ViewModel.ResetCommand}" />
+                                    IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                                    Margin="5,0,0,0">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="5">
+                                    <FontIcon Glyph="&#xE72C;" />
+                                    <TextBlock x:Uid="MainResetTextBlock" />
+                                </StackPanel>
+                            </Button>
 
                         </Grid>
 
@@ -352,10 +371,11 @@
                 </validation:ValidatingForm>
 
                 <Button Grid.Row="1"
-                        HorizontalAlignment="Stretch"
-                        Margin="5,0,0,5"
+                        Command="{x:Bind ViewModel.HelpCommand}"
                         Height="36"
-                        Command="{x:Bind ViewModel.HelpCommand}">
+                        HorizontalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                        Margin="5,0,0,5">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="&#xE897;" />
@@ -364,10 +384,11 @@
                 </Button>
 
                 <Button Grid.Row="2"
-                        HorizontalAlignment="Stretch"
-                        Margin="5,0,0,5"
+                        Command="{x:Bind ViewModel.SettingsCommand}"
                         Height="36"
-                        Command="{x:Bind ViewModel.SettingsCommand}">
+                        HorizontalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                        Margin="5,0,0,5">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="5">
                         <FontIcon Glyph="" />

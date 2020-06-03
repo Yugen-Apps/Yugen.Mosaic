@@ -34,6 +34,7 @@ namespace Yugen.Mosaic.Uwp
         private bool _isAlignmentGridVisibile = true;
         private bool _isLoading;
         private bool _isTeachingTipOpen;
+        private bool _isButtonEnabled = true;
         private BitmapImage _masterBmpSource = new BitmapImage();
         private BitmapImage _outputBmpSource = new BitmapImage();
         private int _outputHeight = 1000;
@@ -84,6 +85,12 @@ namespace Yugen.Mosaic.Uwp
         {
             get => _isTeachingTipOpen;
             set => Set(ref _isTeachingTipOpen, value);
+        }
+
+        public bool IsButtonEnabled
+        {
+            get => _isButtonEnabled;
+            set => Set(ref _isButtonEnabled, value);
         }
 
         public BitmapImage MasterBpmSource
@@ -209,14 +216,15 @@ namespace Yugen.Mosaic.Uwp
 
         private async Task AddMasterImmageCommandBehavior()
         {
-            IsLoading = true;
-
             StorageFile masterFile = await FilePickerHelper.OpenFile(
                 new List<string> { FileFormat.Jpg.GetStringRepresentation(), FileFormat.Png.GetStringRepresentation() },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (masterFile != null)
             {
+                IsButtonEnabled = false;
+                IsLoading = true;
+
                 using (var inputStream = await masterFile.OpenReadAsync())
                 {
                     await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
@@ -235,11 +243,12 @@ namespace Yugen.Mosaic.Uwp
                 Tuple<int, int> newSize = MathHelper.RatioConvert(masterImageSize.Width, masterImageSize.Height, OutputSize.Width, OutputSize.Height);
                 OutputWidth = newSize.Item1;
                 OutputHeight = newSize.Item2;
+
+                IsLoading = false;
+                IsButtonEnabled = true;
             }
 
             UpdateIsAddMasterUIVisible();
-
-            IsLoading = false;
         }
 
         private async Task AddTilesCommandBehavior()
@@ -253,7 +262,7 @@ namespace Yugen.Mosaic.Uwp
                 return;
             }
 
-            //button.IsEnabled = false;
+            IsButtonEnabled = false;
             IsLoading = true;
 
             await Task.Run(() =>
@@ -278,7 +287,7 @@ namespace Yugen.Mosaic.Uwp
             );
 
             IsLoading = false;
-            //button.IsEnabled = true;
+            IsButtonEnabled = true;
         }
 
         private async Task ClickTileCommandBehavior(TileBmp item)
@@ -296,7 +305,7 @@ namespace Yugen.Mosaic.Uwp
 
         private async Task GenerateCommandBehavior()
         {
-            //button.IsEnabled = false;
+            IsButtonEnabled = false;
             IsLoading = true;
 
             await Task.Run(async () =>
@@ -309,12 +318,12 @@ namespace Yugen.Mosaic.Uwp
             }
 
             IsLoading = false;
-            //button.IsEnabled = true;
+            IsButtonEnabled = true;
         }
 
         private async Task SaveCommandBehavior()
         {
-            //button.IsEnabled = false;
+            IsButtonEnabled = false;
             IsLoading = true;
 
             var fileTypes = new Dictionary<string, List<string>>()
@@ -333,9 +342,10 @@ namespace Yugen.Mosaic.Uwp
 
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
-                switch (file.FileType)
+                var fileFormat = EnumHelper.GetValueFromDescription<FileFormat>(file.FileType);
+                switch (fileFormat)
                 {
-                    case ".png":
+                    case FileFormat.Png:
                         _outputImage.SaveAsPng(stream.AsStreamForWrite());
                         break;
 
@@ -346,7 +356,7 @@ namespace Yugen.Mosaic.Uwp
             }
 
             IsLoading = false;
-            //button.IsEnabled = true;
+            IsButtonEnabled = true;
         }
 
         private void ResetCommandBehavior()
