@@ -1,6 +1,8 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
@@ -20,21 +22,26 @@ namespace Yugen.Mosaic.Uwp.Services
                 int y = xy / _tX;
                 int x = xy % _tX;
 
-                int index = 0;
-                int difference = 100;
-                Tile tileFound = _tileImageList[0];
+                int difference = 1000;
+                List<TileFound> tileFoundList = new List<TileFound>();
 
                 // Search for a tile with a similar color
                 foreach (var tile in _tileImageList)
                 {
-                    var newDifference = ColorHelper.GetDifference(_avgsMaster[x, y], _tileImageList[index].AverageColor);
-                    if (newDifference < difference)
+                    var newDifference = ColorHelper.GetDifference(_avgsMaster[x, y], tile.AverageColor);
+                    if (newDifference <= (difference + 5))
                     {
-                        tileFound = _tileImageList[index];
+                        tileFoundList.Add(new TileFound(tile, newDifference));
                         difference = newDifference;
                     }
-                    index++;
                 }
+
+                // Choose a random tile from tileFoundList with a threshold +/- 5 the best match
+                var threshold = tileFoundList.Min(t1 => t1.Difference) + 5;
+                var r = new Random();
+                var tileFound = tileFoundList.Where(t2 => t2.Difference <= threshold)
+                    .OrderBy(a => r.Next())
+                        .First().Tile;
 
                 // Apply found tile to section
                 ApplyTileFound(x, y, tileFound.ResizedImage);
@@ -42,5 +49,18 @@ namespace Yugen.Mosaic.Uwp.Services
                 //_progress++;
             });
         }
+    }
+
+    public class TileFound
+    {
+        public TileFound(Tile tile, int difference)
+        {
+            Tile = tile;
+            Difference = difference;
+        }
+
+        public Tile Tile { get; set; }
+        public int Difference { get; set; }
+
     }
 }
