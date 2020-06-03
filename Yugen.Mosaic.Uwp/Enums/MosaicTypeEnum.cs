@@ -6,10 +6,13 @@ namespace Yugen.Mosaic.Uwp.Enums
     {
         [Description("Classic")]
         Classic,
+
         [Description("Random")]
         Random,
+
         [Description("Adjust Hue")]
         AdjustHue,
+
         [Description("Plain Color")]
         PlainColor
     }

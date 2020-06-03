@@ -12,6 +12,15 @@ namespace Yugen.Mosaic.Uwp.Helpers
 
         public static Rgba32 GetAverageColor(Image<Rgba32> source) => GetAverageColor(source, 0, 0, source.Width, source.Height, source.Width, source.Height);
 
+        public static int GetDifference(Rgba32 source, Rgba32 target)
+        {
+            var dR = Math.Abs(source.R - target.R);
+            var dG = Math.Abs(source.G - target.G);
+            var dB = Math.Abs(source.B - target.B);
+            var diff = Math.Max(dR, dG);
+            return Math.Max(diff, dB);
+        }
+
         private static Rgba32 GetAverageColor(Image<Rgba32> source, int startX, int startY, int width, int height, int endX, int endY)
         {
             long aR = 0;
@@ -38,15 +47,6 @@ namespace Yugen.Mosaic.Uwp.Helpers
             aB /= width * height;
 
             return new Rgba32(Convert.ToByte(aR), Convert.ToByte(aG), Convert.ToByte(aB));
-        }
-
-        public static int GetDifference(Rgba32 source, Rgba32 target)
-        {
-            var dR = Math.Abs(source.R - target.R);
-            var dG = Math.Abs(source.G - target.G);
-            var dB = Math.Abs(source.B - target.B);
-            var diff = Math.Max(dR, dG);
-            return Math.Max(diff, dB);
         }
     }
 }

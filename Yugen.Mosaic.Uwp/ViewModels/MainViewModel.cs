@@ -160,9 +160,6 @@ namespace Yugen.Mosaic.Uwp
             set => Set(ref _tileWidth, value);
         }
 
-        private Size OutputSize => new Size(_outputWidth, _outputHeight);
-        private Size TileSize => new Size(_tileWidth, _tileHeight);
-
         public ICommand PointerEnteredCommand => _pointerEnteredCommand ?? (_pointerEnteredCommand = new RelayCommand(PointerEnteredCommandBehavior));
         public ICommand PointerExitedCommand => _pointerExitedCommand ?? (_pointerExitedCommand = new RelayCommand(PointerExitedCommandBehavior));
         public ICommand AddMasterImmageCommand => _addMasterImmageCommand ?? (_addMasterImmageCommand = new AsyncRelayCommand(AddMasterImmageCommandBehavior));
@@ -173,18 +170,49 @@ namespace Yugen.Mosaic.Uwp
         public ICommand ResetCommand => _resetCommand ?? (_resetCommand = new RelayCommand(ResetCommandBehavior));
         public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new RelayCommand(HelpCommandBehavior));
         public ICommand SettingsCommand => _settingsCommand ?? (_settingsCommand = new AsyncRelayCommand(SettingsCommandBehavior));
-
+        private Size OutputSize => new Size(_outputWidth, _outputHeight);
+        private Size TileSize => new Size(_tileWidth, _tileHeight);
 
         public void PointerEnteredCommandBehavior() => IsAddMasterUIVisible = true;
 
         public void PointerExitedCommandBehavior() => UpdateIsAddMasterUIVisible();
+
+        public void ShowTeachingTip()
+        {
+            OnboardingElement onboardingElement = OnboardingHelper.ShowTeachingTip();
+            if (onboardingElement == null)
+            {
+                return;
+            }
+
+            TeachingTipTitle = onboardingElement.Title;
+            TeachingTipSubTitle = onboardingElement.Subtitle;
+            TeachingTipTarget = onboardingElement.Target;
+            IsTeachingTipOpen = true;
+        }
+
+        public void TeachingTip_ActionButtonClick(TeachingTip sender, object args)
+        {
+            OnboardingHelper.IsDisabled = true;
+            IsTeachingTipOpen = false;
+        }
+
+        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
+
+        public void TeachingTip_Closing(TeachingTip sender, TeachingTipClosingEventArgs args)
+        {
+            TeachingTipTitle = "";
+            TeachingTipSubTitle = "";
+            TeachingTipTarget = null;
+            IsTeachingTipOpen = false;
+        }
 
         private async Task AddMasterImmageCommandBehavior()
         {
             IsLoading = true;
 
             StorageFile masterFile = await FilePickerHelper.OpenFile(
-                new List<string> { ".jpg", ".png" },
+                new List<string> { FileFormat.Jpg.GetStringRepresentation(), FileFormat.Png.GetStringRepresentation() },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (masterFile != null)
@@ -217,7 +245,7 @@ namespace Yugen.Mosaic.Uwp
         private async Task AddTilesCommandBehavior()
         {
             IReadOnlyList<StorageFile> files = await FilePickerHelper.OpenFiles(
-                new List<string> { ".jpg", ".png" },
+                new List<string> { FileFormat.Jpg.GetStringRepresentation(), FileFormat.Png.GetStringRepresentation() },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (files == null)
@@ -344,38 +372,6 @@ namespace Yugen.Mosaic.Uwp
             var settingsDialog = new SettingsDialog();
             await settingsDialog.ShowAsync();
         }
-
-
-        public void ShowTeachingTip()
-        {
-            OnboardingElement onboardingElement = OnboardingHelper.ShowTeachingTip();
-            if (onboardingElement == null)
-            {
-                return;
-            }
-
-            TeachingTipTitle = onboardingElement.Title;
-            TeachingTipSubTitle = onboardingElement.Subtitle;
-            TeachingTipTarget = onboardingElement.Target;
-            IsTeachingTipOpen = true;
-        }
-
-        public void TeachingTip_ActionButtonClick(TeachingTip sender, object args)
-        {
-            OnboardingHelper.IsDisabled = true;
-            IsTeachingTipOpen = false;
-        }
-
-        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
-
-        public void TeachingTip_Closing(TeachingTip sender, TeachingTipClosingEventArgs args)
-        {
-            TeachingTipTitle = "";
-            TeachingTipSubTitle = "";
-            TeachingTipTarget = null;
-            IsTeachingTipOpen = false;
-        }
-
 
         private void UpdateIsAddMasterUIVisible() => IsAddMasterUIVisible = MasterBpmSource.PixelWidth <= 0 || MasterBpmSource.PixelHeight <= 0;
     }

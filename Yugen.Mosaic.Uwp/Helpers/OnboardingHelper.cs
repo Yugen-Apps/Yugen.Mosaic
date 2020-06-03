@@ -5,7 +5,6 @@ using Yugen.Toolkit.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Helpers
 {
-
     public static class OnboardingHelper
     {
         private const string SettingsKey = "OnboardingIsEnabled";

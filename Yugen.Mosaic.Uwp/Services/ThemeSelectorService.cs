@@ -57,6 +57,7 @@ namespace Yugen.Mosaic.Uwp.Services
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             titleBar.ButtonInactiveForegroundColor = GetThemeResource<Color>(theme, "TitleBarButtonForeground");
         }
+
         private static T GetThemeResource<T>(ElementTheme theme, string resKey)
         {
             var isLightTheme = (theme == ElementTheme.Default)

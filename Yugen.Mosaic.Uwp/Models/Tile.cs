@@ -11,6 +11,12 @@ namespace Yugen.Mosaic.Uwp.Models
 {
     public class Tile
     {
+        public Tile(string name, StorageFile file)
+        {
+            Name = name;
+            File = file;
+        }
+
         public string Name { get; set; }
         public StorageFile File { get; set; }
         public Image<Rgba32> ResizedImage { get; set; }
@@ -26,12 +32,6 @@ namespace Yugen.Mosaic.Uwp.Models
 
             ResizedImage.Mutate(x => x.Resize(tileSize));
             AverageColor = ColorHelper.GetAverageColor(ResizedImage);
-        }
-
-        public Tile(string name, StorageFile file)
-        {
-            Name = name;
-            File = file;
         }
     }
 }

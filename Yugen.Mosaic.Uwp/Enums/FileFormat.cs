@@ -6,12 +6,16 @@ namespace Yugen.Mosaic.Uwp.Enums
     {
         [Description(".jpg")]
         Jpg,
+
         [Description(".png")]
         Png,
+
         [Description(".bmp")]
         Bmp,
+
         [Description(".tiff")]
         Tiff,
+
         [Description(".gif")]
         Gif
     }

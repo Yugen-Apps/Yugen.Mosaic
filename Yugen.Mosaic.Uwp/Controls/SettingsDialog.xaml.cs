@@ -10,7 +10,6 @@ namespace Yugen.Mosaic.Uwp.Controls
     public sealed partial class SettingsDialog : ContentDialog
     {
         private ICommand _hideCommand;
-        public SettingsViewModel ViewModel => DataContext as SettingsViewModel;
 
         public SettingsDialog()
         {
@@ -18,6 +17,7 @@ namespace Yugen.Mosaic.Uwp.Controls
             //DataContext = new SettingsViewModel();
         }
 
+        public SettingsViewModel ViewModel => DataContext as SettingsViewModel;
         public ICommand HideCommand => _hideCommand ?? (_hideCommand = new RelayCommand(() => Hide()));
     }
 }

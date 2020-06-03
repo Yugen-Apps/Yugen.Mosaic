@@ -8,24 +8,24 @@
                xmlns:converters="using:Yugen.Toolkit.Uwp.Converters"
                RequestedTheme="{x:Bind ViewModel.ElementTheme, Mode=OneWay}"
                mc:Ignorable="d">
-    
+
     <ContentDialog.Resources>
         <Thickness x:Key="ContentDialogPadding">0</Thickness>
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"
                                            EnumType="ElementTheme" />
     </ContentDialog.Resources>
-    
+
     <ContentDialog.DataContext>
         <vm:SettingsViewModel />
     </ContentDialog.DataContext>
-    
+
     <Grid Padding="16,16,16,32"
           Background="{ThemeResource AppDeepBackgroundBrush}">
-        
+
         <StackPanel Orientation="Vertical"
                     Spacing="16"
                     MaxWidth="360">
-            
+
             <Grid>
 
                 <TextBlock x:Uid="SettingsTitleTextBlock"
@@ -40,7 +40,7 @@
                 </Button>
                 
             </Grid>
-            
+
             <StackPanel Spacing="4"
                         Padding="16,0">
 
@@ -70,9 +70,8 @@
                         <xaml:ElementTheme>Default</xaml:ElementTheme>
                     </RadioButton.CommandParameter>
                 </RadioButton>
-                
             </StackPanel>
-            
+
             <StackPanel Spacing="4"
                         Padding="16,0">
 
@@ -86,11 +85,11 @@
 
                 <TextBlock x:Uid="SettingsDevelopedByTextBlock"
                            Margin="0,4,0,0"
-                           Style="{StaticResource YugenBodyTextBlockStyle}"/>
-                <HyperlinkButton x:Uid="SettingsDevelopedByHyperlink" 
+                           Style="{StaticResource YugenBodyTextBlockStyle}" />
+                <HyperlinkButton x:Uid="SettingsDevelopedByHyperlink"
                                  Content="{x:Bind ViewModel.Publisher}"
                                  Margin="0,-8,0,0"
-                                 Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}" />
 
                 <TextBlock x:Uid="SettingsUITextBlock"
                            Style="{StaticResource YugenBodyTextBlockStyle}" />
@@ -102,11 +101,11 @@
                            Style="{StaticResource YugenBodyTextBlockStyle}" />
                 <HyperlinkButton x:Uid="SettingsIconHyperlink"
                                  Margin="0,-8,0,0"
-                                 Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}" />
 
                 <HyperlinkButton x:Uid="SettingsRateHyperlink"
                                  NavigateUri="{x:Bind ViewModel.RateAndReviewUri}"
-                                 Style="{ThemeResource YugenHyperlinkButtonStyle}"/>
+                                 Style="{ThemeResource YugenHyperlinkButtonStyle}" />
                 
             </StackPanel>
             
