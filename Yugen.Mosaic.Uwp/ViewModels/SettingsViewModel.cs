@@ -2,8 +2,8 @@
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Yugen.Mosaic.Uwp.Services;
-using Yugen.Toolkit.Standard.Commands;
 using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
+using Yugen.Toolkit.Standard.Mvvm.Input;
 using Yugen.Toolkit.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.ViewModels

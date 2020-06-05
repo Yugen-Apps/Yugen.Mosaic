@@ -1,7 +1,5 @@
-﻿using Windows.ApplicationModel.Core;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Yugen.Mosaic.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Views
 {
@@ -13,15 +11,7 @@ namespace Yugen.Mosaic.Uwp.Views
         public MainPage()
         {
             InitializeComponent();
-            ExtendToTitleBar();
-        }
-
-        public MainViewModel ViewModel { get; set; } = new MainViewModel();
-
-        private void ExtendToTitleBar()
-        {
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
+            TitleBarHelper.ExtendToTitleBar();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -37,9 +27,7 @@ namespace Yugen.Mosaic.Uwp.Views
                 SaveButton
             };
 
-            OnboardingHelper.Init(frameworkElements);
-
-            ViewModel.ShowTeachingTip();
+            ViewModel.InitOnboarding(frameworkElements);
         }
     }
 }

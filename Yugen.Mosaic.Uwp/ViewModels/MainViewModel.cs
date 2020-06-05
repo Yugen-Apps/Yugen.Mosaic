@@ -18,18 +18,18 @@ using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Mosaic.Uwp.Services;
-using Yugen.Toolkit.Standard.Commands;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Helpers;
 using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
 using Yugen.Toolkit.Standard.Mvvm.Input;
 using Yugen.Toolkit.Uwp.Helpers;
 
-namespace Yugen.Mosaic.Uwp
+namespace Yugen.Mosaic.Uwp.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
         private readonly MosaicService _mosaicService = new MosaicService();
+
         private bool _isAddMasterUIVisible = true;
         private bool _isAlignmentGridVisibile = true;
         private bool _isLoading;
@@ -183,6 +183,13 @@ namespace Yugen.Mosaic.Uwp
         public void PointerEnteredCommandBehavior() => IsAddMasterUIVisible = true;
 
         public void PointerExitedCommandBehavior() => UpdateIsAddMasterUIVisible();
+
+        public void InitOnboarding(FrameworkElement[] frameworkElements)
+        {
+            OnboardingHelper.Init(frameworkElements);
+
+            ShowTeachingTip();
+        }
 
         public void ShowTeachingTip()
         {

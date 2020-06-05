@@ -153,6 +153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\MosaicType.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Helpers\TitleBarHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -256,13 +257,13 @@
       <Version>1.6.5</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Standard">
-      <Version>1.0.26</Version>
+      <Version>1.0.27</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Uwp">
-      <Version>1.0.26</Version>
+      <Version>1.0.27</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Uwp.Controls">
-      <Version>1.0.26</Version>
+      <Version>1.0.27</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

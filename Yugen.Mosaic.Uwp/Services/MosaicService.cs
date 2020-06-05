@@ -22,12 +22,11 @@ namespace Yugen.Mosaic.Uwp.Services
         internal int _progress;
         internal int _tX;
         internal int _tY;
+        internal List<Tile> _tileImageList = new List<Tile>();
 
         private Image<Rgba32> _masterImage;
         private int _progressMax;
         private Size _tileSize;
-
-        internal List<Tile> _tileImageList { get; set; } = new List<Tile>();
 
         public async Task<Size> AddMasterImage(StorageFile file)
         {
