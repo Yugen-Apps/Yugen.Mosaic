@@ -370,6 +370,7 @@
                                                            Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                                            IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />-->
 
+                        <TextBlock Text="{x:Bind ViewModel.Progress, Mode=OneWay}" />
                     </StackPanel>
 
                 </validation:ValidatingForm>

@@ -47,6 +47,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private ObservableCollection<TileBmp> _tileBmpCollection = new ObservableCollection<TileBmp>();
         private int _tileHeight = 25;
         private int _tileWidth = 25;
+        private int _progress = 0;
         private ICommand _pointerEnteredCommand;
         private ICommand _pointerExitedCommand;
         private ICommand _addMasterImmageCommand;
@@ -165,6 +166,12 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         {
             get => _tileWidth;
             set => Set(ref _tileWidth, value);
+        }
+
+        public int Progress
+        {
+            get => _progress;
+            set => Set(ref _progress, value);
         }
 
         public ICommand PointerEnteredCommand => _pointerEnteredCommand ?? (_pointerEnteredCommand = new RelayCommand(PointerEnteredCommandBehavior));
@@ -315,8 +322,15 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsButtonEnabled = false;
             IsLoading = true;
 
+            // The Progress<T> constructor captures our UI context,
+            //  so the lambda will be run on the UI thread.
+            var progress = new Progress<int>(percent =>
+            {
+                Progress = percent;
+            });
+
             await Task.Run(async () =>
-                _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
+                _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum, progress));
 
             if (_outputImage != null)
             {
