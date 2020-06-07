@@ -8,7 +8,7 @@
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
-      xmlns:winUiControls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:viewmodels="using:Yugen.Mosaic.Uwp.ViewModels"
@@ -352,23 +352,24 @@
 
                         </Grid>
 
-                        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                      Height="80"
-                                      Margin="2"
-                                      Style="{StaticResource YugenProgressRingStyle}"
-                                      Width="80" />
+                        <muxc:ProgressRing Height="80"
+                                           IsActive="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
+                                           Margin="2"
+                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
+                                           Width="80" />
+                        <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
-                        <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
+                        <toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
                                                            Foreground="Firebrick"
-                                                           Outline="LightGray"
-                                                           Thickness="4"
-                                                           Minimum="0"
-                                                           Maximum="100"
                                                            Height="80"
                                                            Width="80"
+                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                                           Minimum="0"
+                                                           Maximum="100"
+                                                           Outline="LightGray"
+                                                           Thickness="4"
                                                            Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
-                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />-->
+                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
 
                         <TextBlock Text="{x:Bind ViewModel.Progress, Mode=OneWay}" />
                     </StackPanel>
@@ -405,7 +406,7 @@
 
         </Grid>
 
-        <winUiControls:TeachingTip IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
+        <muxc:TeachingTip IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
                                    Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
                                    Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
                                    Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"

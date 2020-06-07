@@ -14,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Interfaces
 
         void AddTileImage(string name, StorageFile file);
 
-        Task<Image<Rgba32>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType, Progress<int> progress);
+        Task<Image<Rgba32>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType);
 
         Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size);
 

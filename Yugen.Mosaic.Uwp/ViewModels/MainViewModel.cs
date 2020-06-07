@@ -32,6 +32,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private bool _isAddMasterUIVisible = true;
         private bool _isAlignmentGridVisibile = true;
+        private bool _isIndeterminateLoading;
         private bool _isLoading;
         private bool _isTeachingTipOpen;
         private bool _isButtonEnabled = true;
@@ -74,6 +75,12 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         {
             get => _isAlignmentGridVisibile;
             set => Set(ref _isAlignmentGridVisibile, value);
+        }
+
+        public bool IsIndeterminateLoading
+        {
+            get => _isIndeterminateLoading;
+            set => Set(ref _isIndeterminateLoading, value);
         }
 
         public bool IsLoading
@@ -237,7 +244,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             if (masterFile != null)
             {
                 IsButtonEnabled = false;
-                IsLoading = true;
+                IsIndeterminateLoading = true;
 
                 using (var inputStream = await masterFile.OpenReadAsync())
                 {
@@ -258,7 +265,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 OutputWidth = newSize.Item1;
                 OutputHeight = newSize.Item2;
 
-                IsLoading = false;
+                IsIndeterminateLoading = false;
                 IsButtonEnabled = true;
             }
 
@@ -277,7 +284,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             }
 
             IsButtonEnabled = false;
-            IsLoading = true;
+            IsIndeterminateLoading = true;
 
             await Task.Run(() =>
                 Parallel.ForEach(files, async file =>
@@ -300,7 +307,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 })
             );
 
-            IsLoading = false;
+            IsIndeterminateLoading = false;
             IsButtonEnabled = true;
         }
 
@@ -329,8 +336,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 Progress = percent;
             });
 
+            ProgressHelper.Init(progress);
+
             await Task.Run(async () =>
-                _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum, progress));
+               _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
 
             if (_outputImage != null)
             {
@@ -404,6 +413,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             await settingsDialog.ShowAsync();
         }
 
-        private void UpdateIsAddMasterUIVisible() => IsAddMasterUIVisible = MasterBpmSource.PixelWidth <= 0 || MasterBpmSource.PixelHeight <= 0;
+        private void UpdateIsAddMasterUIVisible() => 
+            IsAddMasterUIVisible = MasterBpmSource.PixelWidth <= 0 || MasterBpmSource.PixelHeight <= 0;
     }
 }

@@ -11,12 +11,18 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class ClassicSearchAndReplaceService : SearchAndReplaceService
     {
-        public ClassicSearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster) : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
+        public ClassicSearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, 
+            int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster) 
+                : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
         {
         }
 
         public override void SearchAndReplace()
         {
+            ProgressHelper.ResetProgress();
+
+            int max = _tX * _tY;
+
             Parallel.For(0, _tX * _tY, xy =>
             {
                 int y = xy / _tX;
@@ -46,21 +52,8 @@ namespace Yugen.Mosaic.Uwp.Services
                 // Apply found tile to section
                 ApplyTileFound(x, y, tileFound.ResizedImage);
 
-                //_progress++;
+                ProgressHelper.IncrementProgress(66, 34, max);
             });
         }
-    }
-
-    public class TileFound
-    {
-        public TileFound(Tile tile, int difference)
-        {
-            Tile = tile;
-            Difference = difference;
-        }
-
-        public Tile Tile { get; set; }
-        public int Difference { get; set; }
-
     }
 }
