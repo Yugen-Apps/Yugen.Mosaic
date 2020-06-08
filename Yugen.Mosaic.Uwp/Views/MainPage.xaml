@@ -14,7 +14,7 @@
       xmlns:viewmodels="using:Yugen.Mosaic.Uwp.ViewModels"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}"
-      Loaded="Page_Loaded">
+      Loaded="OnPageLoaded">
 
     <Page.DataContext>
         <viewmodels:MainViewModel x:Name="ViewModel" />
