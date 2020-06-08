@@ -131,6 +131,7 @@
     <Compile Include="Models\OnboardingElement.cs" />
     <Compile Include="Helpers\OnboardingHelper.cs" />
     <Compile Include="Enums\OnboardingStage.cs" />
+    <Compile Include="Models\TileFound.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
