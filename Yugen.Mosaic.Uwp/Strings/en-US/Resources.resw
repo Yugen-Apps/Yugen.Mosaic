@@ -153,6 +153,12 @@
   <data name="MainShowGridCheckBox.Content" xml:space="preserve">
     <value>Show Grid</value>
   </data>
+  <data name="MainTeachingTip.ActionButtonContent" xml:space="preserve">
+    <value>Skip Tutorial</value>
+  </data>
+  <data name="MainTeachingTip.CloseButtonContent" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="MainTileProperties.Text" xml:space="preserve">
     <value>Tile Properties</value>
   </data>
