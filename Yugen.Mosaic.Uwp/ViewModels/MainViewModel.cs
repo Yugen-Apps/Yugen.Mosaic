@@ -1,5 +1,4 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
-using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -57,6 +56,9 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private ICommand _resetCommand;
         private ICommand _helpCommand;
         private ICommand _settingsCommand;
+        private ICommand _teachingTipActionButtonCommand;
+        private ICommand _teachingTipClosingCommand;
+        private ICommand _teachingTipClosedCommand;
 
         public MainViewModel()
         {
@@ -177,6 +179,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ICommand ResetCommand => _resetCommand ?? (_resetCommand = new RelayCommand(ResetCommandBehavior));
         public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new RelayCommand(HelpCommandBehavior));
         public ICommand SettingsCommand => _settingsCommand ?? (_settingsCommand = new AsyncRelayCommand(SettingsCommandBehavior));
+        public ICommand TeachingTipActionButtonCommand => _teachingTipActionButtonCommand ?? (_teachingTipActionButtonCommand = new RelayCommand(TeachingTipActionButtonCommandBehavior));
+        public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
+        public ICommand TeachingTipClosedCommand => _teachingTipClosedCommand ?? (_teachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior));
+
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
         private Size TileSize => new Size(_tileWidth, _tileHeight);
 
@@ -205,21 +211,21 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsTeachingTipOpen = true;
         }
 
-        public void TeachingTip_ActionButtonClick(TeachingTip sender, object args)
+        public void TeachingTipActionButtonCommandBehavior()
         {
             OnboardingHelper.IsDisabled = true;
             IsTeachingTipOpen = false;
         }
 
-        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
-
-        public void TeachingTip_Closing(TeachingTip sender, TeachingTipClosingEventArgs args)
+        public void TeachingTipClosingCommandBehavior()
         {
             TeachingTipTitle = "";
             TeachingTipSubTitle = "";
             TeachingTipTarget = null;
             IsTeachingTipOpen = false;
         }
+
+        public void TeachingTipClosedCommandBehavior() => ShowTeachingTip();
 
         private async Task AddMasterImmageCommandBehavior()
         {

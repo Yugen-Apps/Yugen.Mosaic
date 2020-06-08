@@ -8,7 +8,7 @@
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
-      xmlns:winUiControls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:viewmodels="using:Yugen.Mosaic.Uwp.ViewModels"
@@ -318,7 +318,7 @@
 
                         <CheckBox x:Uid="MainShowGridCheckBox"
                                   IsChecked="{x:Bind ViewModel.IsAlignmentGridVisibile,Mode=TwoWay}"
-                                  Margin="4,0,0,0"/>
+                                  Margin="4,0,0,0" />
 
                         <Grid Margin="4,0,0,0">
 
@@ -353,11 +353,11 @@
 
                         </Grid>
 
-                        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                      Height="80"
-                                      Margin="2"
-                                      Style="{StaticResource YugenProgressRingStyle}"
-                                      Width="80" />
+                        <muxc:ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                           Height="80"
+                                           Margin="2"
+                                           Width="80" />
+                        <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
                         <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
                                                            Foreground="Firebrick"
@@ -405,15 +405,21 @@
 
         </Grid>
 
-        <winUiControls:TeachingTip IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
-                                   Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
-                                   Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
-                                   Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
-                                   Closing="{x:Bind ViewModel.TeachingTip_Closing}"
-                                   Closed="{x:Bind ViewModel.TeachingTip_Closed}"
-                                   CloseButtonContent="Next"
-                                   ActionButtonContent="Skip Tutorial"
-                                   ActionButtonClick="{x:Bind ViewModel.TeachingTip_ActionButtonClick}" />
+        <muxc:TeachingTip x:Uid="MainTeachingTip"
+                          IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
+                          Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
+                          Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
+                          Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
+                          ActionButtonCommand="{x:Bind ViewModel.TeachingTipActionButtonCommand}">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="Closed">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosedCommand}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="Closing">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosingCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </muxc:TeachingTip>
 
     </Grid>
 
