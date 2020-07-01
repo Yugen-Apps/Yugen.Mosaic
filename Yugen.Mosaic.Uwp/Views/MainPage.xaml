@@ -131,6 +131,17 @@
                         </StackPanel>
                     </Button>
 
+                    <Button x:Name="AddTilesFolderButton"
+                            Command="{x:Bind ViewModel.AddTilesFolderCommand}"
+                            IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                            HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4">
+                            <FontIcon Glyph="" />
+                            <TextBlock x:Uid="MainAddTilesFolderTextBlock" />
+                        </StackPanel>
+                    </Button>
+
                 </StackPanel>
 
                 <toolkitControls:AdaptiveGridView Grid.Row="2"

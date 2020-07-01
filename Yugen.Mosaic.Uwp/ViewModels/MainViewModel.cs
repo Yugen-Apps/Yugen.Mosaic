@@ -52,6 +52,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private ICommand _pointerExitedCommand;
         private ICommand _addMasterImmageCommand;
         private ICommand _addTilesCommand;
+        private ICommand _addTilesFolderCommand;
         private ICommand _clickTileCommand;
         private ICommand _generateCommand;
         private ICommand _saveCommand;
@@ -187,6 +188,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ICommand PointerExitedCommand => _pointerExitedCommand ?? (_pointerExitedCommand = new RelayCommand(PointerExitedCommandBehavior));
         public ICommand AddMasterImmageCommand => _addMasterImmageCommand ?? (_addMasterImmageCommand = new AsyncRelayCommand(AddMasterImmageCommandBehavior));
         public ICommand AddTilesCommand => _addTilesCommand ?? (_addTilesCommand = new AsyncRelayCommand(AddTilesCommandBehavior));
+        public ICommand AddTilesFolderCommand => _addTilesFolderCommand ?? (_addTilesFolderCommand = new AsyncRelayCommand(AddTilesFolderCommandBehavior));
         public ICommand ClickTileCommand => _clickTileCommand ?? (_clickTileCommand = new AsyncRelayCommand<TileBmp>(ClickTileCommandBehavior));
         public ICommand GenerateCommand => _generateCommand ?? (_generateCommand = new AsyncRelayCommand(GenerateCommandBehavior));
         public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new AsyncRelayCommand(SaveCommandBehavior));
@@ -292,11 +294,34 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
-            if (files == null)
+            if (files != null)
             {
-                return;
+                await AddTiles(files);
             }
+        }
 
+        private async Task AddTilesFolderCommandBehavior()
+        {
+            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
+            folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
+            folderPicker.FileTypeFilter.Add(FileFormat.Png.GetStringRepresentation());
+
+            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                // Application now has read/write access to all contents in the picked folder
+                // (including other sub-folder contents)
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+
+                var files = await folder.GetFilesAsync();
+                await AddTiles(files);
+            }
+        }
+
+        private async Task AddTiles(IReadOnlyList<StorageFile> files)
+        {
             IsButtonEnabled = false;
             IsIndeterminateLoading = true;
 
