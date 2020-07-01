@@ -244,7 +244,11 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private async Task AddMasterImmageCommandBehavior()
         {
             StorageFile masterFile = await FilePickerHelper.OpenFile(
-                new List<string> { FileFormat.Jpg.GetStringRepresentation(), FileFormat.Png.GetStringRepresentation() },
+                new List<string> {
+                    FileFormat.Jpg.GetStringRepresentation(),
+                    FileFormat.Jpeg.GetStringRepresentation(),
+                    FileFormat.Png.GetStringRepresentation()
+                },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (masterFile != null)
@@ -281,7 +285,11 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private async Task AddTilesCommandBehavior()
         {
             IReadOnlyList<StorageFile> files = await FilePickerHelper.OpenFiles(
-                new List<string> { FileFormat.Jpg.GetStringRepresentation(), FileFormat.Png.GetStringRepresentation() },
+                new List<string> {
+                    FileFormat.Jpg.GetStringRepresentation(),
+                    FileFormat.Jpeg.GetStringRepresentation(),
+                    FileFormat.Png.GetStringRepresentation()
+                },
                 Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
 
             if (files == null)
