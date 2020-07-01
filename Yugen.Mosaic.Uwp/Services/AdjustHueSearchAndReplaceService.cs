@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -25,7 +26,7 @@ namespace Yugen.Mosaic.Uwp.Services
             var seq = Enumerable.Range(0, _tX * _tY).Select(x => x % _tileImageList.Count);
             var tileShuffledList = seq.OrderBy(a => r.Next());
 
-            ProgressHelper.ResetProgress();
+            ProgressService.Instance.Reset();
 
             int max = _tX * _tY;
 
@@ -48,7 +49,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 // Apply found tile to section
                 ApplyTileFound(x, y, adjustedImage);
 
-                ProgressHelper.IncrementProgress(66, 34, max);
+                ProgressService.Instance.IncrementProgress(max, 66, 100);
             });
         }
 

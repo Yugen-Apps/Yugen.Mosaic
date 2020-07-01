@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -21,7 +22,7 @@ namespace Yugen.Mosaic.Uwp.Services
         // Use just mosic colored tiles
         public override void SearchAndReplace()
         {
-            ProgressHelper.ResetProgress();
+            ProgressService.Instance.Reset();
 
             int max = _tX * _tY;
 
@@ -45,7 +46,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 // Apply found tile to section
                 ApplyTileFound(x, y, adjustedImage);
 
-                ProgressHelper.IncrementProgress(66, 34, max);
+                ProgressService.Instance.IncrementProgress(max, 66, 100);
             });
         }
     }

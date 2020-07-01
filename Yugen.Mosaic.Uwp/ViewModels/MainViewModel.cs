@@ -335,14 +335,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsButtonEnabled = false;
             IsLoading = true;
 
-            // The Progress<T> constructor captures our UI context,
-            //  so the lambda will be run on the UI thread.
-            var progress = new Progress<int>(percent =>
+            ProgressService.Instance.Init(percent =>
             {
                 Progress = percent;
             });
-
-            ProgressHelper.Init(progress);
 
             await Task.Run(async () =>
                _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));

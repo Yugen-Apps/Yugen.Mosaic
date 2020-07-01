@@ -353,26 +353,27 @@
 
                         </Grid>
 
-                        <muxc:ProgressRing Height="80"
+                        <muxc:ProgressRing Background="DarkGoldenrod"
+                                           Foreground="Firebrick"
+                                           Height="100"
+                                           Width="100"
                                            IsActive="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
                                            Margin="2"
-                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
-                                           Width="80" />
+                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"/>
                         <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
                         <toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
                                                            Foreground="Firebrick"
-                                                           Height="80"
-                                                           Width="80"
+                                                           Outline="DarkGoldenrod"
+                                                           Height="100"
+                                                           Width="100"
                                                            IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                                            Minimum="0"
                                                            Maximum="100"
-                                                           Outline="LightGray"
-                                                           Thickness="4"
+                                                           Thickness="8"
                                                            Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
                                                            Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
 
-                        <TextBlock Text="{x:Bind ViewModel.Progress, Mode=OneWay}" />
                     </StackPanel>
 
                 </validation:ValidatingForm>

@@ -13,6 +13,7 @@ using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -102,8 +103,6 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private void GetTilesAverage(Image<Rgba32> masterImage)
         {
-            ProgressHelper.ResetProgress();
-
             Parallel.For(0, _tY, y =>
             {
                 Span<Rgba32> rowSpan = masterImage.GetPixelRowSpan(y);
@@ -113,14 +112,14 @@ namespace Yugen.Mosaic.Uwp.Services
                     _avgsMaster[x, y].FromRgba32(ColorHelper.GetAverageColor(masterImage, x, y, _tileSize));
                 }
 
-                ProgressHelper.IncrementProgress(0, 33, _tY);
+                ProgressService.Instance.IncrementProgress(_tY, 0, 33);
             });
         }
 
         private async Task LoadTilesAndResize()
         {
-            ProgressHelper.ResetProgress();
-
+            ProgressService.Instance.Reset();
+            
             var processTiles = _tileImageList.AsParallel().Select(tile => ProcessTile(tile));
 
             await Task.WhenAll(processTiles);
@@ -130,7 +129,7 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             await tile.Process(_tileSize);
 
-            ProgressHelper.IncrementProgress(33, 33, _tileImageList.Count);
+            ProgressService.Instance.IncrementProgress(_tileImageList.Count, 33, 66);
         }
 
         private Image<Rgba32> SearchAndReplace(Size tileSize, MosaicTypeEnum selectedMosaicType, Size outputSize)
