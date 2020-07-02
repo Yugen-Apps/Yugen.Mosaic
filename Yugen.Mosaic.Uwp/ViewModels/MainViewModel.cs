@@ -302,8 +302,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private async Task AddTilesFolderCommandBehavior()
         {
-            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
-            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            var folderPicker = new Windows.Storage.Pickers.FolderPicker
+            {
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary
+            };
             folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
             folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
             folderPicker.FileTypeFilter.Add(FileFormat.Png.GetStringRepresentation());
@@ -352,15 +354,12 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private async Task ClickTileCommandBehavior(TileBmp item)
         {
-            await MessageDialogHelper.Confirm("Do you want to Remove this picture?",
-                "",
-                new UICommand("Yes",
-                    action =>
-                    {
-                        TileBmpCollection.Remove(item);
-                        _mosaicService.RemoveTileImage(item.Name);
-                    }),
-                new UICommand("No"));
+            await ContentDialogHelper.Confirm(ResourceHelper.GetText("DefaultDeletePicture"), "", ResourceHelper.GetText("DefaultNo"), 
+                new RelayCommand(() =>
+                {
+                    TileBmpCollection.Remove(item);
+                    _mosaicService.RemoveTileImage(item.Name);
+                }), ResourceHelper.GetText("DefaultYes"));            
         }
 
         private async Task GenerateCommandBehavior()
