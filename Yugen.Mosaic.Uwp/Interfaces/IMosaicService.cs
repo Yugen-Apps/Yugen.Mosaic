@@ -1,5 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;

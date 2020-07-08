@@ -8,13 +8,13 @@
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
-      xmlns:winUiControls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:viewmodels="using:Yugen.Mosaic.Uwp.ViewModels"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}"
-      Loaded="Page_Loaded">
+      Loaded="OnPageLoaded">
 
     <Page.DataContext>
         <viewmodels:MainViewModel x:Name="ViewModel" />
@@ -61,7 +61,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <StackPanel Spacing="5">
+                <StackPanel Spacing="4">
 
                     <TextBlock x:Uid="MainMasterImageTextBlock"
                                Style="{StaticResource YugenCaptionTextBlockStyle}" />
@@ -96,8 +96,8 @@
 
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Margin="25"
-                                            Spacing="10">
+                                            Margin="24"
+                                            Spacing="8">
                                     <FontIcon Glyph=""
                                               FontSize="32" />
                                     <TextBlock x:Uid="MainAddMasterTextBlock"
@@ -114,8 +114,8 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1"
-                            Spacing="5"
-                            Margin="0,25,0,10">
+                            Spacing="4"
+                            Margin="0,24,0,8">
 
                     <TextBlock x:Uid="MainTilesListTextBlock"
                                Style="{StaticResource YugenCaptionTextBlockStyle}" />
@@ -125,9 +125,20 @@
                             IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
                             HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal"
-                                    Spacing="5">
+                                    Spacing="4">
                             <FontIcon Glyph="" />
                             <TextBlock x:Uid="MainAddTilesTextBlock" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="AddTilesFolderButton"
+                            Command="{x:Bind ViewModel.AddTilesFolderCommand}"
+                            IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                            HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4">
+                            <FontIcon Glyph="" />
+                            <TextBlock x:Uid="MainAddTilesFolderTextBlock" />
                         </StackPanel>
                     </Button>
 
@@ -145,7 +156,7 @@
                             <Grid>
                                 <Image Source="{x:Bind Image}" />
                                 <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
-                                        Padding="5"
+                                        Padding="4"
                                         VerticalAlignment="Bottom">
                                     <TextBlock Text="{x:Bind Name}"
                                                TextWrapping="Wrap"
@@ -201,7 +212,7 @@
 
                 <validation:ValidatingForm x:Name="ValidatingForm">
 
-                    <StackPanel Spacing="10">
+                    <StackPanel Spacing="12">
 
                         <TextBlock x:Uid="MainTileProperties"
                                    Style="{StaticResource YugenCaptionTextBlockStyle}" />
@@ -218,7 +229,7 @@
                             <TextBlock x:Uid="MainWidthTextBlock"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource YugenCaptionTextBlockStyle}"
-                                       Margin="5,0,5,0" />
+                                       Margin="4,0,4,0" />
 
                             <validation:ValidatingTextBox Grid.Column="1"
                                                           Text="{x:Bind ViewModel.TileWidth, Mode=TwoWay}"
@@ -231,7 +242,7 @@
                                        x:Uid="MainHeightTextBlock"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource YugenCaptionTextBlockStyle}"
-                                       Margin="5,0,5,0" />
+                                       Margin="4,0,4,0" />
 
                             <validation:ValidatingTextBox Grid.Column="3"
                                                           Text="{x:Bind ViewModel.TileHeight, Mode=TwoWay}"
@@ -244,7 +255,7 @@
 
                         <Rectangle Height=".5"
                                    Fill="{ThemeResource AppBorderBrush}"
-                                   Margin="0,15,0,0" />
+                                   Margin="0,16,0,0" />
 
                         <TextBlock x:Uid="MainMosaicTypeTextBlock"
                                    Style="{StaticResource YugenCaptionTextBlockStyle}" />
@@ -257,7 +268,7 @@
 
                         <Rectangle Height=".5"
                                    Fill="{ThemeResource AppBorderBrush}"
-                                   Margin="0,15,0,0" />
+                                   Margin="0,16,0,0" />
 
                         <TextBlock x:Uid="MainOutputPropertiesTextBlock"
                                    Style="{StaticResource YugenCaptionTextBlockStyle}" />
@@ -274,7 +285,7 @@
                             <TextBlock x:Uid="MainWidthTextBlock"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource YugenCaptionTextBlockStyle}"
-                                       Margin="5,0,5,0" />
+                                       Margin="4,0,4,0" />
 
                             <validation:ValidatingTextBox Grid.Column="1"
                                                           Text="{x:Bind ViewModel.OutputWidth, Mode=TwoWay}"
@@ -287,7 +298,7 @@
                                        x:Uid="MainHeightTextBlock"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource YugenCaptionTextBlockStyle}"
-                                       Margin="5,0,5,0" />
+                                       Margin="4,0,4,0" />
 
                             <validation:ValidatingTextBox Grid.Column="3"
                                                           Text="{x:Bind ViewModel.OutputHeight, Mode=TwoWay}"
@@ -300,26 +311,27 @@
 
                         <Rectangle Height=".5"
                                    Fill="{ThemeResource AppBorderBrush}"
-                                   Margin="0,15,0,0" />
+                                   Margin="0,16,0,0" />
 
                         <validation:ValidatingButton x:Name="GenerateButton"
                                                      Command="{x:Bind ViewModel.GenerateCommand}"
                                                      HorizontalAlignment="Stretch"
                                                      IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
-                                                     Margin="5,0,0,0"
+                                                     Margin="4,0,0,0"
                                                      Style="{ThemeResource ButtonRevealStyle}"
                                                      ValidatingForm="{x:Bind ValidatingForm}">
                             <StackPanel Orientation="Horizontal"
-                                        Spacing="5">
+                                        Spacing="4">
                                 <FontIcon Glyph="&#xE768;" />
                                 <TextBlock x:Uid="MainGenerateTextBlock" />
                             </StackPanel>
                         </validation:ValidatingButton>
 
                         <CheckBox x:Uid="MainShowGridCheckBox"
-                                  IsChecked="{x:Bind ViewModel.IsAlignmentGridVisibile,Mode=TwoWay}" />
+                                  IsChecked="{x:Bind ViewModel.IsAlignmentGridVisibile,Mode=TwoWay}"
+                                  Margin="4,0,0,0" />
 
-                        <Grid Margin="5,0,0,0">
+                        <Grid Margin="4,0,0,0">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -330,9 +342,9 @@
                                     Command="{x:Bind ViewModel.SaveCommand}"
                                     HorizontalAlignment="Stretch"
                                     IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
-                                    Margin="0,0,5,0">
+                                    Margin="0,0,4,0">
                                 <StackPanel Orientation="Horizontal"
-                                            Spacing="5">
+                                            Spacing="4">
                                     <FontIcon Glyph="&#xE74E;" />
                                     <TextBlock x:Uid="MainSaveTextBlock" />
                                 </StackPanel>
@@ -342,9 +354,9 @@
                                     Command="{x:Bind ViewModel.ResetCommand}"
                                     HorizontalAlignment="Stretch"
                                     IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
-                                    Margin="5,0,0,0">
+                                    Margin="4,0,0,0">
                                 <StackPanel Orientation="Horizontal"
-                                            Spacing="5">
+                                            Spacing="4">
                                     <FontIcon Glyph="&#xE72C;" />
                                     <TextBlock x:Uid="MainResetTextBlock" />
                                 </StackPanel>
@@ -352,23 +364,26 @@
 
                         </Grid>
 
-                        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                      Height="80"
-                                      Margin="2"
-                                      Style="{StaticResource YugenProgressRingStyle}"
-                                      Width="80" />
+                        <muxc:ProgressRing Background="DarkGoldenrod"
+                                           Foreground="Firebrick"
+                                           Height="100"
+                                           Width="100"
+                                           IsActive="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
+                                           Margin="2"
+                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"/>
+                        <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
-                        <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
+                        <toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
                                                            Foreground="Firebrick"
-                                                           Outline="LightGray"
-                                                           Thickness="4"
+                                                           Outline="DarkGoldenrod"
+                                                           Height="100"
+                                                           Width="100"
+                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                                            Minimum="0"
                                                            Maximum="100"
-                                                           Height="80"
-                                                           Width="80"
+                                                           Thickness="8"
                                                            Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
-                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />-->
+                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
 
                     </StackPanel>
 
@@ -379,9 +394,9 @@
                         Height="36"
                         HorizontalAlignment="Stretch"
                         IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
-                        Margin="5,0,0,5">
+                        Margin="4,0,0,4">
                     <StackPanel Orientation="Horizontal"
-                                Spacing="5">
+                                Spacing="4">
                         <FontIcon Glyph="&#xE897;" />
                         <TextBlock x:Uid="MainHelpTextBlock" />
                     </StackPanel>
@@ -392,9 +407,9 @@
                         Height="36"
                         HorizontalAlignment="Stretch"
                         IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
-                        Margin="5,0,0,5">
+                        Margin="4,0,0,4">
                     <StackPanel Orientation="Horizontal"
-                                Spacing="5">
+                                Spacing="4">
                         <FontIcon Glyph="" />
                         <TextBlock x:Uid="MainSettingsTextBlock" />
                     </StackPanel>
@@ -404,15 +419,21 @@
 
         </Grid>
 
-        <winUiControls:TeachingTip IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
-                                   Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
-                                   Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
-                                   Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
-                                   Closing="{x:Bind ViewModel.TeachingTip_Closing}"
-                                   Closed="{x:Bind ViewModel.TeachingTip_Closed}"
-                                   CloseButtonContent="Next"
-                                   ActionButtonContent="Skip Tutorial"
-                                   ActionButtonClick="{x:Bind ViewModel.TeachingTip_ActionButtonClick}" />
+        <muxc:TeachingTip x:Uid="MainTeachingTip"
+                          IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
+                          Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
+                          Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
+                          Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
+                          ActionButtonCommand="{x:Bind ViewModel.TeachingTipActionButtonCommand}">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="Closed">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosedCommand}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="Closing">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosingCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </muxc:TeachingTip>
 
     </Grid>
 

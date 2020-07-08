@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{E44DE1EE-E0B3-4250-8CBE-F9B13C6DF19A}"
 	ProjectSection(SolutionItems) = preProject
 		build-pipelines.yml = build-pipelines.yml
+		GitVersion.yml = GitVersion.yml
 	EndProjectSection
 EndProject
 Global

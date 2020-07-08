@@ -14,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Views
             TitleBarHelper.ExtendToTitleBar();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             var frameworkElements = new FrameworkElement[]
             {

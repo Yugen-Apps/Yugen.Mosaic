@@ -70,8 +70,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
         private static bool IsSystemThemeLight()
         {
-            var DefaultTheme = new UISettings();
-            var uiTheme = DefaultTheme.GetColorValue(UIColorType.Background).ToString();
+            var defaultTheme = new UISettings();
+            var uiTheme = defaultTheme.GetColorValue(UIColorType.Background).ToString();
             return uiTheme == LIGHT_THEME_BCKG;
         }
 

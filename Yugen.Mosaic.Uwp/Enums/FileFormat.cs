@@ -7,6 +7,9 @@ namespace Yugen.Mosaic.Uwp.Enums
         [Description(".jpg")]
         Jpg,
 
+        [Description(".jpeg")]
+        Jpeg,
+
         [Description(".png")]
         Png,
 
