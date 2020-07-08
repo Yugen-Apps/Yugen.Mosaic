@@ -130,7 +130,7 @@
     <value>Click here to choose a Master image</value>
   </data>
   <data name="MainAddTilesFolderTextBlock.Text" xml:space="preserve">
-    <value>Add Tiles From Folder</value>
+    <value>Add Tiles from Folder</value>
   </data>
   <data name="MainAddTilesTextBlock.Text" xml:space="preserve">
     <value>Add Tiles</value>
