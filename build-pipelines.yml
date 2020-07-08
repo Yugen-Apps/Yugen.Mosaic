@@ -17,24 +17,16 @@ variables:
   appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
   appxmanifest: '**/*.appxmanifest'
   versionNumber: 'Set dynamically below in a task'
-
-name: '$(Rev:r)'
+  
+name: $(GITVERSION_AssemblySemFileVer)
 
 steps:
 
-- task: PowerShell@2
+- task: UseGitVersion@5
+  displayName: GitVersion
+  continueOnError: true
   inputs:
-    targetType: 'inline'
-    script: |
-      [xml] $manifestXml = Get-Content '$(appxmanifest)'
-      $version = [version]$manifestXml.Package.Identity.Version
-
-      [string] $newVersion = "{0}.{1}.{2}.{3}" -f $version.Major, $version.Minor, $(Build.BuildNumber), 0
-      Write-Host "Setting the release version number variable to '$newVersion'."
-      Write-Host "##vso[task.setvariable variable=versionNumber]$newVersion"
-
-      Write-Host "Setting the name of the build to '$newVersion'."
-      Write-Host "##vso[build.updatebuildnumber]$newVersion"
+    versionSpec: '5.x'
 
 - task: NuGetToolInstaller@1
 
@@ -48,7 +40,8 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: VersionAPPX@2
-  displayName: 'Version MSIX'
+  inputs:
+    VersionNumber: '$(GitVersion.AssemblySemFileVer)'
 
 - task: VSBuild@1
   inputs:

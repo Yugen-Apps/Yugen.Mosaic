@@ -131,6 +131,17 @@
                         </StackPanel>
                     </Button>
 
+                    <Button x:Name="AddTilesFolderButton"
+                            Command="{x:Bind ViewModel.AddTilesFolderCommand}"
+                            IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                            HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4">
+                            <FontIcon Glyph="" />
+                            <TextBlock x:Uid="MainAddTilesFolderTextBlock" />
+                        </StackPanel>
+                    </Button>
+
                 </StackPanel>
 
                 <toolkitControls:AdaptiveGridView Grid.Row="2"
@@ -353,23 +364,26 @@
 
                         </Grid>
 
-                        <muxc:ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                           Height="80"
+                        <muxc:ProgressRing Background="DarkGoldenrod"
+                                           Foreground="Firebrick"
+                                           Height="100"
+                                           Width="100"
+                                           IsActive="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
                                            Margin="2"
-                                           Width="80" />
+                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"/>
                         <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
-                        <!--<toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
+                        <toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
                                                            Foreground="Firebrick"
-                                                           Outline="LightGray"
-                                                           Thickness="4"
+                                                           Outline="DarkGoldenrod"
+                                                           Height="100"
+                                                           Width="100"
+                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                                                            Minimum="0"
                                                            Maximum="100"
-                                                           Height="80"
-                                                           Width="80"
+                                                           Thickness="8"
                                                            Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
-                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />-->
+                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
 
                     </StackPanel>
 
