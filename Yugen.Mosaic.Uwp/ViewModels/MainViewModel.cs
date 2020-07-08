@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -60,8 +61,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private ICommand _helpCommand;
         private ICommand _settingsCommand;
         private ICommand _teachingTipActionButtonCommand;
-        private ICommand _teachingTipClosingCommand;
-        private ICommand _teachingTipClosedCommand;
+        //private ICommand _teachingTipClosingCommand;
+        //private ICommand _teachingTipClosedCommand;
 
         public MainViewModel()
         {
@@ -196,8 +197,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new RelayCommand(HelpCommandBehavior));
         public ICommand SettingsCommand => _settingsCommand ?? (_settingsCommand = new AsyncRelayCommand(SettingsCommandBehavior));
         public ICommand TeachingTipActionButtonCommand => _teachingTipActionButtonCommand ?? (_teachingTipActionButtonCommand = new RelayCommand(TeachingTipActionButtonCommandBehavior));
-        public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
-        public ICommand TeachingTipClosedCommand => _teachingTipClosedCommand ?? (_teachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior));
+        //public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
+        //public ICommand TeachingTipClosedCommand => _teachingTipClosedCommand ?? (_teachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior));
 
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
         private Size TileSize => new Size(_tileWidth, _tileHeight);
@@ -233,7 +234,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsTeachingTipOpen = false;
         }
 
-        public void TeachingTipClosingCommandBehavior()
+        public void TeachingTip_Closing(TeachingTip sender, TeachingTipClosingEventArgs args)
         {
             TeachingTipTitle = "";
             TeachingTipSubTitle = "";
@@ -241,7 +242,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsTeachingTipOpen = false;
         }
 
-        public void TeachingTipClosedCommandBehavior() => ShowTeachingTip();
+        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
 
         private async Task AddMasterImmageCommandBehavior()
         {
