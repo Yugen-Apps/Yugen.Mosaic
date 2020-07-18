@@ -28,4 +28,4 @@ The licence for this repository is a [GNU Affero General Public Licence version 
 ## Special Thanks
 - Icon: [Yoshi](https://github.com/yoshiask)
 - UI: [Leisvan](https://twitter.com/leisvanCT)
-- Code Help: [Sergio](https://github.com/Sergio0694)
+- Resharper Help: [Sergio](https://github.com/Sergio0694)
