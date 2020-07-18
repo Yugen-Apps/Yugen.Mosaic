@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
@@ -308,7 +309,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary
             };
             folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
-            folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
+            folderPicker.FileTypeFilter.Add(FileFormat.Jpeg.GetStringRepresentation());
             folderPicker.FileTypeFilter.Add(FileFormat.Png.GetStringRepresentation());
 
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
@@ -319,11 +320,14 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
 
                 var files = await folder.GetFilesAsync();
-                await AddTiles(files);
+                var filteredFiles = files.Where(file => file.FileType.Contains(FileFormat.Jpg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
+                                                     || file.FileType.Contains(FileFormat.Jpeg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
+                                                     || file.FileType.Contains(FileFormat.Png.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase));
+                await AddTiles(filteredFiles);
             }
         }
 
-        private async Task AddTiles(IReadOnlyList<StorageFile> files)
+        private async Task AddTiles(IEnumerable<StorageFile> files)
         {
             IsButtonEnabled = false;
             IsIndeterminateLoading = true;
