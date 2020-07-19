@@ -29,3 +29,4 @@ The licence for this repository is a [GNU Affero General Public Licence version 
 - Icon: [Yoshi](https://github.com/yoshiask)
 - UI: [Leisvan](https://twitter.com/leisvanCT)
 - Resharper Help: [Sergio](https://github.com/Sergio0694)
+
