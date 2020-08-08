@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Yugen.Mosaic.Uwp.Enums;
+using Yugen.Toolkit.Standard.Core.Models;
 
 namespace Yugen.Mosaic.Uwp.Interfaces
 {
@@ -14,7 +15,7 @@ namespace Yugen.Mosaic.Uwp.Interfaces
 
         void AddTileImage(string name, StorageFile file);
 
-        Task<Image<Rgba32>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType);
+        Task<Result<Image<Rgba32>>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType);
 
         Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size);
 

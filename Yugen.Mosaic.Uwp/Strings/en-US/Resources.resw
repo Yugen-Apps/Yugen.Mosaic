@@ -183,6 +183,12 @@
   <data name="MainWidthTextBlock.Text" xml:space="preserve">
     <value>W:</value>
   </data>
+  <data name="MosaicServiceErrorMasterImage" xml:space="preserve">
+    <value>Master image is missing</value>
+  </data>
+  <data name="MosaicServiceErrorTiles" xml:space="preserve">
+    <value>Tiles are missing</value>
+  </data>
   <data name="OnboardingStageAddTilesDescription" xml:space="preserve">
     <value>Then add images. Yugen Mosaic will use them as tiles to build your mosaic. The more tiles you choose, the better result you will get!</value>
   </data>

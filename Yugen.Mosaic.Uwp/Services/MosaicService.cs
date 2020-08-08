@@ -11,11 +11,12 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
-using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Core.Models;
 using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
 using Yugen.Toolkit.Standard.Services;
+using Yugen.Toolkit.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
@@ -52,11 +53,18 @@ namespace Yugen.Mosaic.Uwp.Services
             _tileImageList.Add(new Tile(name, file));
         }
 
-        public async Task<Image<Rgba32>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
+        public async Task<Result<Image<Rgba32>>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
         {
-            if (_masterImage == null || (selectedMosaicType != MosaicTypeEnum.PlainColor && _tileImageList.Count < 1))
+            if (_masterImage == null)
             {
-                return null;
+                var message = ResourceHelper.GetText("MosaicServiceErrorMasterImage");
+                return Result.Fail<Image<Rgba32>>(message);
+            }
+
+            if (selectedMosaicType != MosaicTypeEnum.PlainColor && _tileImageList.Count < 1)
+            {
+                var message = ResourceHelper.GetText("MosaicServiceErrorTiles");
+                return Result.Fail<Image<Rgba32>>(message);
             }
 
             Image<Rgba32> resizedMasterImage = _masterImage.Clone(x => x.Resize(outputSize.Width, outputSize.Height));
@@ -73,7 +81,8 @@ namespace Yugen.Mosaic.Uwp.Services
                 await LoadTilesAndResize();
             }
 
-            return SearchAndReplace(tileSize, selectedMosaicType, outputSize);
+            
+            return Result.Ok(SearchAndReplace(tileSize, selectedMosaicType, outputSize));
         }
 
         public Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size)
@@ -118,7 +127,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 for (var x = 0; x < _tX; x++)
                 {
-                    _avgsMaster[x, y].FromRgba32(ColorHelper.GetAverageColor(masterImage, x, y, _tileSize));
+                    _avgsMaster[x, y].FromRgba32(Helpers.ColorHelper.GetAverageColor(masterImage, x, y, _tileSize));
                 }
 
                 _progressService.IncrementProgress(_tY, 0, 33);

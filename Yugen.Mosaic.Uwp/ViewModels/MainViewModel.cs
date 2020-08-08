@@ -21,6 +21,7 @@ using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Core.Models;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Helpers;
 using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
@@ -403,8 +404,18 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 Progress = percent;
             });
 
-            await Task.Run(async () =>
-               _outputImage = await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
+            Result<Image<Rgba32>> result;
+            result = await Task.Run(async () =>
+               await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
+
+            if (result.IsFailure)
+            {
+                await ContentDialogHelper.Alert(result.Error, "", "Close");
+            }
+            else
+            {
+                _outputImage = result.Value;
+            }
 
             if (_outputImage != null)
             {
