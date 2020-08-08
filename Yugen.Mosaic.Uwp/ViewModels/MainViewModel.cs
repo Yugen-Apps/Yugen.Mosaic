@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.Helpers;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -11,25 +12,27 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Controls;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
+using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
-using Yugen.Mosaic.Uwp.Services;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Helpers;
 using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
+using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
 using Yugen.Toolkit.Standard.Mvvm.Input;
+using Yugen.Toolkit.Standard.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly MosaicService _mosaicService = new MosaicService();
+        private readonly IMosaicService _mosaicService;
+        private readonly IProgressService _progressService;
 
         private bool _isAddMasterUIVisible = true;
         private bool _isAlignmentGridVisibile = true;
@@ -68,6 +71,9 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public MainViewModel()
         {
             SelectedMosaicType = MosaicTypeList[0];
+
+            _mosaicService = Ioc.Default.GetService<IMosaicService>();
+            _progressService = Ioc.Default.GetService<IProgressService>();
         }
 
         public bool IsAddMasterUIVisible
@@ -372,7 +378,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsButtonEnabled = false;
             IsLoading = true;
 
-            ProgressService.Instance.Init(percent =>
+            _progressService.Init(percent =>
             {
                 Progress = percent;
             });

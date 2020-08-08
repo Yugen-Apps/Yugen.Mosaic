@@ -5,15 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
-using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
-    public class AdjustHueSearchAndReplaceService : SearchAndReplaceService
+    public class SearchAndReplaceAdjustHueService : SearchAndReplaceService
     {
-        public AdjustHueSearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, 
+        public SearchAndReplaceAdjustHueService(Image<Rgba32> outputImage, Size tileSize, 
             int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster) 
                 : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
         {
@@ -26,7 +24,7 @@ namespace Yugen.Mosaic.Uwp.Services
             var seq = Enumerable.Range(0, _tX * _tY).Select(x => x % _tileImageList.Count);
             var tileShuffledList = seq.OrderBy(a => r.Next());
 
-            ProgressService.Instance.Reset();
+            _progressService.Reset();
 
             int max = _tX * _tY;
 
@@ -49,7 +47,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 // Apply found tile to section
                 ApplyTileFound(x, y, adjustedImage);
 
-                ProgressService.Instance.IncrementProgress(max, 66, 100);
+                _progressService.IncrementProgress(max, 66, 100);
             });
         }
 

@@ -1,19 +1,16 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
-using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
-    public class PlainColorSearchAndReplaceService : SearchAndReplaceService
+    public class SearchAndReplacePlainColorService : SearchAndReplaceService
     {
-        public PlainColorSearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, 
+        public SearchAndReplacePlainColorService(Image<Rgba32> outputImage, Size tileSize, 
             int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster) 
                 : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
         {
@@ -22,7 +19,7 @@ namespace Yugen.Mosaic.Uwp.Services
         // Use just mosic colored tiles
         public override void SearchAndReplace()
         {
-            ProgressService.Instance.Reset();
+            _progressService.Reset();
 
             int max = _tX * _tY;
 
@@ -46,7 +43,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 // Apply found tile to section
                 ApplyTileFound(x, y, adjustedImage);
 
-                ProgressService.Instance.IncrementProgress(max, 66, 100);
+                _progressService.IncrementProgress(max, 66, 100);
             });
         }
     }

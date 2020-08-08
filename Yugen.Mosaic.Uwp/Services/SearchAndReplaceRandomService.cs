@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
-using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
-    public class RandomSearchAndReplaceService : SearchAndReplaceService
+    public class SearchAndReplaceRandomService : SearchAndReplaceService
     {
-        public RandomSearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, 
+        public SearchAndReplaceRandomService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, 
             List<Tile> tileImageList, Rgba32[,] avgsMaster) 
                 : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
         {
@@ -22,7 +21,7 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             var r = new Random();
 
-            ProgressService.Instance.Reset();
+            _progressService.Reset();
 
             int max = _tX * _tY;
 
@@ -58,7 +57,7 @@ namespace Yugen.Mosaic.Uwp.Services
                 // Apply found tile to section
                 ApplyTileFound(x, y, tileFound.ResizedImage);
 
-                ProgressService.Instance.IncrementProgress(max, 66, 100);
+                _progressService.IncrementProgress(max, 66, 100);
             });
         }
     }

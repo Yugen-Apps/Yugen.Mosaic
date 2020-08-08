@@ -13,19 +13,25 @@ using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
-using Yugen.Mosaic.Uwp.ViewModels;
+using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public class MosaicService : IMosaicService
     {
-        internal Rgba32[,] _avgsMaster;
-        internal int _tX;
-        internal int _tY;
-        internal List<Tile> _tileImageList = new List<Tile>();
+        private Rgba32[,] _avgsMaster;
+        private int _tX;
+        private int _tY;
+        private List<Tile> _tileImageList = new List<Tile>();
 
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
+        private readonly IProgressService _progressService;
+
+        public MosaicService(IProgressService progressService)
+        {
+            _progressService = progressService;
+        }
 
         public async Task<Size> AddMasterImage(StorageFile file)
         {
@@ -112,13 +118,13 @@ namespace Yugen.Mosaic.Uwp.Services
                     _avgsMaster[x, y].FromRgba32(ColorHelper.GetAverageColor(masterImage, x, y, _tileSize));
                 }
 
-                ProgressService.Instance.IncrementProgress(_tY, 0, 33);
+                _progressService.IncrementProgress(_tY, 0, 33);
             });
         }
 
         private async Task LoadTilesAndResize()
         {
-            ProgressService.Instance.Reset();
+            _progressService.Reset();
             
             var processTiles = _tileImageList.AsParallel().Select(tile => ProcessTile(tile));
 
@@ -129,7 +135,7 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             await tile.Process(_tileSize);
 
-            ProgressService.Instance.IncrementProgress(_tileImageList.Count, 33, 66);
+            _progressService.IncrementProgress(_tileImageList.Count, 33, 66);
         }
 
         private Image<Rgba32> SearchAndReplace(Size tileSize, MosaicTypeEnum selectedMosaicType, Size outputSize)
@@ -141,22 +147,26 @@ namespace Yugen.Mosaic.Uwp.Services
             switch (selectedMosaicType)
             {
                 case MosaicTypeEnum.Classic:
-                    SearchAndReplaceService = new ClassicSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
+                    SearchAndReplaceService = new SearchAndReplaceClassicService(outputImage, tileSize, 
+                        _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
 
                 case MosaicTypeEnum.Random:
-                    SearchAndReplaceService = new RandomSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
+                    SearchAndReplaceService = new SearchAndReplaceRandomService(outputImage, tileSize, 
+                        _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
 
                 case MosaicTypeEnum.AdjustHue:
-                    SearchAndReplaceService = new AdjustHueSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
+                    SearchAndReplaceService = new SearchAndReplaceAdjustHueService(outputImage, tileSize, 
+                        _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
 
                 case MosaicTypeEnum.PlainColor:
-                    SearchAndReplaceService = new PlainColorSearchAndReplaceService(outputImage, tileSize, _tX, _tY, _tileImageList, _avgsMaster);
+                    SearchAndReplaceService = new SearchAndReplacePlainColorService(outputImage, tileSize, 
+                        _tX, _tY, _tileImageList, _avgsMaster);
                     SearchAndReplaceService.SearchAndReplace();
                     break;
             }

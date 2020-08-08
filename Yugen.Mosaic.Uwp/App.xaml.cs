@@ -1,15 +1,20 @@
 ﻿using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.Views;
 using Yugen.Toolkit.Standard.Extensions;
+using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
+using Yugen.Toolkit.Standard.Services;
+using Yugen.Toolkit.Uwp.Services;
 
 namespace Yugen.Mosaic.Uwp
 {
@@ -26,6 +31,17 @@ namespace Yugen.Mosaic.Uwp
         {
             InitializeComponent();
             Suspending += OnSuspending;
+
+            Ioc.Default.ConfigureServices(collection =>
+            {
+                collection.AddSingleton<IProgressService, ProgressService>();
+                collection.AddSingleton<IMosaicService, MosaicService>();
+                collection.AddTransient<SearchAndReplaceAdjustHueService>();
+                collection.AddTransient<SearchAndReplaceClassicService>();
+                collection.AddTransient<SearchAndReplacePlainColorService>();
+                collection.AddTransient<SearchAndReplaceRandomService>();
+                collection.AddTransient<SearchAndReplaceAdjustHueService>();
+            });
 
             AppCenter.Start("7df4b441-69ae-49c5-b27d-5a532f33b554",
                    typeof(Analytics), typeof(Crashes));

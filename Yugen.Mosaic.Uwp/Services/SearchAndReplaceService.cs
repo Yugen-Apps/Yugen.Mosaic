@@ -1,23 +1,28 @@
-﻿using SixLabors.ImageSharp;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
+using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public abstract class SearchAndReplaceService : ISearchAndReplaceService
     {
-        internal readonly Rgba32[,] _avgsMaster;
-        internal readonly Image<Rgba32> _outputImage;
-        internal readonly List<Tile> _tileImageList;
-        internal readonly Size _tileSize;
-        internal readonly int _tX;
-        internal readonly int _tY;
+        protected readonly Rgba32[,] _avgsMaster;
+        protected readonly Image<Rgba32> _outputImage;
+        protected readonly List<Tile> _tileImageList;
+        protected readonly Size _tileSize;
+        protected readonly int _tX;
+        protected readonly int _tY;
+        protected readonly IProgressService _progressService;
 
-        public SearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster)
+        public SearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, List<Tile> tileImageList, 
+            Rgba32[,] avgsMaster)
         {
             _outputImage = outputImage;
             _tileSize = tileSize;
@@ -25,11 +30,11 @@ namespace Yugen.Mosaic.Uwp.Services
             _tY = tY;
             _tileImageList = tileImageList;
             _avgsMaster = avgsMaster;
+
+            _progressService = Ioc.Default.GetService<IProgressService>();
         }
 
-        public virtual void SearchAndReplace()
-        {
-        }
+        public virtual void SearchAndReplace() { }
 
         // TODO: c.DrawImage crash (System.NullReferenceException)
         // with the current SixLabors.ImageSharp.Drawing preview version
