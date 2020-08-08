@@ -1,10 +1,12 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
@@ -60,8 +62,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private ICommand _helpCommand;
         private ICommand _settingsCommand;
         private ICommand _teachingTipActionButtonCommand;
-        private ICommand _teachingTipClosingCommand;
-        private ICommand _teachingTipClosedCommand;
+        //private ICommand _teachingTipClosingCommand;
+        //private ICommand _teachingTipClosedCommand;
 
         public MainViewModel()
         {
@@ -196,8 +198,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new RelayCommand(HelpCommandBehavior));
         public ICommand SettingsCommand => _settingsCommand ?? (_settingsCommand = new AsyncRelayCommand(SettingsCommandBehavior));
         public ICommand TeachingTipActionButtonCommand => _teachingTipActionButtonCommand ?? (_teachingTipActionButtonCommand = new RelayCommand(TeachingTipActionButtonCommandBehavior));
-        public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
-        public ICommand TeachingTipClosedCommand => _teachingTipClosedCommand ?? (_teachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior));
+        //public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
+        //public ICommand TeachingTipClosedCommand => _teachingTipClosedCommand ?? (_teachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior));
 
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
         private Size TileSize => new Size(_tileWidth, _tileHeight);
@@ -233,7 +235,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsTeachingTipOpen = false;
         }
 
-        public void TeachingTipClosingCommandBehavior()
+        public void TeachingTip_Closing(TeachingTip sender, TeachingTipClosingEventArgs args)
         {
             TeachingTipTitle = "";
             TeachingTipSubTitle = "";
@@ -241,7 +243,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             IsTeachingTipOpen = false;
         }
 
-        public void TeachingTipClosedCommandBehavior() => ShowTeachingTip();
+        public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
 
         private async Task AddMasterImmageCommandBehavior()
         {
@@ -307,7 +309,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary
             };
             folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
-            folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
+            folderPicker.FileTypeFilter.Add(FileFormat.Jpeg.GetStringRepresentation());
             folderPicker.FileTypeFilter.Add(FileFormat.Png.GetStringRepresentation());
 
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
@@ -318,11 +320,14 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
 
                 var files = await folder.GetFilesAsync();
-                await AddTiles(files);
+                var filteredFiles = files.Where(file => file.FileType.Contains(FileFormat.Jpg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
+                                                     || file.FileType.Contains(FileFormat.Jpeg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
+                                                     || file.FileType.Contains(FileFormat.Png.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase));
+                await AddTiles(filteredFiles);
             }
         }
 
-        private async Task AddTiles(IReadOnlyList<StorageFile> files)
+        private async Task AddTiles(IEnumerable<StorageFile> files)
         {
             IsButtonEnabled = false;
             IsIndeterminateLoading = true;
