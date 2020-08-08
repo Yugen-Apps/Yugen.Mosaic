@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
@@ -325,12 +327,23 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 // (including other sub-folder contents)
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
 
-                var files = await folder.GetFilesAsync();
-                var filteredFiles = files.Where(file => file.FileType.Contains(FileFormat.Jpg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
-                                                     || file.FileType.Contains(FileFormat.Jpeg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
-                                                     || file.FileType.Contains(FileFormat.Png.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase));
-                await AddTiles(filteredFiles);
+                await AddFiles(folder);
+
+                IReadOnlyList<StorageFolder> folderList = await folder.GetFoldersAsync();
+                foreach (var _folder in folderList)
+                {
+                    await AddFiles(_folder);
+                }
             }
+        }
+
+        private async Task AddFiles(StorageFolder folder)
+        {
+            var files = await folder.GetFilesAsync();
+            var filteredFiles = files.Where(file => file.FileType.Contains(FileFormat.Jpg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
+                                                 || file.FileType.Contains(FileFormat.Jpeg.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase)
+                                                 || file.FileType.Contains(FileFormat.Png.GetStringRepresentation(), StringComparison.InvariantCultureIgnoreCase));
+            await AddTiles(filteredFiles);
         }
 
         private async Task AddTiles(IEnumerable<StorageFile> files)
@@ -341,21 +354,28 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             await Task.Run(() =>
                 Parallel.ForEach(files, async file =>
                 {
-                    using (var inputStream = await file.OpenReadAsync())
+                    try
                     {
-                        await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                        using (var inputStream = await file.OpenReadAsync())
                         {
-                            var bmp = new BitmapImage
+                            await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
                             {
-                                DecodePixelHeight = 120
-                            };
-                            await bmp.SetSourceAsync(inputStream);
+                                var bmp = new BitmapImage
+                                {
+                                    DecodePixelHeight = 120
+                                };
+                                await bmp.SetSourceAsync(inputStream);
 
-                            TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
-                        });
+                                TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
+                            });
+                        }
+
+                        _mosaicService.AddTileImage(file.DisplayName, file);
                     }
-
-                    _mosaicService.AddTileImage(file.DisplayName, file);
+                    catch(Exception exception) 
+                    {
+                        Crashes.TrackError(exception);
+                    }
                 })
             );
 
