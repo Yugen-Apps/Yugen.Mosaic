@@ -1,44 +1,46 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
-using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
 using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public abstract class SearchAndReplaceService : ISearchAndReplaceService
     {
-        protected readonly Rgba32[,] _avgsMaster;
-        protected readonly Image<Rgba32> _outputImage;
-        protected readonly List<Tile> _tileImageList;
-        protected readonly Size _tileSize;
-        protected readonly int _tX;
-        protected readonly int _tY;
         protected readonly IProgressService _progressService;
 
-        public SearchAndReplaceService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, List<Tile> tileImageList, 
-            Rgba32[,] avgsMaster)
+        protected Rgba32[,] _avgsMaster;
+        protected Image<Rgba32> _outputImage;
+        protected List<Tile> _tileImageList;
+        protected Size _tileSize;
+        protected int _tX;
+        protected int _tY;
+
+        public SearchAndReplaceService(IProgressService progressService)
         {
+            _progressService = progressService;
+        }
+
+        public void Init(Rgba32[,] avgsMaster, Image<Rgba32> outputImage,
+            List<Tile> tileImageList, Size tileSize, int tX, int tY)
+        {
+            _avgsMaster = avgsMaster;
             _outputImage = outputImage;
+            _tileImageList = tileImageList;
             _tileSize = tileSize;
             _tX = tX;
             _tY = tY;
-            _tileImageList = tileImageList;
-            _avgsMaster = avgsMaster;
-
-            _progressService = Ioc.Default.GetService<IProgressService>();
         }
 
         public virtual void SearchAndReplace() { }
 
         // TODO: c.DrawImage crash (System.NullReferenceException)
         // with the current SixLabors.ImageSharp.Drawing preview version
-        //internal void ApplyTileFound(int x, int y, Image<Rgba32> source)
+        //protected void ApplyTileFound(int x, int y, Image<Rgba32> source)
         //{
         //    _outputImage.Mutate(c =>
         //    {
@@ -51,7 +53,7 @@ namespace Yugen.Mosaic.Uwp.Services
         //    });
         //}
 
-        internal void ApplyTileFound(int x, int y, Image<Rgba32> source)
+        protected void ApplyTileFound(int x, int y, Image<Rgba32> source)
         {
             Parallel.For(0, source.Height, h =>
             {

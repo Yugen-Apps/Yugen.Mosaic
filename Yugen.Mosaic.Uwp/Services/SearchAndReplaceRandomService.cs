@@ -1,22 +1,15 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceRandomService : SearchAndReplaceService
     {
-        public SearchAndReplaceRandomService(Image<Rgba32> outputImage, Size tileSize, int tX, int tY, 
-            List<Tile> tileImageList, Rgba32[,] avgsMaster) 
-                : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
-        {
-        }
+        public SearchAndReplaceRandomService(IProgressService progressService) : base(progressService) { }
 
-        // Don't adjust hue - keep searching for a tile close enough
         public override void SearchAndReplace()
         {
             var r = new Random();

@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
@@ -13,20 +14,22 @@ using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
 using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public class MosaicService : IMosaicService
     {
+        private readonly IProgressService _progressService;
+
         private Rgba32[,] _avgsMaster;
         private int _tX;
         private int _tY;
         private List<Tile> _tileImageList = new List<Tile>();
-
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
-        private readonly IProgressService _progressService;
+        private ISearchAndReplaceService _searchAndReplaceService;
 
         public MosaicService(IProgressService progressService)
         {
@@ -125,7 +128,7 @@ namespace Yugen.Mosaic.Uwp.Services
         private async Task LoadTilesAndResize()
         {
             _progressService.Reset();
-            
+
             var processTiles = _tileImageList.AsParallel().Select(tile => ProcessTile(tile));
 
             await Task.WhenAll(processTiles);
@@ -142,34 +145,27 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
 
-            ISearchAndReplaceService SearchAndReplaceService;
-
             switch (selectedMosaicType)
             {
                 case MosaicTypeEnum.Classic:
-                    SearchAndReplaceService = new SearchAndReplaceClassicService(outputImage, tileSize, 
-                        _tX, _tY, _tileImageList, _avgsMaster);
-                    SearchAndReplaceService.SearchAndReplace();
+                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplaceClassicService>();
                     break;
 
                 case MosaicTypeEnum.Random:
-                    SearchAndReplaceService = new SearchAndReplaceRandomService(outputImage, tileSize, 
-                        _tX, _tY, _tileImageList, _avgsMaster);
-                    SearchAndReplaceService.SearchAndReplace();
+                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplaceRandomService>();
                     break;
 
                 case MosaicTypeEnum.AdjustHue:
-                    SearchAndReplaceService = new SearchAndReplaceAdjustHueService(outputImage, tileSize, 
-                        _tX, _tY, _tileImageList, _avgsMaster);
-                    SearchAndReplaceService.SearchAndReplace();
+                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplaceAdjustHueService>();
                     break;
 
                 case MosaicTypeEnum.PlainColor:
-                    SearchAndReplaceService = new SearchAndReplacePlainColorService(outputImage, tileSize, 
-                        _tX, _tY, _tileImageList, _avgsMaster);
-                    SearchAndReplaceService.SearchAndReplace();
+                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplacePlainColorService>();
                     break;
             }
+
+            _searchAndReplaceService.Init(_avgsMaster, outputImage, _tileImageList, tileSize, _tX, _tY);
+            _searchAndReplaceService.SearchAndReplace();
 
             GC.Collect();
 

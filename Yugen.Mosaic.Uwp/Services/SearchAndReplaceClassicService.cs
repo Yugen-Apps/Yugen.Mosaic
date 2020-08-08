@@ -1,21 +1,16 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceClassicService : SearchAndReplaceService
     {
-        public SearchAndReplaceClassicService(Image<Rgba32> outputImage, Size tileSize, 
-            int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster) 
-                : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
-        {
-        }
+        public SearchAndReplaceClassicService(IProgressService progressService) : base(progressService) { }
 
         public override void SearchAndReplace()
         {

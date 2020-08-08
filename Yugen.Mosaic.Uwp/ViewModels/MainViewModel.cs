@@ -365,12 +365,12 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private async Task ClickTileCommandBehavior(TileBmp item)
         {
-            await ContentDialogHelper.Confirm(ResourceHelper.GetText("DefaultDeletePicture"), "", ResourceHelper.GetText("DefaultNo"), 
+            await ContentDialogHelper.Confirm(ResourceHelper.GetText("DefaultDeletePicture"), "", ResourceHelper.GetText("DefaultNo"),
                 new RelayCommand(() =>
                 {
                     TileBmpCollection.Remove(item);
                     _mosaicService.RemoveTileImage(item.Name);
-                }), ResourceHelper.GetText("DefaultYes"));            
+                }), ResourceHelper.GetText("DefaultYes"));
         }
 
         private async Task GenerateCommandBehavior()
@@ -458,7 +458,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             await settingsDialog.ShowAsync();
         }
 
-        private void UpdateIsAddMasterUIVisible() => 
+        private void UpdateIsAddMasterUIVisible() =>
             IsAddMasterUIVisible = MasterBpmSource.PixelWidth <= 0 || MasterBpmSource.PixelHeight <= 0;
     }
 }

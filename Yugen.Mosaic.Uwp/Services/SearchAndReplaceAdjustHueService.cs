@@ -2,22 +2,17 @@
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Models;
+using Yugen.Toolkit.Standard.Services;
 
 namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceAdjustHueService : SearchAndReplaceService
     {
-        public SearchAndReplaceAdjustHueService(Image<Rgba32> outputImage, Size tileSize, 
-            int tX, int tY, List<Tile> tileImageList, Rgba32[,] avgsMaster) 
-                : base(outputImage, tileSize, tX, tY, tileImageList, avgsMaster)
-        {
-        }
+        public SearchAndReplaceAdjustHueService(IProgressService progressService) : base(progressService) { }
 
-        // Adjust hue - get the first (random) tile found and adjust its colours to suit the average
         public override void SearchAndReplace()
         {
             var r = new Random();
