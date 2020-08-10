@@ -315,11 +315,14 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         {
             var folderPicker = new Windows.Storage.Pickers.FolderPicker
             {
-                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary,
+                FileTypeFilter = 
+                { 
+                    FileFormat.Jpg.GetStringRepresentation(),
+                    FileFormat.Jpeg.GetStringRepresentation(),
+                    FileFormat.Png.GetStringRepresentation()
+                }
             };
-            folderPicker.FileTypeFilter.Add(FileFormat.Jpg.GetStringRepresentation());
-            folderPicker.FileTypeFilter.Add(FileFormat.Jpeg.GetStringRepresentation());
-            folderPicker.FileTypeFilter.Add(FileFormat.Png.GetStringRepresentation());
 
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
