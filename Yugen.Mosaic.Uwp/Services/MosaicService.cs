@@ -14,7 +14,6 @@ using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Toolkit.Standard.Core.Models;
-using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
 using Yugen.Toolkit.Standard.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 
@@ -172,19 +171,19 @@ namespace Yugen.Mosaic.Uwp.Services
             switch (selectedMosaicType)
             {
                 case MosaicTypeEnum.Classic:
-                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplaceClassicService>();
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceClassicService>();
                     break;
 
                 case MosaicTypeEnum.Random:
-                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplaceRandomService>();
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceRandomService>();
                     break;
 
                 case MosaicTypeEnum.AdjustHue:
-                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplaceAdjustHueService>();
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceAdjustHueService>();
                     break;
 
                 case MosaicTypeEnum.PlainColor:
-                    _searchAndReplaceService = Ioc.Default.GetService<SearchAndReplacePlainColorService>();
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplacePlainColorService>();
                     break;
             }
 

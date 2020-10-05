@@ -1,18 +1,22 @@
-﻿using Windows.UI.Xaml;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Yugen.Mosaic.Uwp.ViewModels;
 
 namespace Yugen.Mosaic.Uwp.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             InitializeComponent();
+
             TitleBarHelper.ExtendToTitleBar();
+
+            DataContext = AppContainer.Services.GetService<MainViewModel>();
         }
+
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {

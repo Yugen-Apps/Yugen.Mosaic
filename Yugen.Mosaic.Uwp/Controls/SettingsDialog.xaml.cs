@@ -1,9 +1,8 @@
-﻿using System.Windows.Input;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using Yugen.Mosaic.Uwp.ViewModels;
 using Yugen.Toolkit.Standard.Mvvm.Input;
-
-// The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Yugen.Mosaic.Uwp.Controls
 {
@@ -14,10 +13,11 @@ namespace Yugen.Mosaic.Uwp.Controls
         public SettingsDialog()
         {
             InitializeComponent();
-            //DataContext = new SettingsViewModel();
+
+            DataContext = AppContainer.Services.GetService<SettingsViewModel>();
         }
 
-        public SettingsViewModel ViewModel => DataContext as SettingsViewModel;
+        private SettingsViewModel ViewModel => (SettingsViewModel)DataContext;
 
         public ICommand HideCommand => _hideCommand ?? (_hideCommand = new RelayCommand(Hide));
     }

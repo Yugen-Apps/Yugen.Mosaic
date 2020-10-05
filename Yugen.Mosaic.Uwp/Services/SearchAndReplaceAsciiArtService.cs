@@ -1,10 +1,10 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
+﻿using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Text;
-using SixLabors.Fonts;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Toolkit.Standard.Services;
 

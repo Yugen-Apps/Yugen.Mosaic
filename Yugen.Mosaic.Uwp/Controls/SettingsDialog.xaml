@@ -4,7 +4,6 @@
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                xmlns:xaml="using:Windows.UI.Xaml"
-               xmlns:vm="using:Yugen.Mosaic.Uwp.ViewModels"
                xmlns:converters="using:Yugen.Toolkit.Uwp.Converters"
                RequestedTheme="{x:Bind ViewModel.ElementTheme, Mode=OneWay}"
                mc:Ignorable="d">
@@ -14,10 +13,6 @@
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"
                                            EnumType="ElementTheme" />
     </ContentDialog.Resources>
-
-    <ContentDialog.DataContext>
-        <vm:SettingsViewModel />
-    </ContentDialog.DataContext>
 
     <Grid Padding="16,16,16,32"
           Background="{ThemeResource AppDeepBackgroundBrush}">

@@ -1,6 +1,4 @@
-﻿using Microsoft.AppCenter;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
@@ -25,7 +23,6 @@ using Yugen.Toolkit.Standard.Core.Models;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Helpers;
 using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
-using Yugen.Toolkit.Standard.Mvvm.DependencyInjection;
 using Yugen.Toolkit.Standard.Mvvm.Input;
 using Yugen.Toolkit.Standard.Services;
 using Yugen.Toolkit.Uwp.Helpers;
@@ -71,12 +68,11 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         //private ICommand _teachingTipClosingCommand;
         //private ICommand _teachingTipClosedCommand;
 
-        public MainViewModel()
+        public MainViewModel(IMosaicService mosaicService, IProgressService progressService)
         {
             SelectedMosaicType = MosaicTypeList[0];
-
-            _mosaicService = Ioc.Default.GetService<IMosaicService>();
-            _progressService = Ioc.Default.GetService<IProgressService>();
+            _mosaicService = mosaicService;
+            _progressService = progressService;
         }
 
         public bool IsAddMasterUIVisible
@@ -317,8 +313,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             var folderPicker = new Windows.Storage.Pickers.FolderPicker
             {
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary,
-                FileTypeFilter = 
-                { 
+                FileTypeFilter =
+                {
                     FileFormat.Jpg.GetStringRepresentation(),
                     FileFormat.Jpeg.GetStringRepresentation(),
                     FileFormat.Png.GetStringRepresentation()
@@ -377,7 +373,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
                         _mosaicService.AddTileImage(file.DisplayName, file);
                     }
-                    catch(Exception exception) 
+                    catch (Exception exception)
                     {
                         Crashes.TrackError(exception);
                     }

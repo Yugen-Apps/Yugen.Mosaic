@@ -11,14 +11,9 @@
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-      xmlns:viewmodels="using:Yugen.Mosaic.Uwp.ViewModels"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}"
       Loaded="OnPageLoaded">
-
-    <Page.DataContext>
-        <viewmodels:MainViewModel x:Name="ViewModel" />
-    </Page.DataContext>
 
     <Grid>
 
