@@ -126,7 +126,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
            new MosaicType(MosaicTypeEnum.Classic),
            new MosaicType(MosaicTypeEnum.Random),
            new MosaicType(MosaicTypeEnum.AdjustHue),
-           new MosaicType(MosaicTypeEnum.PlainColor)
+           new MosaicType(MosaicTypeEnum.PlainColor),
+           new MosaicType(MosaicTypeEnum.AsciiArt)
         };
 
         public BitmapImage OutputBmpSource

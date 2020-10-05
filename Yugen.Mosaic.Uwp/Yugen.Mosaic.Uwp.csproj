@@ -132,6 +132,8 @@
     <Compile Include="Helpers\OnboardingHelper.cs" />
     <Compile Include="Enums\OnboardingStage.cs" />
     <Compile Include="Models\TileFound.cs" />
+    <Compile Include="Interfaces\ISearchAndReplaceAsciiArtService.cs" />
+    <Compile Include="Services\SearchAndReplaceAsciiArtService.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -252,6 +254,9 @@
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp">
       <Version>1.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="SixLabors.ImageSharp.Drawing">
+      <Version>1.0.0-beta0010</Version>
     </PackageReference>
     <PackageReference Include="WriteableBitmapEx">
       <Version>1.6.7</Version>

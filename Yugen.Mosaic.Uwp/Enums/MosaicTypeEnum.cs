@@ -14,6 +14,9 @@ namespace Yugen.Mosaic.Uwp.Enums
         AdjustHue,
 
         [Description("Plain Color")]
-        PlainColor
+        PlainColor,
+
+        [Description("Ascii Art")]
+        AsciiArt
     }
 }

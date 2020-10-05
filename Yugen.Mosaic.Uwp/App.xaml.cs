@@ -36,6 +36,7 @@ namespace Yugen.Mosaic.Uwp
             {
                 collection.AddSingleton<IProgressService, ProgressService>();
                 collection.AddSingleton<IMosaicService, MosaicService>();
+                collection.AddSingleton<ISearchAndReplaceAsciiArtService, SearchAndReplaceAsciiArtService>();
                 collection.AddTransient<SearchAndReplaceAdjustHueService>();
                 collection.AddTransient<SearchAndReplaceClassicService>();
                 collection.AddTransient<SearchAndReplacePlainColorService>();

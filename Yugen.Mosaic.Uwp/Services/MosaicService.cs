@@ -31,10 +31,12 @@ namespace Yugen.Mosaic.Uwp.Services
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
         private ISearchAndReplaceService _searchAndReplaceService;
+        private ISearchAndReplaceAsciiArtService _searchAndReplaceAsciiArtService;
 
-        public MosaicService(IProgressService progressService)
+        public MosaicService(IProgressService progressService, ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService)
         {
             _progressService = progressService;
+            _searchAndReplaceAsciiArtService = searchAndReplaceAsciiArtService;
         }
 
         public async Task<Size> AddMasterImage(StorageFile file)
@@ -61,7 +63,9 @@ namespace Yugen.Mosaic.Uwp.Services
                 return Result.Fail<Image<Rgba32>>(message);
             }
 
-            if (selectedMosaicType != MosaicTypeEnum.PlainColor && _tileImageList.Count < 1)
+            if (selectedMosaicType != MosaicTypeEnum.PlainColor &&
+                selectedMosaicType != MosaicTypeEnum.AsciiArt &&
+                _tileImageList.Count < 1)
             {
                 var message = ResourceHelper.GetText("MosaicServiceErrorTiles");
                 return Result.Fail<Image<Rgba32>>(message);
@@ -69,20 +73,31 @@ namespace Yugen.Mosaic.Uwp.Services
 
             Image<Rgba32> resizedMasterImage = _masterImage.Clone(x => x.Resize(outputSize.Width, outputSize.Height));
 
-            _tileSize = tileSize;
-            _tX = resizedMasterImage.Width / tileSize.Width;
-            _tY = resizedMasterImage.Height / tileSize.Height;
-            _avgsMaster = new Rgba32[_tX, _tY];
-
-            GetTilesAverage(resizedMasterImage);
-
-            if (selectedMosaicType != MosaicTypeEnum.PlainColor)
+            if (selectedMosaicType == MosaicTypeEnum.AsciiArt)
             {
-                await LoadTilesAndResize();
-            }
+                var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
+                _searchAndReplaceAsciiArtService.Init(resizedMasterImage, outputImage);
+                
+                GC.Collect();
 
-            
-            return Result.Ok(SearchAndReplace(tileSize, selectedMosaicType, outputSize));
+                return Result.Ok(_searchAndReplaceAsciiArtService.SearchAndReplace());
+            }
+            else
+            {
+                _tileSize = tileSize;
+                _tX = resizedMasterImage.Width / tileSize.Width;
+                _tY = resizedMasterImage.Height / tileSize.Height;
+                _avgsMaster = new Rgba32[_tX, _tY];
+
+                GetTilesAverage(resizedMasterImage);
+
+                if (selectedMosaicType != MosaicTypeEnum.PlainColor)
+                {
+                    await LoadTilesAndResize();
+                }
+
+                return Result.Ok(SearchAndReplace(tileSize, selectedMosaicType, outputSize));
+            }
         }
 
         public Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size)
