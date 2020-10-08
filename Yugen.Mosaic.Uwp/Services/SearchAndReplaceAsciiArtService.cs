@@ -64,12 +64,16 @@ namespace Yugen.Mosaic.Uwp.Services
                 _progressService.IncrementProgress(_resizedMasterImage.Height);
             }
 
-            var font = SystemFonts.CreateFont("Arial", 10);
+            var font = SystemFonts.CreateFont("Courier New", 14);
             var text = sb.ToString();
             var size = TextMeasurer.Measure(text, new RendererOptions(font));
 
             var finalImage = new Image<Rgba32>((int)size.Width, (int)size.Height);
-            finalImage.Mutate(x => x.DrawText(text, font, Color.White, new PointF(0, 0)));
+            finalImage.Mutate(i =>
+            {
+                i.Fill(SixLabors.ImageSharp.Color.White);
+                i.DrawText(text, font, Color.Black, new PointF(0, 0));
+             });
 
             //_outputImage = finalImage.Clone(x => x.Resize(_outputImage.Width, _outputImage.Height));
 
