@@ -1,6 +1,7 @@
 ﻿using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -41,7 +42,8 @@ namespace Yugen.Mosaic.Uwp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            ThemeSelectorService.InitializeAsync().FireAndForgetSafeAsync();
+            var themeSelectorService = AppContainer.Services.GetService<IThemeSelectorService>();
+            themeSelectorService.InitializeAsync().FireAndForgetSafeAsync();
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AppCenter.Crashes;
+using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
@@ -22,8 +23,7 @@ using Yugen.Mosaic.Uwp.Models;
 using Yugen.Toolkit.Standard.Core.Models;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Helpers;
-using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
-using Yugen.Toolkit.Standard.Mvvm.Input;
+using Yugen.Toolkit.Standard.Mvvm;
 using Yugen.Toolkit.Standard.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 
@@ -78,43 +78,43 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public bool IsAddMasterUIVisible
         {
             get => _isAddMasterUIVisible;
-            set => Set(ref _isAddMasterUIVisible, value);
+            set => SetProperty(ref _isAddMasterUIVisible, value);
         }
 
         public bool IsAlignmentGridVisibile
         {
             get => _isAlignmentGridVisibile;
-            set => Set(ref _isAlignmentGridVisibile, value);
+            set => SetProperty(ref _isAlignmentGridVisibile, value);
         }
 
         public bool IsIndeterminateLoading
         {
             get => _isIndeterminateLoading;
-            set => Set(ref _isIndeterminateLoading, value);
+            set => SetProperty(ref _isIndeterminateLoading, value);
         }
 
         public bool IsLoading
         {
             get => _isLoading;
-            set => Set(ref _isLoading, value);
+            set => SetProperty(ref _isLoading, value);
         }
 
         public bool IsTeachingTipOpen
         {
             get => _isTeachingTipOpen;
-            set => Set(ref _isTeachingTipOpen, value);
+            set => SetProperty(ref _isTeachingTipOpen, value);
         }
 
         public bool IsButtonEnabled
         {
             get => _isButtonEnabled;
-            set => Set(ref _isButtonEnabled, value);
+            set => SetProperty(ref _isButtonEnabled, value);
         }
 
         public BitmapImage MasterBpmSource
         {
             get => _masterBmpSource;
-            set => Set(ref _masterBmpSource, value);
+            set => SetProperty(ref _masterBmpSource, value);
         }
 
         public List<MosaicType> MosaicTypeList { get; set; } = new List<MosaicType>
@@ -129,67 +129,67 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public BitmapImage OutputBmpSource
         {
             get => _outputBmpSource;
-            set => Set(ref _outputBmpSource, value);
+            set => SetProperty(ref _outputBmpSource, value);
         }
 
         public int OutputHeight
         {
             get => _outputHeight;
-            set => Set(ref _outputHeight, value);
+            set => SetProperty(ref _outputHeight, value);
         }
 
         public int OutputWidth
         {
             get => _outputWidth;
-            set => Set(ref _outputWidth, value);
+            set => SetProperty(ref _outputWidth, value);
         }
 
         public MosaicType SelectedMosaicType
         {
             get => _selectedMosaicType;
-            set => Set(ref _selectedMosaicType, value);
+            set => SetProperty(ref _selectedMosaicType, value);
         }
 
         public string TeachingTipSubTitle
         {
             get => _teachingTipSubTitle;
-            set => Set(ref _teachingTipSubTitle, value);
+            set => SetProperty(ref _teachingTipSubTitle, value);
         }
 
         public FrameworkElement TeachingTipTarget
         {
             get => _teachingTipTarget;
-            set => Set(ref _teachingTipTarget, value);
+            set => SetProperty(ref _teachingTipTarget, value);
         }
 
         public string TeachingTipTitle
         {
             get => _teachingTipTitle;
-            set => Set(ref _teachingTipTitle, value);
+            set => SetProperty(ref _teachingTipTitle, value);
         }
 
         public ObservableCollection<TileBmp> TileBmpCollection
         {
             get => _tileBmpCollection;
-            set => Set(ref _tileBmpCollection, value);
+            set => SetProperty(ref _tileBmpCollection, value);
         }
 
         public int TileHeight
         {
             get => _tileHeight;
-            set => Set(ref _tileHeight, value);
+            set => SetProperty(ref _tileHeight, value);
         }
 
         public int TileWidth
         {
             get => _tileWidth;
-            set => Set(ref _tileWidth, value);
+            set => SetProperty(ref _tileWidth, value);
         }
 
         public int Progress
         {
             get => _progress;
-            set => Set(ref _progress, value);
+            set => SetProperty(ref _progress, value);
         }
 
         public ICommand PointerEnteredCommand => _pointerEnteredCommand ?? (_pointerEnteredCommand = new RelayCommand(PointerEnteredCommandBehavior));

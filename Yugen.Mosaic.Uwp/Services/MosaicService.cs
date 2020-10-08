@@ -26,11 +26,11 @@ namespace Yugen.Mosaic.Uwp.Services
         private Rgba32[,] _avgsMaster;
         private int _tX;
         private int _tY;
-        private List<Tile> _tileImageList = new List<Tile>();
+        private readonly List<Tile> _tileImageList = new List<Tile>();
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
         private ISearchAndReplaceService _searchAndReplaceService;
-        private ISearchAndReplaceAsciiArtService _searchAndReplaceAsciiArtService;
+        private readonly ISearchAndReplaceAsciiArtService _searchAndReplaceAsciiArtService;
 
         public MosaicService(IProgressService progressService, ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService)
         {

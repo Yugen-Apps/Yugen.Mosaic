@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Toolkit.Mvvm.Input;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml;
-using Yugen.Toolkit.Standard.Mvvm.ComponentModel;
-using Yugen.Toolkit.Standard.Mvvm.Input;
+using Yugen.Toolkit.Standard.Mvvm;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.Services;
 
@@ -10,8 +10,16 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private ElementTheme _elementTheme = ThemeSelectorService.Theme;
+        private readonly IThemeSelectorService _themeSelectorService;
+        private ElementTheme _elementTheme;
         private ICommand _switchThemeCommand;
+
+        public SettingsViewModel(IThemeSelectorService themeSelectorService)
+        {
+            _themeSelectorService = themeSelectorService;
+
+            _elementTheme = _themeSelectorService.Theme;
+        }
 
         public string AppVersion => SystemHelper.AppVersion;
         public string Publisher => SystemHelper.Publisher;
@@ -20,7 +28,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ElementTheme ElementTheme
         {
             get => _elementTheme;
-            set => Set(ref _elementTheme, value);
+            set => SetProperty(ref _elementTheme, value);
         }
 
         public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<ElementTheme>(SwitchThemeCommandBehavior));
@@ -28,7 +36,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private async Task SwitchThemeCommandBehavior(ElementTheme param)
         {
             ElementTheme = param;
-            await ThemeSelectorService.SetThemeAsync(param);
+            await _themeSelectorService.SetThemeAsync(param);
         }
     }
 }

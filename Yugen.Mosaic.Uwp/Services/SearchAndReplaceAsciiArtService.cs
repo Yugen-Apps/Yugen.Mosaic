@@ -12,7 +12,7 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceAsciiArtService : ISearchAndReplaceAsciiArtService
     {
-        private static string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+        private static readonly string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
         private readonly IProgressService _progressService;
 
         private Image<Rgba32> _resizedMasterImage;

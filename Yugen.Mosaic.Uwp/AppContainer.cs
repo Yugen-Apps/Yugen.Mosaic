@@ -8,6 +8,7 @@ using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.ViewModels;
 using Yugen.Toolkit.Standard.Services;
+using Yugen.Toolkit.Uwp.Services;
 
 namespace Yugen.Mosaic.Uwp
 {
@@ -30,9 +31,10 @@ namespace Yugen.Mosaic.Uwp
             Log.Warning("Serilog started Warning!");
 
             Services = new ServiceCollection()
-                .AddSingleton<IProgressService, ProgressService>()
                 .AddSingleton<IMosaicService, MosaicService>()
+                .AddSingleton<IProgressService, ProgressService>()
                 .AddSingleton<ISearchAndReplaceAsciiArtService, SearchAndReplaceAsciiArtService>()
+                .AddSingleton<IThemeSelectorService, ThemeSelectorService>()
                 .AddTransient<SearchAndReplaceAdjustHueService>()
                 .AddTransient<SearchAndReplaceClassicService>()
                 .AddTransient<SearchAndReplacePlainColorService>()

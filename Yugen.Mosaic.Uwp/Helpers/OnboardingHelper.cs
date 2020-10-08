@@ -14,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Helpers
         public static bool IsDisabled
         {
             get => SettingsHelper.Read<bool>(SettingsKey);
-            set => SettingsHelper.Write<bool>(SettingsKey, value);
+            set => SettingsHelper.Write(SettingsKey, value);
         }
 
         public static void Init(FrameworkElement[] frameworkElements) => _onboardingElements = new OnboardingElement[]

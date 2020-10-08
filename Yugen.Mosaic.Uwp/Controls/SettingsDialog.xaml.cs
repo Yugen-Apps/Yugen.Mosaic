@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.Input;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using Yugen.Mosaic.Uwp.ViewModels;
-using Yugen.Toolkit.Standard.Mvvm.Input;
 
 namespace Yugen.Mosaic.Uwp.Controls
 {
