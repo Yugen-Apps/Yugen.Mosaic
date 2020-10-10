@@ -209,10 +209,11 @@
   </data>
   <data name="OnboardingStageMosaicTypeDescription" xml:space="preserve">
     <value>Now choose the type of your mosaic:
-- Choose "Classic" to automatically choose the best fitting image to apply in every tile.
-- Choose "Random" to randomly choose images that have best possible fit. It is faster than Classic but less precise.
-- Choose "Adjust Hue" to insert all the tiles you choose, adapting the color to the master image.
-- Choose "Plain Color" to create a mosaic with plain colors based on the master image. You do not need to provide any images.</value>
+- "Classic" to automatically choose the best fitting image to apply in every tile.
+- "Random" to randomly choose images that have best possible fit. It is faster than Classic but less precise.
+- "Adjust Hue" to insert all the tiles you choose, adapting the color to the master image.
+- "Plain Color" to create a mosaic with plain colors based on the master image. You do not need to provide any images.
+- "Ascii Art" to create a beautiful reproduction of your image with a text based visual art.</value>
   </data>
   <data name="OnboardingStageMosaicTypeTitle" xml:space="preserve">
     <value>Set the mosaic type</value>

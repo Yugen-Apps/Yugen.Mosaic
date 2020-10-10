@@ -421,6 +421,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             {
                 InMemoryRandomAccessStream outputStream = _mosaicService.GetStream(_outputImage);
                 await OutputBmpSource.SetSourceAsync(outputStream);
+
+                OutputWidth = OutputBmpSource.PixelWidth;
+                OutputHeight = OutputBmpSource.PixelHeight;
+                IsAlignmentGridVisibile = false;
             }
 
             IsLoading = false;
