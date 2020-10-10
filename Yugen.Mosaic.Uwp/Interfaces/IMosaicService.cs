@@ -1,6 +1,5 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -15,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Interfaces
 
         void AddTileImage(string name, StorageFile file);
 
-        Task<Result<Image<Rgba32>>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType);
+        Task<Result<Image<Rgba32>>> Generate(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType);
 
         Image<Rgba32> GetResizedImage(Image<Rgba32> image, int size);
 

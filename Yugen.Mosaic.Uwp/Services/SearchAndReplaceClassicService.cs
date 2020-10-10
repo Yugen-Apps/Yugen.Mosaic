@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +12,11 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceClassicService : SearchAndReplaceService
     {
-        public SearchAndReplaceClassicService(IProgressService progressService) : base(progressService) { }
+        public SearchAndReplaceClassicService(IProgressService progressService) : base(progressService)
+        {
+        }
 
-        public override void SearchAndReplace()
+        public override Image<Rgba32> SearchAndReplace()
         {
             _progressService.Reset();
 
@@ -49,6 +53,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 _progressService.IncrementProgress(max, 66, 100);
             });
+
+            return _outputImage;
         }
     }
 }

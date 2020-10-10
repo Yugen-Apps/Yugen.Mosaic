@@ -25,18 +25,20 @@ namespace Yugen.Mosaic.Uwp.Services
             _progressService = progressService;
         }
 
-        public void Init(Rgba32[,] avgsMaster, Image<Rgba32> outputImage,
+        public void Init(Rgba32[,] avgsMaster, Size outputSize,
             List<Tile> tileImageList, Size tileSize, int tX, int tY)
         {
             _avgsMaster = avgsMaster;
-            _outputImage = outputImage;
             _tileImageList = tileImageList;
             _tileSize = tileSize;
             _tX = tX;
             _tY = tY;
+
+            // TODO: adapt size to tiles
+            _outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
         }
 
-        public virtual void SearchAndReplace() { }
+        public virtual Image<Rgba32> SearchAndReplace() => throw new NotImplementedException();
 
         // TODO: c.DrawImage crash (System.NullReferenceException)
         // with the current SixLabors.ImageSharp.Drawing preview version

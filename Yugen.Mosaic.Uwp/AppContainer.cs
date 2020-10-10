@@ -26,9 +26,9 @@ namespace Yugen.Mosaic.Uwp
                    .WriteTo.File(logFilePath, restrictedToMinimumLevel: LogEventLevel.Information)
                    .CreateLogger();
 
-            Log.Debug("Serilog started Debug!");
-            Log.Information("Serilog started Information!");
-            Log.Warning("Serilog started Warning!");
+            //Log.Debug("Serilog started Debug!");
+            //Log.Information("Serilog started Information!");
+            //Log.Warning("Serilog started Warning!");
 
             Services = new ServiceCollection()
                 .AddSingleton<IMosaicService, MosaicService>()

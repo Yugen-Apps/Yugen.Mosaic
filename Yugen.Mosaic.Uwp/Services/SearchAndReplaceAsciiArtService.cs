@@ -15,32 +15,23 @@ namespace Yugen.Mosaic.Uwp.Services
         private static readonly string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
         private readonly IProgressService _progressService;
 
-        private Image<Rgba32> _resizedMasterImage;
-        private Image<Rgba32> _outputImage;
-
         public SearchAndReplaceAsciiArtService(IProgressService progressService)
         {
             _progressService = progressService;
         }
 
-        public void Init(Image<Rgba32> resizedMasterImage, Image<Rgba32> outputImage)
-        {
-            _resizedMasterImage = resizedMasterImage;
-            _outputImage = outputImage;
-        }
-
-        public Image<Rgba32> SearchAndReplace(int ratio = 5)
+        public Image<Rgba32> SearchAndReplace(Image<Rgba32> masterImage, int ratio = 5)
         {
             _progressService.Reset();
 
             bool toggle = false;
             StringBuilder sb = new StringBuilder();
 
-            for (int h = 0; h < _resizedMasterImage.Height; h += ratio)
+            for (int h = 0; h < masterImage.Height; h += ratio)
             {
-                for (int w = 0; w < _resizedMasterImage.Width; w += ratio)
+                for (int w = 0; w < masterImage.Width; w += ratio)
                 {
-                    var pixelColor = _resizedMasterImage[w, h];
+                    var pixelColor = masterImage[w, h];
                     var color = Convert.ToByte((pixelColor.R + pixelColor.G + pixelColor.B) / 3);
                     var grayColor = new Rgba32(color, color, color);
 
@@ -61,7 +52,7 @@ namespace Yugen.Mosaic.Uwp.Services
                     toggle = false;
                 }
 
-                _progressService.IncrementProgress(_resizedMasterImage.Height);
+                _progressService.IncrementProgress(masterImage.Height);
             }
 
             var font = SystemFonts.CreateFont("Courier New", 14);
@@ -74,8 +65,6 @@ namespace Yugen.Mosaic.Uwp.Services
                 i.Fill(SixLabors.ImageSharp.Color.White);
                 i.DrawText(text, font, Color.Black, new PointF(0, 0));
              });
-
-            //_outputImage = finalImage.Clone(x => x.Resize(_outputImage.Width, _outputImage.Height));
 
             return finalImage;
         }

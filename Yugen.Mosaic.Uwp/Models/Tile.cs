@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.AccessCache;
 using Yugen.Mosaic.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Models
@@ -21,8 +20,10 @@ namespace Yugen.Mosaic.Uwp.Models
 
         public string Name { get; set; }
         public StorageFile File { get; set; }
+
         //public string FaToken { get; set; }
         public Image<Rgba32> ResizedImage { get; set; }
+
         public Rgba32 AverageColor { get; set; }
 
         public async Task Process(Size tileSize)

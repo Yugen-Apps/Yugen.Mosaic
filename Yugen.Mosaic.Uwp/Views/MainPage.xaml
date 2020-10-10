@@ -153,7 +153,8 @@
                                 <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
                                         Padding="4"
                                         VerticalAlignment="Bottom">
-                                    <TextBlock Text="{x:Bind Name}"
+                                    <TextBlock MaxLines="2"
+                                               Text="{x:Bind Name}"
                                                TextWrapping="Wrap"
                                                Style="{ThemeResource CaptionTextBlockStyle}" />
                                 </Border>
@@ -365,7 +366,7 @@
                                            Width="100"
                                            IsActive="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
                                            Margin="2"
-                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"/>
+                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}" />
                         <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
                         <toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"

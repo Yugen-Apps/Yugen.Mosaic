@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Helpers;
 using Yugen.Mosaic.Uwp.Models;
@@ -8,9 +10,11 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceRandomService : SearchAndReplaceService
     {
-        public SearchAndReplaceRandomService(IProgressService progressService) : base(progressService) { }
+        public SearchAndReplaceRandomService(IProgressService progressService) : base(progressService)
+        {
+        }
 
-        public override void SearchAndReplace()
+        public override Image<Rgba32> SearchAndReplace()
         {
             var r = new Random();
 
@@ -52,6 +56,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 _progressService.IncrementProgress(max, 66, 100);
             });
+
+            return _outputImage;
         }
     }
 }

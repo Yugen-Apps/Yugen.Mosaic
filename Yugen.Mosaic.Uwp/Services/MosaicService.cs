@@ -23,14 +23,14 @@ namespace Yugen.Mosaic.Uwp.Services
     {
         private readonly IProgressService _progressService;
 
+        private readonly List<Tile> _tileImageList = new List<Tile>();
+        private readonly ISearchAndReplaceAsciiArtService _searchAndReplaceAsciiArtService;
         private Rgba32[,] _avgsMaster;
         private int _tX;
         private int _tY;
-        private readonly List<Tile> _tileImageList = new List<Tile>();
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
         private ISearchAndReplaceService _searchAndReplaceService;
-        private readonly ISearchAndReplaceAsciiArtService _searchAndReplaceAsciiArtService;
 
         public MosaicService(IProgressService progressService, ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService)
         {
@@ -54,7 +54,7 @@ namespace Yugen.Mosaic.Uwp.Services
             _tileImageList.Add(new Tile(name, file));
         }
 
-        public async Task<Result<Image<Rgba32>>> GenerateMosaic(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
+        public async Task<Result<Image<Rgba32>>> Generate(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
         {
             if (_masterImage == null)
             {
@@ -74,28 +74,11 @@ namespace Yugen.Mosaic.Uwp.Services
 
             if (selectedMosaicType == MosaicTypeEnum.AsciiArt)
             {
-                var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
-                _searchAndReplaceAsciiArtService.Init(resizedMasterImage, outputImage);
-                
-                GC.Collect();
-
-                return Result.Ok(_searchAndReplaceAsciiArtService.SearchAndReplace());
+                return GenerateAsciiArt(outputSize, resizedMasterImage);
             }
             else
             {
-                _tileSize = tileSize;
-                _tX = resizedMasterImage.Width / tileSize.Width;
-                _tY = resizedMasterImage.Height / tileSize.Height;
-                _avgsMaster = new Rgba32[_tX, _tY];
-
-                GetTilesAverage(resizedMasterImage);
-
-                if (selectedMosaicType != MosaicTypeEnum.PlainColor)
-                {
-                    await LoadTilesAndResize();
-                }
-
-                return Result.Ok(SearchAndReplace(tileSize, selectedMosaicType, outputSize));
+                return await GenerateModaic(outputSize, resizedMasterImage, tileSize, selectedMosaicType);
             }
         }
 
@@ -133,6 +116,56 @@ namespace Yugen.Mosaic.Uwp.Services
             _tileImageList.Clear();
         }
 
+        private Result<Image<Rgba32>> GenerateAsciiArt(Size outputSize, Image<Rgba32> resizedMasterImage)
+        {
+            var finalImage = _searchAndReplaceAsciiArtService.SearchAndReplace(resizedMasterImage);
+
+            GC.Collect();
+
+            return Result.Ok(finalImage);
+        }
+
+        private async Task<Result<Image<Rgba32>>> GenerateModaic(Size outputSize, Image<Rgba32> resizedMasterImage, Size tileSize, MosaicTypeEnum selectedMosaicType)
+        {
+            _tileSize = tileSize;
+            _tX = resizedMasterImage.Width / tileSize.Width;
+            _tY = resizedMasterImage.Height / tileSize.Height;
+            _avgsMaster = new Rgba32[_tX, _tY];
+
+            GetTilesAverage(resizedMasterImage);
+
+            if (selectedMosaicType != MosaicTypeEnum.PlainColor)
+            {
+                await LoadTilesAndResize();
+            }
+
+            switch (selectedMosaicType)
+            {
+                case MosaicTypeEnum.Classic:
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceClassicService>();
+                    break;
+
+                case MosaicTypeEnum.Random:
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceRandomService>();
+                    break;
+
+                case MosaicTypeEnum.AdjustHue:
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceAdjustHueService>();
+                    break;
+
+                case MosaicTypeEnum.PlainColor:
+                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplacePlainColorService>();
+                    break;
+            }
+
+            _searchAndReplaceService.Init(_avgsMaster, outputSize, _tileImageList, tileSize, _tX, _tY);
+            var finalImage = _searchAndReplaceService.SearchAndReplace();
+
+            GC.Collect();
+
+            return Result.Ok(finalImage);
+        }
+
         private void GetTilesAverage(Image<Rgba32> masterImage)
         {
             Parallel.For(0, _tY, y =>
@@ -162,37 +195,6 @@ namespace Yugen.Mosaic.Uwp.Services
             await tile.Process(_tileSize);
 
             _progressService.IncrementProgress(_tileImageList.Count, 33, 66);
-        }
-
-        private Image<Rgba32> SearchAndReplace(Size tileSize, MosaicTypeEnum selectedMosaicType, Size outputSize)
-        {
-            var outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
-
-            switch (selectedMosaicType)
-            {
-                case MosaicTypeEnum.Classic:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceClassicService>();
-                    break;
-
-                case MosaicTypeEnum.Random:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceRandomService>();
-                    break;
-
-                case MosaicTypeEnum.AdjustHue:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceAdjustHueService>();
-                    break;
-
-                case MosaicTypeEnum.PlainColor:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplacePlainColorService>();
-                    break;
-            }
-
-            _searchAndReplaceService.Init(_avgsMaster, outputImage, _tileImageList, tileSize, _tX, _tY);
-            _searchAndReplaceService.SearchAndReplace();
-
-            GC.Collect();
-
-            return outputImage;
         }
     }
 }

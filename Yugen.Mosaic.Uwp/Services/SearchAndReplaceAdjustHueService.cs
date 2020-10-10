@@ -11,9 +11,11 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplaceAdjustHueService : SearchAndReplaceService
     {
-        public SearchAndReplaceAdjustHueService(IProgressService progressService) : base(progressService) { }
+        public SearchAndReplaceAdjustHueService(IProgressService progressService) : base(progressService)
+        {
+        }
 
-        public override void SearchAndReplace()
+        public override Image<Rgba32> SearchAndReplace()
         {
             var r = new Random();
             var seq = Enumerable.Range(0, _tX * _tY).Select(x => x % _tileImageList.Count);
@@ -44,6 +46,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 _progressService.IncrementProgress(max, 66, 100);
             });
+
+            return _outputImage;
         }
 
         private void AdjustHue(Image<Rgba32> source, Image<Rgba32> output, Rgba32 averageColor)

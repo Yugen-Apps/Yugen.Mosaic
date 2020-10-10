@@ -9,9 +9,11 @@ namespace Yugen.Mosaic.Uwp.Services
 {
     public class SearchAndReplacePlainColorService : SearchAndReplaceService
     {
-        public SearchAndReplacePlainColorService(IProgressService progressService) : base(progressService) { }
+        public SearchAndReplacePlainColorService(IProgressService progressService) : base(progressService)
+        {
+        }
 
-        public override void SearchAndReplace()
+        public override Image<Rgba32> SearchAndReplace()
         {
             _progressService.Reset();
 
@@ -39,6 +41,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
                 _progressService.IncrementProgress(max, 66, 100);
             });
+
+            return _outputImage;
         }
     }
 }

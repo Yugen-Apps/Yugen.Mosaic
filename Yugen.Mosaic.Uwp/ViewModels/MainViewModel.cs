@@ -406,7 +406,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
             Result<Image<Rgba32>> result;
             result = await Task.Run(async () =>
-               await _mosaicService.GenerateMosaic(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
+               await _mosaicService.Generate(OutputSize, TileSize, SelectedMosaicType.MosaicTypeEnum));
 
             if (result.IsFailure)
             {

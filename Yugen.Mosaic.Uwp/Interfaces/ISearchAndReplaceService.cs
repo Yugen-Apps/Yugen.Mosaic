@@ -7,7 +7,8 @@ namespace Yugen.Mosaic.Uwp.Interfaces
 {
     public interface ISearchAndReplaceService
     {
-        void Init(Rgba32[,] avgsMaster, Image<Rgba32> outputImage, List<Tile> tileImageList, Size tileSize, int tX, int tY);
-        void SearchAndReplace();
+        void Init(Rgba32[,] avgsMaster, Size outputSize, List<Tile> tileImageList, Size tileSize, int tX, int tY);
+
+        Image<Rgba32> SearchAndReplace();
     }
 }
