@@ -35,6 +35,7 @@ namespace Yugen.Mosaic.Uwp
                 .AddSingleton<IProgressService, ProgressService>()
                 .AddSingleton<ISearchAndReplaceAsciiArtService, SearchAndReplaceAsciiArtService>()
                 .AddSingleton<IThemeSelectorService, ThemeSelectorService>()
+                .AddSingleton<IWhatsNewDisplayService, WhatsNewDisplayService>()
                 .AddTransient<SearchAndReplaceAdjustHueService>()
                 .AddTransient<SearchAndReplaceClassicService>()
                 .AddTransient<SearchAndReplacePlainColorService>()
@@ -42,6 +43,7 @@ namespace Yugen.Mosaic.Uwp
                 .AddTransient<SearchAndReplaceAdjustHueService>()
                 .AddTransient<MainViewModel>()
                 .AddTransient<SettingsViewModel>()
+                .AddTransient<WhatsNewViewModel>()
                 .AddLogging(loggingBuilder =>
                 {
                     loggingBuilder.AddSerilog(dispose: true);

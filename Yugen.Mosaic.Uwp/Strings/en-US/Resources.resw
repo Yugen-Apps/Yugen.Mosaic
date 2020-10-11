@@ -180,6 +180,9 @@
   <data name="MainTitleTextBlock.Text" xml:space="preserve">
     <value>Yugen Mosaic</value>
   </data>
+  <data name="MainWhatsNewTextBlock.Text" xml:space="preserve">
+    <value>What's New</value>
+  </data>
   <data name="MainWidthTextBlock.Text" xml:space="preserve">
     <value>W:</value>
   </data>
@@ -283,5 +286,13 @@
   </data>
   <data name="SettingsUITextBlock.Text" xml:space="preserve">
     <value>UI</value>
+  </data>
+  <data name="WhatsNewBody" xml:space="preserve">
+    <value>In this version:
+- "Ascii Art" to create a beautiful reproduction of your image with a text based visual art.
+- We squashed some bugs and made some performance improvements</value>
+  </data>
+  <data name="WhatsNewTitle" xml:space="preserve">
+    <value>What's New</value>
   </data>
 </root>

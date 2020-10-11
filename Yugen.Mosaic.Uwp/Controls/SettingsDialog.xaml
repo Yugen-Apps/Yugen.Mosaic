@@ -14,30 +14,27 @@
                                            EnumType="ElementTheme" />
     </ContentDialog.Resources>
 
-    <Grid Padding="16,16,16,32"
-          Background="{ThemeResource AppDeepBackgroundBrush}">
+    <Grid Background="{ThemeResource AppDeepBackgroundBrush}"
+          Padding="16,16,16,32">
 
-        <StackPanel Orientation="Vertical"
-                    Spacing="16"
-                    MaxWidth="360">
+        <StackPanel MaxWidth="360"
+                    Spacing="16">
 
             <Grid>
-
                 <TextBlock x:Uid="SettingsTitleTextBlock"
-                           Style="{ThemeResource TitleTextBlockStyle}"
                            HorizontalAlignment="Left"
-                           Margin="4,0,0,0" />
-                <Button Style="{StaticResource SoftRevealButtonStyle}"
+                           Margin="4,0,0,0"
+                           Style="{ThemeResource TitleTextBlockStyle}" />
+                <Button Command="{x:Bind HideCommand}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
-                        Command="{x:Bind HideCommand}">
+                        Style="{StaticResource SoftRevealButtonStyle}">
                     <FontIcon Glyph="" />
-                </Button>
-                
+                </Button>                
             </Grid>
 
-            <StackPanel Spacing="4"
-                        Padding="16,0">
+            <StackPanel Padding="16,0"
+                        Spacing="4">
 
                 <TextBlock x:Uid="SettingsThemeTextBlock"
                            Style="{StaticResource YugenSubtitleTextBlockStyle}" />

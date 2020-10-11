@@ -127,6 +127,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppContainer.cs" />
+    <Compile Include="Controls\WhatsNewDialog.xaml.cs">
+      <DependentUpon>WhatsNewDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Enums\FileFormat.cs" />
     <Compile Include="Enums\MosaicTypeEnum.cs" />
     <Compile Include="Models\OnboardingElement.cs" />
@@ -134,7 +137,10 @@
     <Compile Include="Enums\OnboardingStage.cs" />
     <Compile Include="Models\TileFound.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceAsciiArtService.cs" />
+    <Compile Include="Services\IWhatsNewDisplayService.cs" />
     <Compile Include="Services\SearchAndReplaceAsciiArtService.cs" />
+    <Compile Include="Services\WhatsNewDisplayService.cs" />
+    <Compile Include="ViewModels\WhatsNewViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -221,6 +227,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\WhatsNewDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

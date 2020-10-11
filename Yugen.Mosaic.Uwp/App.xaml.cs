@@ -8,6 +8,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.Views;
 using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Uwp.Services;
@@ -19,6 +20,8 @@ namespace Yugen.Mosaic.Uwp
     /// </summary>
     public sealed partial class App : Application
     {
+        private IWhatsNewDisplayService _whatsNewDialogService;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -67,6 +70,8 @@ namespace Yugen.Mosaic.Uwp
             {
                 if (rootFrame.Content == null)
                 {
+                    _whatsNewDialogService = AppContainer.Services.GetService<IWhatsNewDisplayService>();
+
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
@@ -74,6 +79,8 @@ namespace Yugen.Mosaic.Uwp
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
+
+                _whatsNewDialogService.ShowIfAppropriateAsync();
             }
         }
 
@@ -82,7 +89,8 @@ namespace Yugen.Mosaic.Uwp
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e) => throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e) => 
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved

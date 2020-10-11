@@ -63,6 +63,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private ICommand _saveCommand;
         private ICommand _resetCommand;
         private ICommand _helpCommand;
+        private ICommand _whatsNewCommandCommand;
         private ICommand _settingsCommand;
         private ICommand _teachingTipActionButtonCommand;
         //private ICommand _teachingTipClosingCommand;
@@ -202,6 +203,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new AsyncRelayCommand(SaveCommandBehavior));
         public ICommand ResetCommand => _resetCommand ?? (_resetCommand = new RelayCommand(ResetCommandBehavior));
         public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new RelayCommand(HelpCommandBehavior));
+        public ICommand WhatsNewCommand => _whatsNewCommandCommand ?? (_whatsNewCommandCommand = new AsyncRelayCommand(WhatsNewCommandBehavior));
         public ICommand SettingsCommand => _settingsCommand ?? (_settingsCommand = new AsyncRelayCommand(SettingsCommandBehavior));
         public ICommand TeachingTipActionButtonCommand => _teachingTipActionButtonCommand ?? (_teachingTipActionButtonCommand = new RelayCommand(TeachingTipActionButtonCommandBehavior));
         //public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
@@ -491,6 +493,12 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         {
             var settingsDialog = new SettingsDialog();
             await settingsDialog.ShowAsync();
+        }
+
+        private async Task WhatsNewCommandBehavior()
+        {
+            var WhatsNewCommandBehavior = new WhatsNewDialog();
+            await WhatsNewCommandBehavior.ShowAsync();
         }
 
         private void UpdateIsAddMasterUIVisible() =>
