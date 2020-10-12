@@ -14,7 +14,7 @@ namespace Yugen.Mosaic.Uwp.Controls
         {
             InitializeComponent();
 
-            DataContext = AppContainer.Services.GetService<SettingsViewModel>();
+            DataContext = App.Current.Services.GetService<SettingsViewModel>();
         }
 
         public ICommand HideCommand => _hideCommand ?? (_hideCommand = new RelayCommand(Hide));

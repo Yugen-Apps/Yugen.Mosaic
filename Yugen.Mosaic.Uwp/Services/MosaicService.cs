@@ -142,19 +142,19 @@ namespace Yugen.Mosaic.Uwp.Services
             switch (selectedMosaicType)
             {
                 case MosaicTypeEnum.Classic:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceClassicService>();
+                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplaceClassicService>();
                     break;
 
                 case MosaicTypeEnum.Random:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceRandomService>();
+                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplaceRandomService>();
                     break;
 
                 case MosaicTypeEnum.AdjustHue:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplaceAdjustHueService>();
+                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplaceAdjustHueService>();
                     break;
 
                 case MosaicTypeEnum.PlainColor:
-                    _searchAndReplaceService = AppContainer.Services.GetService<SearchAndReplacePlainColorService>();
+                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplacePlainColorService>();
                     break;
             }
 

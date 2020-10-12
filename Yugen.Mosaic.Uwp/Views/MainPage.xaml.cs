@@ -2,7 +2,6 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Yugen.Mosaic.Uwp.ViewModels;
-using Yugen.Toolkit.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Views
 {
@@ -12,9 +11,7 @@ namespace Yugen.Mosaic.Uwp.Views
         {
             InitializeComponent();
 
-            TitleBarHelper.ExtendToTitleBar();
-
-            DataContext = AppContainer.Services.GetService<MainViewModel>();
+            DataContext = App.Current.Services.GetService<MainViewModel>();
         }
 
         private MainViewModel ViewModel => (MainViewModel)DataContext;

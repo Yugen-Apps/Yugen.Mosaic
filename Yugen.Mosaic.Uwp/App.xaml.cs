@@ -2,15 +2,25 @@
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Events;
 using System;
+using System.Diagnostics.Contracts;
+using System.IO;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Services;
+using Yugen.Mosaic.Uwp.ViewModels;
 using Yugen.Mosaic.Uwp.Views;
 using Yugen.Toolkit.Standard.Extensions;
+using Yugen.Toolkit.Standard.Services;
+using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.Services;
 
 namespace Yugen.Mosaic.Uwp
@@ -20,19 +30,16 @@ namespace Yugen.Mosaic.Uwp
     /// </summary>
     public sealed partial class App : Application
     {
-        private IWhatsNewDisplayService _whatsNewDialogService;
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
+            Services = ConfigureServices();
+
             InitializeComponent();
             Suspending += OnSuspending;
-
-            // Register services
-            AppContainer.ConfigureServices();
 
             AppCenter.Start("7df4b441-69ae-49c5-b27d-5a532f33b554",
                    typeof(Analytics), typeof(Crashes));
@@ -43,15 +50,16 @@ namespace Yugen.Mosaic.Uwp
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            var themeSelectorService = AppContainer.Services.GetService<IThemeSelectorService>();
-            themeSelectorService.InitializeAsync().FireAndForgetSafeAsync();
-
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (!(Window.Current.Content is Frame rootFrame))
             {
+                await InitializeServices();
+
+                TitleBarHelper.ExtendToTitleBar();
+
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
@@ -70,8 +78,6 @@ namespace Yugen.Mosaic.Uwp
             {
                 if (rootFrame.Content == null)
                 {
-                    _whatsNewDialogService = AppContainer.Services.GetService<IWhatsNewDisplayService>();
-
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
@@ -80,7 +86,7 @@ namespace Yugen.Mosaic.Uwp
                 // Ensure the current window is active
                 Window.Current.Activate();
 
-                _whatsNewDialogService.ShowIfAppropriateAsync();
+                await Services.GetService<IWhatsNewDisplayService>().ShowIfAppropriateAsync();
             }
         }
 
@@ -104,6 +110,46 @@ namespace Yugen.Mosaic.Uwp
             SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        public new static App Current => (App)Application.Current;
+
+        public IServiceProvider Services { get; }
+
+        private IServiceProvider ConfigureServices()
+        {
+            string logFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Logs\\Yugen.Mosaic.Log.");
+
+            Log.Logger = new LoggerConfiguration()
+                   .MinimumLevel.Debug()
+                   .WriteTo.Debug()
+                   .WriteTo.File(logFilePath, restrictedToMinimumLevel: LogEventLevel.Information)
+                   .CreateLogger();
+
+            return new ServiceCollection()
+                .AddSingleton<IMosaicService, MosaicService>()
+                .AddSingleton<IProgressService, ProgressService>()
+                .AddSingleton<ISearchAndReplaceAsciiArtService, SearchAndReplaceAsciiArtService>()
+                .AddSingleton<IThemeSelectorService, ThemeSelectorService>()
+                .AddSingleton<IWhatsNewDisplayService, WhatsNewDisplayService>()
+                .AddTransient<SearchAndReplaceAdjustHueService>()
+                .AddTransient<SearchAndReplaceClassicService>()
+                .AddTransient<SearchAndReplacePlainColorService>()
+                .AddTransient<SearchAndReplaceRandomService>()
+                .AddTransient<SearchAndReplaceAdjustHueService>()
+                .AddTransient<MainViewModel>()
+                .AddTransient<SettingsViewModel>()
+                .AddTransient<WhatsNewViewModel>()
+                .AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder.AddSerilog(dispose: true);
+                })
+                .BuildServiceProvider();
+        }
+
+        private async Task InitializeServices()
+        {
+            await Services.GetService<IThemeSelectorService>().InitializeAsync();
         }
     }
 }
