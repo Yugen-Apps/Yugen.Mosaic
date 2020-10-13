@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -18,7 +17,6 @@ using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.ViewModels;
 using Yugen.Mosaic.Uwp.Views;
-using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.Services;
@@ -132,14 +130,21 @@ namespace Yugen.Mosaic.Uwp
                 .AddSingleton<ISearchAndReplaceAsciiArtService, SearchAndReplaceAsciiArtService>()
                 .AddSingleton<IThemeSelectorService, ThemeSelectorService>()
                 .AddSingleton<IWhatsNewDisplayService, WhatsNewDisplayService>()
+
+                .AddTransient<ISearchAndReplaceServiceFactory, SearchAndReplaceServiceFactory>()
                 .AddTransient<SearchAndReplaceAdjustHueService>()
+                .AddSingleton<Func<SearchAndReplaceAdjustHueService>>(x => x.GetService<SearchAndReplaceAdjustHueService>)
                 .AddTransient<SearchAndReplaceClassicService>()
+                .AddSingleton<Func<SearchAndReplaceClassicService>>(x => x.GetService<SearchAndReplaceClassicService>)
                 .AddTransient<SearchAndReplacePlainColorService>()
+                .AddSingleton<Func<SearchAndReplacePlainColorService>>(x => x.GetService<SearchAndReplacePlainColorService>)
                 .AddTransient<SearchAndReplaceRandomService>()
-                .AddTransient<SearchAndReplaceAdjustHueService>()
+                .AddSingleton<Func<SearchAndReplaceRandomService>>(x => x.GetService<SearchAndReplaceRandomService>)
+
                 .AddTransient<MainViewModel>()
                 .AddTransient<SettingsViewModel>()
                 .AddTransient<WhatsNewViewModel>()
+
                 .AddLogging(loggingBuilder =>
                 {
                     loggingBuilder.AddSerilog(dispose: true);

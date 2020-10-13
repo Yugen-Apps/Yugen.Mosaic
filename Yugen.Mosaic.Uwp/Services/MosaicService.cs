@@ -31,11 +31,15 @@ namespace Yugen.Mosaic.Uwp.Services
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
         private ISearchAndReplaceService _searchAndReplaceService;
+        private readonly ISearchAndReplaceServiceFactory _searchAndReplaceServiceFactory;
 
-        public MosaicService(IProgressService progressService, ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService)
+
+        public MosaicService(IProgressService progressService, ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService,
+            ISearchAndReplaceServiceFactory searchAndReplaceServiceFactory)
         {
             _progressService = progressService;
             _searchAndReplaceAsciiArtService = searchAndReplaceAsciiArtService;
+            _searchAndReplaceServiceFactory = searchAndReplaceServiceFactory;
         }
 
         public async Task<Size> AddMasterImage(StorageFile file)
@@ -78,7 +82,7 @@ namespace Yugen.Mosaic.Uwp.Services
             }
             else
             {
-                return await GenerateModaic(outputSize, resizedMasterImage, tileSize, selectedMosaicType);
+                return await GenerateMosaic(outputSize, resizedMasterImage, tileSize, selectedMosaicType);
             }
         }
 
@@ -125,7 +129,7 @@ namespace Yugen.Mosaic.Uwp.Services
             return Result.Ok(finalImage);
         }
 
-        private async Task<Result<Image<Rgba32>>> GenerateModaic(Size outputSize, Image<Rgba32> resizedMasterImage, Size tileSize, MosaicTypeEnum selectedMosaicType)
+        private async Task<Result<Image<Rgba32>>> GenerateMosaic(Size outputSize, Image<Rgba32> resizedMasterImage, Size tileSize, MosaicTypeEnum selectedMosaicType)
         {
             _tileSize = tileSize;
             _tX = resizedMasterImage.Width / tileSize.Width;
@@ -139,26 +143,9 @@ namespace Yugen.Mosaic.Uwp.Services
                 await LoadTilesAndResize();
             }
 
-            switch (selectedMosaicType)
-            {
-                case MosaicTypeEnum.Classic:
-                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplaceClassicService>();
-                    break;
-
-                case MosaicTypeEnum.Random:
-                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplaceRandomService>();
-                    break;
-
-                case MosaicTypeEnum.AdjustHue:
-                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplaceAdjustHueService>();
-                    break;
-
-                case MosaicTypeEnum.PlainColor:
-                    _searchAndReplaceService = App.Current.Services.GetService<SearchAndReplacePlainColorService>();
-                    break;
-            }
-
+            _searchAndReplaceService = _searchAndReplaceServiceFactory.Create(selectedMosaicType);
             _searchAndReplaceService.Init(_avgsMaster, outputSize, _tileImageList, tileSize, _tX, _tY);
+
             var finalImage = _searchAndReplaceService.SearchAndReplace();
 
             GC.Collect();
