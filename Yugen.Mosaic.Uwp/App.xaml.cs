@@ -13,6 +13,7 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.ViewModels;
@@ -132,14 +133,10 @@ namespace Yugen.Mosaic.Uwp
                 .AddSingleton<IWhatsNewDisplayService, WhatsNewDisplayService>()
 
                 .AddTransient<ISearchAndReplaceServiceFactory, SearchAndReplaceServiceFactory>()
-                .AddTransient<SearchAndReplaceAdjustHueService>()
-                .AddSingleton<Func<SearchAndReplaceAdjustHueService>>(x => x.GetService<SearchAndReplaceAdjustHueService>)
-                .AddTransient<SearchAndReplaceClassicService>()
-                .AddSingleton<Func<SearchAndReplaceClassicService>>(x => x.GetService<SearchAndReplaceClassicService>)
-                .AddTransient<SearchAndReplacePlainColorService>()
-                .AddSingleton<Func<SearchAndReplacePlainColorService>>(x => x.GetService<SearchAndReplacePlainColorService>)
-                .AddTransient<SearchAndReplaceRandomService>()
-                .AddSingleton<Func<SearchAndReplaceRandomService>>(x => x.GetService<SearchAndReplaceRandomService>)
+                .AddFactory<SearchAndReplaceAdjustHueService>()
+                .AddFactory<SearchAndReplaceClassicService>()
+                .AddFactory<SearchAndReplacePlainColorService>()
+                .AddFactory<SearchAndReplaceRandomService>()
 
                 .AddTransient<MainViewModel>()
                 .AddTransient<SettingsViewModel>()

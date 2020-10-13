@@ -136,6 +136,7 @@
     <Compile Include="Enums\OnboardingStage.cs" />
     <Compile Include="Models\TileFound.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceAsciiArtService.cs" />
+    <Compile Include="Extensions\ServiceCollectionExtensions.cs" />
     <Compile Include="Services\ISearchAndReplaceServiceFactory.cs" />
     <Compile Include="Services\IWhatsNewDisplayService.cs" />
     <Compile Include="Services\SearchAndReplaceAsciiArtService.cs" />
