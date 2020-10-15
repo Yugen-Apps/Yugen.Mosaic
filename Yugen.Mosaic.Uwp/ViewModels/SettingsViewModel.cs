@@ -12,13 +12,14 @@ namespace Yugen.Mosaic.Uwp.ViewModels
     {
         private readonly IThemeSelectorService _themeSelectorService;
         private ElementTheme _elementTheme;
-        private ICommand _switchThemeCommand;
 
         public SettingsViewModel(IThemeSelectorService themeSelectorService)
         {
             _themeSelectorService = themeSelectorService;
 
-            _elementTheme = _themeSelectorService.Theme;
+            _elementTheme = _themeSelectorService.Theme; 
+            
+            SwitchThemeCommand = new AsyncRelayCommand<ElementTheme>(SwitchThemeCommandBehavior);
         }
 
         public string AppVersion => SystemHelper.AppVersion;
@@ -31,7 +32,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             set => SetProperty(ref _elementTheme, value);
         }
 
-        public ICommand SwitchThemeCommand => _switchThemeCommand ?? (_switchThemeCommand = new AsyncRelayCommand<ElementTheme>(SwitchThemeCommandBehavior));
+        public ICommand SwitchThemeCommand { get; }
 
         private async Task SwitchThemeCommandBehavior(ElementTheme param)
         {

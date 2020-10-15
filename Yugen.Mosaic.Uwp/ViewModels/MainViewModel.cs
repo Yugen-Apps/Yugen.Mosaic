@@ -53,27 +53,28 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private int _tileHeight = 25;
         private int _tileWidth = 25;
         private int _progress = 0;
-        private ICommand _pointerEnteredCommand;
-        private ICommand _pointerExitedCommand;
-        private ICommand _addMasterImmageCommand;
-        private ICommand _addTilesCommand;
-        private ICommand _addTilesFolderCommand;
-        private ICommand _clickTileCommand;
-        private ICommand _generateCommand;
-        private ICommand _saveCommand;
-        private ICommand _resetCommand;
-        private ICommand _helpCommand;
-        private ICommand _whatsNewCommandCommand;
-        private ICommand _settingsCommand;
-        private ICommand _teachingTipActionButtonCommand;
-        //private ICommand _teachingTipClosingCommand;
-        //private ICommand _teachingTipClosedCommand;
 
         public MainViewModel(IMosaicService mosaicService, IProgressService progressService)
         {
             SelectedMosaicType = MosaicTypeList[0];
             _mosaicService = mosaicService;
             _progressService = progressService;
+
+            PointerEnteredCommand = new RelayCommand(PointerEnteredCommandBehavior);
+            PointerExitedCommand = new RelayCommand(PointerExitedCommandBehavior);
+            AddMasterImmageCommand = new AsyncRelayCommand(AddMasterImmageCommandBehavior);
+            AddTilesCommand = new AsyncRelayCommand(AddTilesCommandBehavior);
+            AddTilesFolderCommand = new AsyncRelayCommand(AddTilesFolderCommandBehavior);
+            ClickTileCommand = new AsyncRelayCommand<TileBmp>(ClickTileCommandBehavior);
+            GenerateCommand = new AsyncRelayCommand(GenerateCommandBehavior);
+            SaveCommand = new AsyncRelayCommand(SaveCommandBehavior);
+            ResetCommand = new RelayCommand(ResetCommandBehavior);
+            HelpCommand = new RelayCommand(HelpCommandBehavior);
+            WhatsNewCommand = new AsyncRelayCommand(WhatsNewCommandBehavior);
+            SettingsCommand = new AsyncRelayCommand(SettingsCommandBehavior);
+            TeachingTipActionButtonCommand = new RelayCommand(TeachingTipActionButtonCommandBehavior);
+            //TeachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior);
+            //TeachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior);
         }
 
         public bool IsAddMasterUIVisible
@@ -193,21 +194,21 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             set => SetProperty(ref _progress, value);
         }
 
-        public ICommand PointerEnteredCommand => _pointerEnteredCommand ?? (_pointerEnteredCommand = new RelayCommand(PointerEnteredCommandBehavior));
-        public ICommand PointerExitedCommand => _pointerExitedCommand ?? (_pointerExitedCommand = new RelayCommand(PointerExitedCommandBehavior));
-        public ICommand AddMasterImmageCommand => _addMasterImmageCommand ?? (_addMasterImmageCommand = new AsyncRelayCommand(AddMasterImmageCommandBehavior));
-        public ICommand AddTilesCommand => _addTilesCommand ?? (_addTilesCommand = new AsyncRelayCommand(AddTilesCommandBehavior));
-        public ICommand AddTilesFolderCommand => _addTilesFolderCommand ?? (_addTilesFolderCommand = new AsyncRelayCommand(AddTilesFolderCommandBehavior));
-        public ICommand ClickTileCommand => _clickTileCommand ?? (_clickTileCommand = new AsyncRelayCommand<TileBmp>(ClickTileCommandBehavior));
-        public ICommand GenerateCommand => _generateCommand ?? (_generateCommand = new AsyncRelayCommand(GenerateCommandBehavior));
-        public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new AsyncRelayCommand(SaveCommandBehavior));
-        public ICommand ResetCommand => _resetCommand ?? (_resetCommand = new RelayCommand(ResetCommandBehavior));
-        public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new RelayCommand(HelpCommandBehavior));
-        public ICommand WhatsNewCommand => _whatsNewCommandCommand ?? (_whatsNewCommandCommand = new AsyncRelayCommand(WhatsNewCommandBehavior));
-        public ICommand SettingsCommand => _settingsCommand ?? (_settingsCommand = new AsyncRelayCommand(SettingsCommandBehavior));
-        public ICommand TeachingTipActionButtonCommand => _teachingTipActionButtonCommand ?? (_teachingTipActionButtonCommand = new RelayCommand(TeachingTipActionButtonCommandBehavior));
-        //public ICommand TeachingTipClosingCommand => _teachingTipClosingCommand ?? (_teachingTipClosingCommand = new RelayCommand(TeachingTipClosingCommandBehavior));
-        //public ICommand TeachingTipClosedCommand => _teachingTipClosedCommand ?? (_teachingTipClosedCommand = new RelayCommand(TeachingTipClosedCommandBehavior));
+        public ICommand PointerEnteredCommand { get; }
+        public ICommand PointerExitedCommand { get; }
+        public ICommand AddMasterImmageCommand { get; }
+        public ICommand AddTilesCommand { get; }
+        public ICommand AddTilesFolderCommand { get; }
+        public ICommand ClickTileCommand { get; }
+        public ICommand GenerateCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand ResetCommand { get; }
+        public ICommand HelpCommand { get; }
+        public ICommand WhatsNewCommand { get; }
+        public ICommand SettingsCommand { get; }
+        public ICommand TeachingTipActionButtonCommand { get; }
+        //public ICommand TeachingTipClosingCommand { get; }
+        //public ICommand TeachingTipClosedCommand { get; }
 
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
         private Size TileSize => new Size(_tileWidth, _tileHeight);
