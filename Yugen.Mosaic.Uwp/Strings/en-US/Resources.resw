@@ -288,8 +288,7 @@
     <value>UI</value>
   </data>
   <data name="WhatsNewBody" xml:space="preserve">
-    <value>In this version:
-- We added a new mosaic type option "Ascii Art", a text based visual art. 
+    <value>- We added a new mosaic type option "Ascii Art" for text based visual art. 
 This graphic design technique will recreate your pictures with a set of printable characters pieced together.
 - We squashed some bugs and made some performance improvements</value>
   </data>

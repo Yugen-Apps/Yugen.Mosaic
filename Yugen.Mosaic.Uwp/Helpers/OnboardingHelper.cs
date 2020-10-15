@@ -18,29 +18,29 @@ namespace Yugen.Mosaic.Uwp.Helpers
         }
 
         public static void Init(FrameworkElement[] frameworkElements) => _onboardingElements = new OnboardingElement[]
-            {
-                new OnboardingElement(
-                    frameworkElements[0],
-                    OnboardingStage.MasterImage),
-                new OnboardingElement(
-                    frameworkElements[1],
-                    OnboardingStage.AddTiles),
-                new OnboardingElement(
-                    frameworkElements[2],
-                    OnboardingStage.TileProperties),
-                new OnboardingElement(
-                    frameworkElements[3],
-                    OnboardingStage.MosaicType),
-                new OnboardingElement(
-                    frameworkElements[4],
-                    OnboardingStage.OutputProperties),
-                new OnboardingElement(
-                    frameworkElements[5],
-                    OnboardingStage.Generate),
-                new OnboardingElement(
-                    frameworkElements[6],
-                    OnboardingStage.Save),
-            };
+        {
+            new OnboardingElement(
+                frameworkElements[0],
+                OnboardingStage.MasterImage),
+            new OnboardingElement(
+                frameworkElements[1],
+                OnboardingStage.AddTiles),
+            new OnboardingElement(
+                frameworkElements[2],
+                OnboardingStage.TileProperties),
+            new OnboardingElement(
+                frameworkElements[3],
+                OnboardingStage.MosaicType),
+            new OnboardingElement(
+                frameworkElements[4],
+                OnboardingStage.OutputProperties),
+            new OnboardingElement(
+                frameworkElements[5],
+                OnboardingStage.Generate),
+            new OnboardingElement(
+                frameworkElements[6],
+                OnboardingStage.Save),
+        };
 
         public static OnboardingElement ShowTeachingTip()
         {
