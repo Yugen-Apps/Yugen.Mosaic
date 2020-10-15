@@ -44,6 +44,10 @@ namespace Yugen.Mosaic.Uwp
                    typeof(Analytics), typeof(Crashes));
         }
 
+        public new static App Current => (App)Application.Current;
+
+        public IServiceProvider Services { get; }
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -94,7 +98,7 @@ namespace Yugen.Mosaic.Uwp
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e) => 
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e) =>
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 
         /// <summary>
@@ -110,10 +114,6 @@ namespace Yugen.Mosaic.Uwp
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
-
-        public new static App Current => (App)Application.Current;
-
-        public IServiceProvider Services { get; }
 
         private IServiceProvider ConfigureServices()
         {
