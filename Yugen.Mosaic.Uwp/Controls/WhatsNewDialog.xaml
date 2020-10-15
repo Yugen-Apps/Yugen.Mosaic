@@ -6,47 +6,32 @@
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                mc:Ignorable="d">
 
-    <!--<ContentDialog.TitleTemplate>
-        <DataTemplate x:DataType="x:String">
-            <StackPanel Orientation="Horizontal">
-                <Image Height="40"
-                       Width="40"
-                        Source="ms-appx:///Assets/StoreLogo.png" />
-                <TextBlock Margin="12,0,0,0"
-                           Text="{x:Bind}"
-                           VerticalAlignment="Center"/>
-            </StackPanel>
-        </DataTemplate>
-    </ContentDialog.TitleTemplate>-->
-
-    <StackPanel>
+    <StackPanel MaxWidth="400"
+                Padding="8"
+                Spacing="8">
 
         <Grid>
             <Image Height="40"
                    Width="40"
                    HorizontalAlignment="Left"
-                   Margin="8,0,0,0"
                    Source="ms-appx:///Assets/StoreLogo.png" />
             <TextBlock HorizontalAlignment="Left"
-                       Margin="60,0,0,0"
+                       Margin="48,0,0,0"
                        Style="{ThemeResource TitleTextBlockStyle}"
                        Text="{x:Bind ViewModel.Title}" />
             <Button Command="{x:Bind HideCommand}"
                     HorizontalAlignment="Right"
-                    HorizontalContentAlignment="Right"
                     Style="{StaticResource SoftRevealButtonStyle}">
                 <FontIcon Glyph="&#xE8BB;" />
             </Button>
         </Grid>
 
-        <ScrollViewer MaxHeight="400"
-                      Padding="16">
+        <ScrollViewer MaxHeight="400">
             <TextBlock Text="{x:Bind ViewModel.Body}"
                        TextWrapping="WrapWholeWords" />
         </ScrollViewer>
 
-        <StackPanel Padding="8">
-
+        <StackPanel>
             <Image Source="ms-appx:///Assets/Images/UWPCommunityGif.gif"
                    Stretch="Uniform"
                    Width="60" />
