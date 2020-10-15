@@ -4,8 +4,7 @@
                xmlns:local="using:Yugen.Mosaic.Uwp.Controls"
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-               mc:Ignorable="d"
-               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+               mc:Ignorable="d">
 
     <!--<ContentDialog.TitleTemplate>
         <DataTemplate x:DataType="x:String">
@@ -36,16 +35,38 @@
                     HorizontalAlignment="Right"
                     HorizontalContentAlignment="Right"
                     Style="{StaticResource SoftRevealButtonStyle}">
-                <FontIcon Glyph="" />
+                <FontIcon Glyph="&#xE8BB;" />
             </Button>
         </Grid>
 
-        <ScrollViewer Padding="16">
-            <StackPanel>
-                <TextBlock Text="{x:Bind ViewModel.Body}"
-                           TextWrapping="WrapWholeWords" />
-            </StackPanel>
+        <ScrollViewer MaxHeight="400"
+                      Padding="16">
+            <TextBlock Text="{x:Bind ViewModel.Body}"
+                       TextWrapping="WrapWholeWords" />
         </ScrollViewer>
+
+        <StackPanel Padding="8">
+
+            <Image Source="ms-appx:///Assets/Images/UWPCommunityGif.gif"
+                   Stretch="Uniform"
+                   Width="60" />
+
+            <TextBlock x:Uid="DefaultLaunch2020TextBlock"
+                       HorizontalAlignment="Center"
+                       FontWeight="Bold"
+                       Margin="0,8,0,0"
+                       Style="{StaticResource YugenBodyTextBlockStyle}" />
+
+            <HyperlinkButton x:Uid="DefaultUwpCommunityHyperlink"
+                             HorizontalAlignment="Center"
+                             Style="{ThemeResource YugenHyperlinkButtonStyle}" />
+
+            <HyperlinkButton x:Uid="DefaultDevelopedByHyperlink"
+                             FontStyle="Italic"
+                             HorizontalAlignment="Center"
+                             Margin="0,8,0,0"
+                             Style="{ThemeResource YugenHyperlinkButtonStyle}" />
+        </StackPanel>
 
     </StackPanel>
 </ContentDialog>

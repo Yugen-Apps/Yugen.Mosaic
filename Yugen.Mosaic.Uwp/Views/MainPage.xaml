@@ -93,7 +93,7 @@
                                             VerticalAlignment="Center"
                                             Margin="24"
                                             Spacing="8">
-                                    <FontIcon Glyph=""
+                                    <FontIcon Glyph="&#xEB9F;"
                                               FontSize="32" />
                                     <TextBlock x:Uid="MainAddMasterTextBlock"
                                                TextWrapping="WrapWholeWords"
@@ -121,7 +121,7 @@
                             HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="4">
-                            <FontIcon Glyph="" />
+                            <FontIcon Glyph="&#xECC8;" />
                             <TextBlock x:Uid="MainAddTilesTextBlock" />
                         </StackPanel>
                     </Button>
@@ -132,7 +132,7 @@
                             HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="4">
-                            <FontIcon Glyph="" />
+                            <FontIcon Glyph="&#xECC8;" />
                             <TextBlock x:Uid="MainAddTilesFolderTextBlock" />
                         </StackPanel>
                     </Button>
