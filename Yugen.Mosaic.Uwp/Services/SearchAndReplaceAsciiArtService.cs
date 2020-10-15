@@ -31,13 +31,12 @@ namespace Yugen.Mosaic.Uwp.Services
             {
                 for (int w = 0; w < masterImage.Width; w += ratio)
                 {
-                    var pixelColor = masterImage[w, h];
-                    var color = Convert.ToByte((pixelColor.R + pixelColor.G + pixelColor.B) / 3);
-                    var grayColor = new Rgba32(color, color, color);
+                    var grayColor = new L8();
+                    grayColor.FromRgba32(masterImage[w, h]);
 
                     if (!toggle)
                     {
-                        int index = grayColor.R * 10 / 255;
+                        int index = grayColor.PackedValue * 10 / 255;
                         sb.Append(asciiChars[index]);
                     }
                 }
@@ -62,7 +61,7 @@ namespace Yugen.Mosaic.Uwp.Services
             var finalImage = new Image<Rgba32>((int)size.Width, (int)size.Height);
             finalImage.Mutate(i =>
             {
-                i.Fill(SixLabors.ImageSharp.Color.White);
+                i.Fill(Color.White);
                 i.DrawText(text, font, Color.Black, new PointF(0, 0));
              });
 

@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{E44DE1EE
 	ProjectSection(SolutionItems) = preProject
 		build-pipelines.yml = build-pipelines.yml
 		GitVersion.yml = GitVersion.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
