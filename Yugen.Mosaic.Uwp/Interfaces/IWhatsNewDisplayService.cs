@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Yugen.Mosaic.Uwp.Services
+namespace Yugen.Mosaic.Uwp.Interfaces
 {
     public interface IWhatsNewDisplayService
     {

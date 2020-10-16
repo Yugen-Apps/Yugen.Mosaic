@@ -1,7 +1,6 @@
 ﻿using Yugen.Mosaic.Uwp.Enums;
-using Yugen.Mosaic.Uwp.Interfaces;
 
-namespace Yugen.Mosaic.Uwp.Services
+namespace Yugen.Mosaic.Uwp.Interfaces
 {
     public interface ISearchAndReplaceServiceFactory
     {

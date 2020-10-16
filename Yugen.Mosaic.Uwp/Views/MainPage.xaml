@@ -179,9 +179,8 @@
                             Height="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
                             Width="{x:Bind ViewModel.OutputWidth, Mode=OneWay}">
 
-                        <Image x:Name="outputImage"
-                               Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
-                               Stretch="Uniform" />
+                            <Image Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
+                                   Stretch="Uniform" />
                     </Border>
 
                     <controls:AlignmentGrid Opacity="0.3"

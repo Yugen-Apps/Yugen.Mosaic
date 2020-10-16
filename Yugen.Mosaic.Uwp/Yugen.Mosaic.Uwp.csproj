@@ -137,8 +137,8 @@
     <Compile Include="Models\TileFound.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceAsciiArtService.cs" />
     <Compile Include="Extensions\ServiceCollectionExtensions.cs" />
-    <Compile Include="Services\ISearchAndReplaceServiceFactory.cs" />
-    <Compile Include="Services\IWhatsNewDisplayService.cs" />
+    <Compile Include="Interfaces\ISearchAndReplaceServiceFactory.cs" />
+    <Compile Include="Interfaces\IWhatsNewDisplayService.cs" />
     <Compile Include="Services\SearchAndReplaceAsciiArtService.cs" />
     <Compile Include="Services\SearchAndReplaceServiceFactory.cs" />
     <Compile Include="Services\WhatsNewDisplayService.cs" />

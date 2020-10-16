@@ -21,11 +21,10 @@
       An Assembly element with Name="*Application*" applies to all assemblies in
       the application package. The asterisks are not wildcards.
     -->
-    <Assembly Name="*Application*" Dynamic="Required All" />
-    
+    <Assembly Name="*Application*" Dynamic="Required All" />    
     
     <!-- Add your application specific runtime directives here. -->
-
+    <Assembly Name="System.Text.Json" Serialize="Required All" />
 
   </Application>
 </Directives>

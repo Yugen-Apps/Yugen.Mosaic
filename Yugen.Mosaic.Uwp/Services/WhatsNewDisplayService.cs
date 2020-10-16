@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Yugen.Mosaic.Uwp.Controls;
+using Yugen.Mosaic.Uwp.Interfaces;
 
 namespace Yugen.Mosaic.Uwp.Services
 {

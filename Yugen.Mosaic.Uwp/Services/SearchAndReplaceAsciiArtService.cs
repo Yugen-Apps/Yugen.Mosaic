@@ -24,34 +24,25 @@ namespace Yugen.Mosaic.Uwp.Services
         {
             _progressService.Reset();
 
-            bool toggle = false;
             StringBuilder sb = new StringBuilder();
+            int hRatio = ratio * 2;
+            var totalProgress = masterImage.Height / hRatio;
 
-            for (int h = 0; h < masterImage.Height; h += ratio)
+            for (int h = 0; h < masterImage.Height; h += hRatio)
             {
-                for (int w = 0; w < masterImage.Width; w += ratio)
+                Span<Rgba32> rowSpan = masterImage.GetPixelRowSpan(h);
+
+                for (var w = 0; w < masterImage.Width; w += ratio)
                 {
                     var grayColor = new L8();
-                    grayColor.FromRgba32(masterImage[w, h]);
-
-                    if (!toggle)
-                    {
-                        int index = grayColor.PackedValue * 10 / 255;
-                        sb.Append(asciiChars[index]);
-                    }
+                    grayColor.FromRgba32(rowSpan[w]);
+                    int index = grayColor.PackedValue * 10 / 255;
+                    sb.Append(asciiChars[index]);
                 }
 
-                if (!toggle)
-                {
-                    sb.AppendLine();
-                    toggle = true;
-                }
-                else
-                {
-                    toggle = false;
-                }
+                sb.AppendLine();
 
-                _progressService.IncrementProgress(masterImage.Height);
+                _progressService.IncrementProgress(totalProgress);
             }
 
             var font = SystemFonts.CreateFont("Courier New", 14);
@@ -63,7 +54,7 @@ namespace Yugen.Mosaic.Uwp.Services
             {
                 i.Fill(Color.White);
                 i.DrawText(text, font, Color.Black, new PointF(0, 0));
-             });
+            });
 
             return finalImage;
         }
