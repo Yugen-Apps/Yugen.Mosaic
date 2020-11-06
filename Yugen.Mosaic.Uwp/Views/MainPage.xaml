@@ -393,7 +393,7 @@
                         Margin="4,0,0,4">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
-                        <FontIcon Glyph="&#xE735;" />
+                        <FontIcon Glyph="&#xE789;" />
                         <TextBlock x:Uid="MainWhatsNewTextBlock" />
                     </StackPanel>
                 </Button>
