@@ -37,7 +37,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private async Task SwitchThemeCommandBehavior(ElementTheme param)
         {
             ElementTheme = param;
-            await _themeSelectorService.SetThemeAsync(param);
+            await _themeSelectorService.SetThemeAsync(param, true);
         }
     }
 }

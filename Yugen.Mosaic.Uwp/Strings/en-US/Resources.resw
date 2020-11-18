@@ -254,6 +254,9 @@
   <data name="OnboardingStageTilePropertiesTitle" xml:space="preserve">
     <value>Set the tile properties</value>
   </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
   <data name="SettingsAboutTextBlock.Text" xml:space="preserve">
     <value>About</value>
   </data>
@@ -281,21 +284,18 @@
   <data name="SettingsThemeTextBlock.Text" xml:space="preserve">
     <value>Theme</value>
   </data>
-  <data name="SettingsTitleTextBlock.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
   <data name="SettingsUIHyperlink.Content" xml:space="preserve">
     <value>UI Design By Leisvan</value>
   </data>
   <data name="SettingsUIHyperlink.NavigateUri" xml:space="preserve">
     <value>https://twitter.com/leisvanCT</value>
   </data>
+  <data name="WhatsNew.Title" xml:space="preserve">
+    <value>What's New</value>
+  </data>
   <data name="WhatsNewBody" xml:space="preserve">
     <value>- We added a new mosaic type option "Ascii Art" for text based visual art. 
 This graphic design technique will recreate your pictures with a set of printable characters pieced together.
 - We squashed some bugs and made some performance improvements</value>
-  </data>
-  <data name="WhatsNewTitle" xml:space="preserve">
-    <value>What's New</value>
   </data>
 </root>

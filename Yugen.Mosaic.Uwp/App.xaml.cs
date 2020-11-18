@@ -13,11 +13,11 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Yugen.Mosaic.Uwp.Extensions;
 using Yugen.Mosaic.Uwp.Interfaces;
 using Yugen.Mosaic.Uwp.Services;
 using Yugen.Mosaic.Uwp.ViewModels;
 using Yugen.Mosaic.Uwp.Views;
+using Yugen.Toolkit.Standard.Extensions;
 using Yugen.Toolkit.Standard.Services;
 using Yugen.Toolkit.Uwp.Helpers;
 using Yugen.Toolkit.Uwp.Services;
@@ -61,11 +61,12 @@ namespace Yugen.Mosaic.Uwp
             {
                 await InitializeServices();
 
-                TitleBarHelper.ExtendToTitleBar();
+                // Initial UI styling
+                TitleBarHelper.ExpandViewIntoTitleBar();
+                //TitleBarHelper.StyleTitleBar(...);
 
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -133,10 +134,10 @@ namespace Yugen.Mosaic.Uwp
                 .AddSingleton<IWhatsNewDisplayService, WhatsNewDisplayService>()
 
                 .AddTransient<ISearchAndReplaceServiceFactory, SearchAndReplaceServiceFactory>()
-                .AddFactory<SearchAndReplaceAdjustHueService>()
-                .AddFactory<SearchAndReplaceClassicService>()
-                .AddFactory<SearchAndReplacePlainColorService>()
-                .AddFactory<SearchAndReplaceRandomService>()
+                .AddTransientFactory<SearchAndReplaceAdjustHueService>()
+                .AddTransientFactory<SearchAndReplaceClassicService>()
+                .AddTransientFactory<SearchAndReplacePlainColorService>()
+                .AddTransientFactory<SearchAndReplaceRandomService>()
 
                 .AddTransient<MainViewModel>()
                 .AddTransient<SettingsViewModel>()
@@ -151,7 +152,7 @@ namespace Yugen.Mosaic.Uwp
 
         private async Task InitializeServices()
         {
-            await Services.GetService<IThemeSelectorService>().InitializeAsync();
+            await Services.GetService<IThemeSelectorService>().InitializeAsync(true);
         }
     }
 }

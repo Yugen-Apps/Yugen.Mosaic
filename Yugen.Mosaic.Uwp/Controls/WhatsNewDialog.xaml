@@ -1,57 +1,40 @@
-﻿<ContentDialog x:Class="Yugen.Mosaic.Uwp.Controls.WhatsNewDialog"
-               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               xmlns:local="using:Yugen.Mosaic.Uwp.Controls"
-               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-               mc:Ignorable="d">
+﻿<dialogs:YugenDialog x:Class="Yugen.Mosaic.Uwp.Controls.WhatsNewDialog"
+                     x:Uid="WhatsNew"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:local="using:Yugen.Mosaic.Uwp.Controls"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:dialogs="using:Yugen.Toolkit.Uwp.Controls.Dialogs"
+                     mc:Ignorable="d"
+                     Background="{ThemeResource AppDeepBackgroundBrush}">
 
-    <StackPanel MaxWidth="400"
-                Padding="8"
-                Spacing="8">
+    <StackPanel Spacing="4">
 
-        <Grid>
-            <Image Height="40"
-                   Width="40"
-                   HorizontalAlignment="Left"
-                   Source="ms-appx:///Assets/StoreLogo.png" />
-            <TextBlock HorizontalAlignment="Left"
-                       Margin="48,0,0,0"
-                       Style="{ThemeResource TitleTextBlockStyle}"
-                       Text="{x:Bind ViewModel.Title}" />
-            <Button Command="{x:Bind HideCommand}"
-                    HorizontalAlignment="Right"
-                    Style="{StaticResource SoftRevealButtonStyle}">
-                <FontIcon Glyph="&#xE8BB;" />
-            </Button>
-        </Grid>
+        <TextBlock Text="{x:Bind ViewModel.Body}"
+                   TextWrapping="WrapWholeWords" />
+        
+        <!--Footer-->
+        <Image Margin="0,16,0,0" 
+               Source="ms-appx:///Assets/Images/UWPCommunityGif.gif"
+               Stretch="Uniform"
+               Width="60" />
 
-        <ScrollViewer MaxHeight="400">
-            <TextBlock Text="{x:Bind ViewModel.Body}"
-                       TextWrapping="WrapWholeWords" />
-        </ScrollViewer>
+        <TextBlock x:Uid="DefaultLaunch2020TextBlock"
+                   HorizontalAlignment="Center"
+                   FontWeight="Bold"
+                   Margin="0,8,0,0"
+                   Style="{StaticResource YugenBodyTextBlockStyle}" />
 
-        <StackPanel>
-            <Image Source="ms-appx:///Assets/Images/UWPCommunityGif.gif"
-                   Stretch="Uniform"
-                   Width="60" />
+        <HyperlinkButton x:Uid="DefaultUwpCommunityHyperlink"
+                         HorizontalAlignment="Center"
+                         Style="{ThemeResource YugenHyperlinkButtonStyle}" />
 
-            <TextBlock x:Uid="DefaultLaunch2020TextBlock"
-                       HorizontalAlignment="Center"
-                       FontWeight="Bold"
-                       Margin="0,8,0,0"
-                       Style="{StaticResource YugenBodyTextBlockStyle}" />
-
-            <HyperlinkButton x:Uid="DefaultUwpCommunityHyperlink"
-                             HorizontalAlignment="Center"
-                             Style="{ThemeResource YugenHyperlinkButtonStyle}" />
-
-            <HyperlinkButton x:Uid="DefaultDevelopedByHyperlink"
-                             FontStyle="Italic"
-                             HorizontalAlignment="Center"
-                             Margin="0,8,0,0"
-                             Style="{ThemeResource YugenHyperlinkButtonStyle}" />
-        </StackPanel>
+        <HyperlinkButton x:Uid="DefaultDevelopedByHyperlink"
+                         FontStyle="Italic"
+                         HorizontalAlignment="Center"
+                         Style="{ThemeResource YugenHyperlinkButtonStyle}" />
 
     </StackPanel>
-</ContentDialog>
+
+</dialogs:YugenDialog>

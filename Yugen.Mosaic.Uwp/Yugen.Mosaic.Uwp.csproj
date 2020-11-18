@@ -136,7 +136,6 @@
     <Compile Include="Enums\OnboardingStage.cs" />
     <Compile Include="Models\TileFound.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceAsciiArtService.cs" />
-    <Compile Include="Extensions\ServiceCollectionExtensions.cs" />
     <Compile Include="Interfaces\ISearchAndReplaceServiceFactory.cs" />
     <Compile Include="Interfaces\IWhatsNewDisplayService.cs" />
     <Compile Include="Services\SearchAndReplaceAsciiArtService.cs" />
@@ -266,7 +265,7 @@
       <Version>2.4.3</Version>
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp">
-      <Version>1.0.1</Version>
+      <Version>1.0.2</Version>
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp.Drawing">
       <Version>1.0.0-beta0010</Version>
@@ -275,13 +274,13 @@
       <Version>1.6.7</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Standard">
-      <Version>1.0.39</Version>
+      <Version>1.0.40</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Uwp">
-      <Version>1.0.39</Version>
+      <Version>1.0.40</Version>
     </PackageReference>
     <PackageReference Include="Yugen.Toolkit.Uwp.Controls">
-      <Version>1.0.39</Version>
+      <Version>1.0.40</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging">
       <Version>3.0.1</Version>
