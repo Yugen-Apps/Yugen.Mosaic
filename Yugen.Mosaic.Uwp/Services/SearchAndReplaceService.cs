@@ -41,7 +41,7 @@ namespace Yugen.Mosaic.Uwp.Services
         public virtual Image<Rgba32> SearchAndReplace() => throw new NotImplementedException();
 
         // TODO: c.DrawImage crash (System.NullReferenceException)
-        // with the current SixLabors.ImageSharp.Drawing preview version
+        // with the current SixLabors.ImageSharp.Drawing beta version
         //protected void ApplyTileFound(int x, int y, Image<Rgba32> source)
         //{
         //    _outputImage.Mutate(c =>
