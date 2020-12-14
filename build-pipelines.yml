@@ -48,6 +48,7 @@ steps:
                   /p:AppxBundle=Always 
                   /p:UapAppxPackageBuildMode=StoreUpload 
                   /p:AppxPackageSigningEnabled=false'
+    msbuildArchitecture: 'x64'
     maximumCpuCount: true
 
 - task: PublishBuildArtifacts@1
