@@ -1,8 +1,3 @@
-# Universal Windows Platform
-# Build a Universal Windows Platform project using Visual Studio.
-# Add steps that test and distribute an app, save build artifacts, and more:
-# https://aka.ms/yaml
-
 trigger:
 - release/*
 pr: none
@@ -22,11 +17,11 @@ name: $(GITVERSION_AssemblySemFileVer)
 
 steps:
 
-- task: UseGitVersion@5
-  displayName: GitVersion
-  continueOnError: true
+- task: gitversion/setup@0
   inputs:
     versionSpec: '5.x'
+
+- task: gitversion/execute@0
 
 - task: NuGetToolInstaller@1
 
@@ -53,6 +48,7 @@ steps:
                   /p:AppxBundle=Always 
                   /p:UapAppxPackageBuildMode=StoreUpload 
                   /p:AppxPackageSigningEnabled=false'
+    maximumCpuCount: true
 
 - task: PublishBuildArtifacts@1
   inputs:
