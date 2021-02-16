@@ -9,13 +9,13 @@
   <Identity
     Name="30978emiliano84.YugenMosaic"
     Publisher="CN=0259C6DD-5945-485D-962F-C84F7531D6C4"
-    Version="1.1.6.0" />
+    Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="28ec5e35-91ae-4fd4-ad1b-556ee32b1fc6" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Yugen Mosaic</DisplayName>
-    <PublisherDisplayName>emiliano84</PublisherDisplayName>
+    <PublisherDisplayName>PandaSharp</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
