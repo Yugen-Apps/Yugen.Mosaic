@@ -1,6 +1,8 @@
-﻿using Microsoft.Toolkit.Uwp.Helpers;
+﻿using Microsoft.Toolkit.Uwp;
+using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Threading.Tasks;
+using Windows.System;
 using Yugen.Mosaic.Uwp.Controls;
 using Yugen.Mosaic.Uwp.Interfaces;
 
@@ -12,15 +14,17 @@ namespace Yugen.Mosaic.Uwp.Services
 
         public async Task ShowIfAppropriateAsync()
         {
-            await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+            var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+
+            if (SystemInformation.Instance.IsAppUpdated && !isShown)
             {
-                if (SystemInformation.IsAppUpdated && !isShown)
+                isShown = true;
+                await dispatcherQueue.EnqueueAsync(async () =>
                 {
-                    isShown = true;
                     var dialog = new WhatsNewDialog();
                     await dialog.ShowAsync();
-                }
-            });
+                });
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+      xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
       xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:models="using:Yugen.Mosaic.Uwp.Models"
       xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
@@ -66,7 +66,7 @@
 
                         <Grid x:Name="MasterImageGrid"
                               CornerRadius="2"
-                              extensions:Mouse.Cursor="Hand">
+                              ui:FrameworkElementExtensions.Cursor="Hand">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:InvokeCommandAction Command="{x:Bind ViewModel.AddMasterImmageCommand}" />
