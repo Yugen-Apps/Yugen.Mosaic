@@ -1,6 +1,6 @@
 ﻿using Microsoft.AppCenter.Crashes;
 using Microsoft.Toolkit.Mvvm.Input;
-using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.UI.Xaml.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Controls;
@@ -36,7 +37,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private bool _isAddMasterUIVisible = true;
         private bool _isAlignmentGridVisibile = true;
-        private bool _isIndeterminateLoading;
+        private bool _isIndeterminate;
         private bool _isLoading;
         private bool _isTeachingTipOpen;
         private bool _isButtonEnabled = true;
@@ -62,7 +63,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
             PointerEnteredCommand = new RelayCommand(PointerEnteredCommandBehavior);
             PointerExitedCommand = new RelayCommand(PointerExitedCommandBehavior);
-            AddMasterImmageCommand = new AsyncRelayCommand(AddMasterImmageCommandBehavior);
+            AddMasterImageCommand = new AsyncRelayCommand(AddMasterImageCommandBehavior);
             AddTilesCommand = new AsyncRelayCommand(AddTilesCommandBehavior);
             AddTilesFolderCommand = new AsyncRelayCommand(AddTilesFolderCommandBehavior);
             ClickTileCommand = new AsyncRelayCommand<TileBmp>(ClickTileCommandBehavior);
@@ -89,10 +90,10 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             set => SetProperty(ref _isAlignmentGridVisibile, value);
         }
 
-        public bool IsIndeterminateLoading
+        public bool IsIndeterminate
         {
-            get => _isIndeterminateLoading;
-            set => SetProperty(ref _isIndeterminateLoading, value);
+            get => _isIndeterminate;
+            set => SetProperty(ref _isIndeterminate, value);
         }
 
         public bool IsLoading
@@ -196,7 +197,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         public ICommand PointerEnteredCommand { get; }
         public ICommand PointerExitedCommand { get; }
-        public ICommand AddMasterImmageCommand { get; }
+        public ICommand AddMasterImageCommand { get; }
         public ICommand AddTilesCommand { get; }
         public ICommand AddTilesFolderCommand { get; }
         public ICommand ClickTileCommand { get; }
@@ -254,7 +255,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         public void TeachingTip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args) => ShowTeachingTip();
 
-        private async Task AddMasterImmageCommandBehavior()
+        private async Task AddMasterImageCommandBehavior()
         {
             StorageFile masterFile = await FilePickerHelper.OpenFile(
                 new List<string> {
@@ -266,12 +267,13 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
             if (masterFile != null)
             {
-                IsButtonEnabled = false;
-                IsIndeterminateLoading = true;
+                StartProgressRing(true);
 
                 using (var inputStream = await masterFile.OpenReadAsync())
                 {
-                    await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                    var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+
+                    await dispatcherQueue.EnqueueAsync(async () =>
                     {
                         var bmp = new BitmapImage
                         {
@@ -288,8 +290,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 OutputWidth = newSize.Item1;
                 OutputHeight = newSize.Item2;
 
-                IsIndeterminateLoading = false;
-                IsButtonEnabled = true;
+                StopProgressRing();
             }
 
             UpdateIsAddMasterUIVisible();
@@ -352,8 +353,9 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private async Task AddTiles(IEnumerable<StorageFile> files)
         {
-            IsButtonEnabled = false;
-            IsIndeterminateLoading = true;
+            StartProgressRing(false);
+
+            var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
             await Task.Run(() =>
                 Parallel.ForEach(files, async file =>
@@ -362,7 +364,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                     {
                         using (var inputStream = await file.OpenReadAsync())
                         {
-                            await DispatcherHelper.ExecuteOnUIThreadAsync(async () =>
+                            await dispatcherQueue.EnqueueAsync(async () =>
                             {
                                 var bmp = new BitmapImage
                                 {
@@ -383,8 +385,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 })
             );
 
-            IsIndeterminateLoading = false;
-            IsButtonEnabled = true;
+            StopProgressRing();
         }
 
         private async Task ClickTileCommandBehavior(TileBmp item)
@@ -399,8 +400,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private async Task GenerateCommandBehavior()
         {
-            IsButtonEnabled = false;
-            IsLoading = true;
+            StartProgressRing(false);
 
             _progressService.Init(percent =>
             {
@@ -430,14 +430,12 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 IsAlignmentGridVisibile = false;
             }
 
-            IsLoading = false;
-            IsButtonEnabled = true;
+            StopProgressRing();
         }
 
         private async Task SaveCommandBehavior()
         {
-            IsButtonEnabled = false;
-            IsLoading = true;
+            StartProgressRing(false);
 
             var fileTypes = new Dictionary<string, List<string>>()
             {
@@ -468,8 +466,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 }
             }
 
-            IsLoading = false;
-            IsButtonEnabled = true;
+            StopProgressRing();
         }
 
         private void ResetCommandBehavior()
@@ -504,5 +501,18 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private void UpdateIsAddMasterUIVisible() =>
             IsAddMasterUIVisible = MasterBpmSource.PixelWidth <= 0 || MasterBpmSource.PixelHeight <= 0;
+
+        private void StartProgressRing(bool isIndeterminate)
+        {
+            IsButtonEnabled = false;
+            IsLoading = true;
+            IsIndeterminate = isIndeterminate;
+        }
+
+        private void StopProgressRing()
+        {
+            IsLoading = false;
+            IsButtonEnabled = true;
+        }
     }
 }

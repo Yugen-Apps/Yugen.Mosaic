@@ -69,7 +69,7 @@
                               ui:FrameworkElementExtensions.Cursor="Hand">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.AddMasterImmageCommand}" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.AddMasterImageCommand}" />
                                 </core:EventTriggerBehavior>
                                 <core:EventTriggerBehavior EventName="PointerEntered">
                                     <core:InvokeCommandAction Command="{x:Bind ViewModel.PointerEnteredCommand}" />
@@ -364,22 +364,13 @@
                                            Foreground="Firebrick"
                                            Height="100"
                                            Width="100"
-                                           IsActive="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}"
+                                           IsActive="True"
+                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                           IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                            Margin="2"
-                                           Visibility="{x:Bind ViewModel.IsIndeterminateLoading, Mode=OneWay}" />
-                        <!--Style="{StaticResource YugenProgressRingStyle}"-->
-
-                        <toolkitControls:RadialProgressBar x:Name="RadialProgressBarControl"
-                                                           Foreground="Firebrick"
-                                                           Outline="DarkGoldenrod"
-                                                           Height="100"
-                                                           Width="100"
-                                                           IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                                           Minimum="0"
-                                                           Maximum="100"
-                                                           Thickness="8"
-                                                           Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
-                                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
+                                           Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
+                                           <!--Style="{StaticResource YugenProgressRingStyle}"-->
 
                     </StackPanel>
 
