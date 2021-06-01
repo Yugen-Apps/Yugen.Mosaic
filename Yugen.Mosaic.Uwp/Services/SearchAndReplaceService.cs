@@ -34,8 +34,7 @@ namespace Yugen.Mosaic.Uwp.Services
             _tX = tX;
             _tY = tY;
 
-            // TODO: adapt size to tiles
-            _outputImage = new Image<Rgba32>(outputSize.Width, outputSize.Height);
+            _outputImage = new Image<Rgba32>(tileSize.Width * _tX, tileSize.Height * _tY);
         }
 
         public virtual Image<Rgba32> SearchAndReplace() => throw new NotImplementedException();

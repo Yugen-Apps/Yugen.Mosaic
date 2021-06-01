@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Yugen.Mosaic.Uwp.Enums;
@@ -39,11 +40,13 @@ namespace Yugen.Mosaic.Uwp.Services
             _progressService = progressService;
             _searchAndReplaceAsciiArtService = searchAndReplaceAsciiArtService;
             _searchAndReplaceServiceFactory = searchAndReplaceServiceFactory;
+
+            StorageApplicationPermissions.FutureAccessList.Clear();
         }
 
-        public async Task<Size> AddMasterImage(StorageFile file)
+        public async Task<Size> AddMasterImage(StorageFile storageFile)
         {
-            using (var inputStream = await file.OpenReadAsync())
+            using (var inputStream = await storageFile.OpenReadAsync())
             using (var stream = inputStream.AsStreamForRead())
             {
                 _masterImage = Image.Load<Rgba32>(stream);
@@ -52,9 +55,10 @@ namespace Yugen.Mosaic.Uwp.Services
             return _masterImage.Size();
         }
 
-        public void AddTileImage(string name, StorageFile file)
+        public void AddTileImage(string name, StorageFile storageFile)
         {
-            _tileImageList.Add(new Tile(name, file));
+            var faToken = StorageApplicationPermissions.FutureAccessList.Add(storageFile);
+            _tileImageList.Add(new Tile(name, faToken));
         }
 
         public async Task<Result<Image<Rgba32>>> Generate(Size outputSize, Size tileSize, MosaicTypeEnum selectedMosaicType)
@@ -147,7 +151,7 @@ namespace Yugen.Mosaic.Uwp.Services
 
             var finalImage = _searchAndReplaceService.SearchAndReplace();
 
-            GC.Collect();
+            Dispose();
 
             return Result.Ok(finalImage);
         }
@@ -172,15 +176,28 @@ namespace Yugen.Mosaic.Uwp.Services
             _progressService.Reset();
 
             var processTiles = _tileImageList.AsParallel().Select(tile => ProcessTile(tile));
-
             await Task.WhenAll(processTiles);
         }
 
         private async Task ProcessTile(Tile tile)
         {
-            await tile.Process(_tileSize);
+            StorageFile storageFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(tile.FaToken);
+            IRandomAccessStream randomAccessStream = await storageFile.OpenAsync(FileAccessMode.Read);
+            tile.Process(_tileSize, randomAccessStream);
 
             _progressService.IncrementProgress(_tileImageList.Count, 33, 66);
+        }
+
+        private void Dispose()
+        {
+            Parallel.ForEach(_tileImageList, tile =>
+            {
+                tile.Dispose();
+            });
+
+            Configuration.Default.MemoryAllocator.ReleaseRetainedResources();
+
+            GC.Collect();
         }
     }
 }

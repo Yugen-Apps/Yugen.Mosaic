@@ -3,41 +3,45 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage;
+using Windows.Storage.Streams;
 using Yugen.Mosaic.Uwp.Helpers;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
-    public class Tile
+    public class Tile : IDisposable
     {
-        public Tile(string name, StorageFile file)
+        public Tile(string name, string faToken)
         {
             Name = name;
-            File = file;
-            //FaToken = StorageApplicationPermissions.FutureAccessList.Add(file);
+            FaToken = faToken;
         }
 
         public string Name { get; set; }
-        public StorageFile File { get; set; }
 
-        //public string FaToken { get; set; }
+        public string FaToken { get; set; }
+
         public Image<Rgba32> ResizedImage { get; set; }
 
         public Rgba32 AverageColor { get; set; }
 
-        public async Task Process(Size tileSize)
+        public void Process(Size tileSize, IRandomAccessStream RandomAccessStream)
         {
-            //StorageFile file = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(FaToken);
-
-            using (var inputStream = await File.OpenReadAsync())
-            using (var stream = inputStream.AsStreamForRead())
+            using (var stream = RandomAccessStream.AsStreamForRead())
             {
-                ResizedImage = Image.Load<Rgba32>(stream);
+                ResizedImage = Image.Load<Rgba32>(stream);                     
             }
-
             ResizedImage.Mutate(x => x.Resize(tileSize));
-            AverageColor = ColorHelper.GetAverageColor(ResizedImage);
+
+            if (AverageColor == default)
+            {
+                AverageColor = ColorHelper.GetAverageColor(ResizedImage);
+            }
+        }
+
+        public void Dispose()
+        {
+            ResizedImage.Dispose();
+            ResizedImage = null;
         }
     }
 }

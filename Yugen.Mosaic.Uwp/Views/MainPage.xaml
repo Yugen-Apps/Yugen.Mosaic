@@ -148,17 +148,23 @@
 
                     <toolkitControls:AdaptiveGridView.ItemTemplate>
                         <DataTemplate x:DataType="models:TileBmp">
-                            <Grid>
-                                <Image Source="{x:Bind Image}" />
-                                <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
-                                        Padding="4"
-                                        VerticalAlignment="Bottom">
-                                    <TextBlock MaxLines="2"
-                                               Text="{x:Bind Name}"
-                                               TextWrapping="Wrap"
-                                               Style="{ThemeResource CaptionTextBlockStyle}" />
-                                </Border>
-                            </Grid>
+                            <Border CornerRadius="4">
+                                <Grid>
+                                    <Image Height="80" 
+                                           Stretch="UniformToFill"
+                                           Source="{x:Bind Image}"
+                                           VerticalAlignment="Top"/>
+                                    <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
+                                            VerticalAlignment="Bottom">
+                                        <TextBlock MaxLines="1"
+                                                   Padding="2"
+                                                   Text="{x:Bind Name}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   ToolTipService.ToolTip="{x:Bind Name}"
+                                                   Style="{ThemeResource CaptionTextBlockStyle}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </toolkitControls:AdaptiveGridView.ItemTemplate>
 

@@ -1,16 +1,17 @@
-﻿using Windows.UI.Xaml.Media.Imaging;
+﻿using Windows.UI.Xaml.Media;
 
 namespace Yugen.Mosaic.Uwp.Models
 {
     public class TileBmp
     {
-        public TileBmp(string name, BitmapImage image)
+        public TileBmp(string name, ImageSource image)
         {
             Name = name;
             Image = image;
         }
 
-        public BitmapImage Image { get; set; }
+        public ImageSource Image { get; set; }
+
         public string Name { get; set; }
     }
 }

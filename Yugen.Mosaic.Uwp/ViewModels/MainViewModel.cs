@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
+using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI.Xaml;
@@ -196,22 +197,37 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         }
 
         public ICommand PointerEnteredCommand { get; }
+
         public ICommand PointerExitedCommand { get; }
+
         public ICommand AddMasterImageCommand { get; }
+
         public ICommand AddTilesCommand { get; }
+
         public ICommand AddTilesFolderCommand { get; }
+
         public ICommand ClickTileCommand { get; }
+
         public ICommand GenerateCommand { get; }
+
         public ICommand SaveCommand { get; }
+
         public ICommand ResetCommand { get; }
+
         public ICommand HelpCommand { get; }
+
         public ICommand WhatsNewCommand { get; }
+
         public ICommand SettingsCommand { get; }
+
         public ICommand TeachingTipActionButtonCommand { get; }
+
         //public ICommand TeachingTipClosingCommand { get; }
+
         //public ICommand TeachingTipClosedCommand { get; }
 
         private Size OutputSize => new Size(_outputWidth, _outputHeight);
+
         private Size TileSize => new Size(_tileWidth, _tileHeight);
 
         public void PointerEnteredCommandBehavior() => IsAddMasterUIVisible = true;
@@ -358,21 +374,20 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
             await Task.Run(() =>
+            {
                 Parallel.ForEach(files, async file =>
                 {
                     try
                     {
-                        using (var inputStream = await file.OpenReadAsync())
+                        using (StorageItemThumbnail thumbnail = await file.GetThumbnailAsync(
+                               ThumbnailMode.SingleItem, 120, ThumbnailOptions.None))
                         {
                             await dispatcherQueue.EnqueueAsync(async () =>
                             {
-                                var bmp = new BitmapImage
-                                {
-                                    DecodePixelHeight = 120
-                                };
-                                await bmp.SetSourceAsync(inputStream);
+                                BitmapImage bitmapImage = new BitmapImage();
+                                await bitmapImage.SetSourceAsync(thumbnail);
 
-                                TileBmpCollection.Add(new TileBmp(file.DisplayName, bmp));
+                                TileBmpCollection.Add(new TileBmp(file.DisplayName, bitmapImage));
                             });
                         }
 
@@ -382,8 +397,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                     {
                         Crashes.TrackError(exception);
                     }
-                })
-            );
+                });
+            });
 
             StopProgressRing();
         }
