@@ -498,7 +498,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
 
         private void HelpCommandBehavior()
         {
-            OnboardingHelper.IsDisabled = false;
+            OnboardingHelper.Reset();
             ShowTeachingTip();
         }
 

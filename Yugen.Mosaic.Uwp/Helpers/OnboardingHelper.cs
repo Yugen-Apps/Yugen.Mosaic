@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Toolkit.Uwp.Helpers;
@@ -46,7 +47,7 @@ namespace Yugen.Mosaic.Uwp.Helpers
         {
             OnboardingElement onboardingElement = null;
 
-            if (_step < 0 || IsDisabled)
+            if (IsDisabled)
             {
                 return onboardingElement;
             }
@@ -62,6 +63,12 @@ namespace Yugen.Mosaic.Uwp.Helpers
             }
 
             return onboardingElement;
+        }
+
+        internal static void Reset()
+        {
+            IsDisabled = false;
+            _step = 0;
         }
     }
 }
