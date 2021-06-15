@@ -498,8 +498,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             }
 
             StopProgressRing();
-        }        
-        
+        }
+
         private async Task SaveAsTextCommandBehavior()
         {
             StartProgressRing(false);

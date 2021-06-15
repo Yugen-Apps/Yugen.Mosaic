@@ -22,19 +22,19 @@ namespace Yugen.Mosaic.Uwp.Services
     public class MosaicService : IMosaicService
     {
         private readonly IProgressService _progressService;
-
-        private readonly List<Tile> _tileImageList = new List<Tile>();
         private readonly ISearchAndReplaceAsciiArtService _searchAndReplaceAsciiArtService;
+        private readonly ISearchAndReplaceServiceFactory _searchAndReplaceServiceFactory;
+        private readonly List<Tile> _tileImageList = new List<Tile>();
+
         private Rgba32[,] _avgsMaster;
         private int _tX;
         private int _tY;
         private Image<Rgba32> _masterImage;
         private Size _tileSize;
         private ISearchAndReplaceService _searchAndReplaceService;
-        private readonly ISearchAndReplaceServiceFactory _searchAndReplaceServiceFactory;
 
         public MosaicService(
-            IProgressService progressService, 
+            IProgressService progressService,
             ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService,
             ISearchAndReplaceServiceFactory searchAndReplaceServiceFactory)
         {

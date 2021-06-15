@@ -15,8 +15,11 @@ namespace Yugen.Mosaic.Uwp.Models
         }
 
         public OnboardingStage Stage { get; set; }
+
         public string Subtitle { get; set; }
+
         public FrameworkElement Target { get; set; }
+
         public string Title { get; set; }
     }
 }

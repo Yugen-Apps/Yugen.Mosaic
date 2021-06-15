@@ -17,13 +17,15 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         {
             _themeSelectorService = themeSelectorService;
 
-            _elementTheme = _themeSelectorService.Theme; 
-            
+            _elementTheme = _themeSelectorService.Theme;
+
             SwitchThemeCommand = new AsyncRelayCommand<ElementTheme>(SwitchThemeCommandBehavior);
         }
 
         public string AppVersion => SystemHelper.AppVersion;
+
         public string Publisher => SystemHelper.Publisher;
+
         public string RateAndReviewUri => SystemHelper.RateAndReviewUri;
 
         public ElementTheme ElementTheme
