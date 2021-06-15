@@ -10,6 +10,8 @@ namespace Yugen.Mosaic.Uwp.Interfaces
 {
     public interface IMosaicService
     {
+        string GetAsciiText { get; }
+
         Task<Size> AddMasterImage(StorageFile file);
 
         void AddTileImage(string name, StorageFile file);

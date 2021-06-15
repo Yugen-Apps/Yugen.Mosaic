@@ -55,6 +55,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         private int _tileHeight = 25;
         private int _tileWidth = 25;
         private int _progress = 0;
+        private bool _isSaveAsTextButtonVisible;
 
         public MainViewModel(IMosaicService mosaicService, IProgressService progressService)
         {
@@ -70,6 +71,7 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             ClickTileCommand = new AsyncRelayCommand<TileBmp>(ClickTileCommandBehavior);
             GenerateCommand = new AsyncRelayCommand(GenerateCommandBehavior);
             SaveCommand = new AsyncRelayCommand(SaveCommandBehavior);
+            SaveAsTextCommand = new AsyncRelayCommand(SaveAsTextCommandBehavior);
             ResetCommand = new RelayCommand(ResetCommandBehavior);
             HelpCommand = new RelayCommand(HelpCommandBehavior);
             WhatsNewCommand = new AsyncRelayCommand(WhatsNewCommandBehavior);
@@ -151,7 +153,19 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public MosaicType SelectedMosaicType
         {
             get => _selectedMosaicType;
-            set => SetProperty(ref _selectedMosaicType, value);
+            set
+            {
+                if (SetProperty(ref _selectedMosaicType, value))
+                {
+                    IsSaveAsTextButtonVisible = _selectedMosaicType.MosaicTypeEnum == MosaicTypeEnum.AsciiArt;
+                }
+            }
+        }
+
+        public bool IsSaveAsTextButtonVisible
+        {
+            get => _isSaveAsTextButtonVisible;
+            set => SetProperty(ref _isSaveAsTextButtonVisible, value);
         }
 
         public string TeachingTipSubTitle
@@ -211,6 +225,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
         public ICommand GenerateCommand { get; }
 
         public ICommand SaveCommand { get; }
+
+        public ICommand SaveAsTextCommand { get; }
 
         public ICommand ResetCommand { get; }
 
@@ -480,6 +496,30 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                         break;
                 }
             }
+
+            StopProgressRing();
+        }        
+        
+        private async Task SaveAsTextCommandBehavior()
+        {
+            StartProgressRing(false);
+
+            var fileTypes = new Dictionary<string, List<string>>()
+            {
+                {FileFormat.Txt.ToString(), new List<string>() {FileFormat.Txt.GetStringRepresentation()}}
+            };
+
+            StorageFile file = await FilePickerHelper.SaveFile("Mosaic", fileTypes,
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+
+            var text = _mosaicService.GetAsciiText;
+
+            if (file == null || _outputImage == null || string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            await FileIO.WriteTextAsync(file, text);
 
             StopProgressRing();
         }

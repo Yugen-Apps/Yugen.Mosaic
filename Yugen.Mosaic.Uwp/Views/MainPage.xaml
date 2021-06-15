@@ -87,7 +87,7 @@
                             <Grid x:Name="AddMasterUI"
                                   Background="{ThemeResource AppTransparentBackgroundBrush}"
                                   CornerRadius="2"
-                                  Visibility="{x:Bind ViewModel.IsAddMasterUIVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                  Visibility="{x:Bind ViewModel.IsAddMasterUIVisible, Mode=OneWay}">
 
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
@@ -361,6 +361,22 @@
                                             Spacing="4">
                                     <FontIcon Glyph="&#xE72C;" />
                                     <TextBlock x:Uid="MainResetTextBlock" />
+                                </StackPanel>
+                            </Button>
+
+                        </Grid>
+
+                        <Grid Margin="4,0,0,0">
+
+                            <Button Command="{x:Bind ViewModel.SaveAsTextCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    IsEnabled="{x:Bind ViewModel.IsButtonEnabled, Mode=OneWay}"
+                                    Margin="0,0,4,0"
+                                    Visibility="{x:Bind ViewModel.IsSaveAsTextButtonVisible, Mode=OneWay}">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="4">
+                                    <FontIcon Glyph="&#xE74E;" />
+                                    <TextBlock x:Uid="MainSaveAsTextTextBlock" />
                                 </StackPanel>
                             </Button>
 

@@ -33,8 +33,9 @@ namespace Yugen.Mosaic.Uwp.Services
         private ISearchAndReplaceService _searchAndReplaceService;
         private readonly ISearchAndReplaceServiceFactory _searchAndReplaceServiceFactory;
 
-
-        public MosaicService(IProgressService progressService, ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService,
+        public MosaicService(
+            IProgressService progressService, 
+            ISearchAndReplaceAsciiArtService searchAndReplaceAsciiArtService,
             ISearchAndReplaceServiceFactory searchAndReplaceServiceFactory)
         {
             _progressService = progressService;
@@ -43,6 +44,8 @@ namespace Yugen.Mosaic.Uwp.Services
 
             StorageApplicationPermissions.FutureAccessList.Clear();
         }
+
+        public string GetAsciiText => _searchAndReplaceAsciiArtService.Text;
 
         public async Task<Size> AddMasterImage(StorageFile storageFile)
         {

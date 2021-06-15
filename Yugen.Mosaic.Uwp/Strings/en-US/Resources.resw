@@ -171,6 +171,9 @@
   <data name="MainResetTextBlock.Text" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="MainSaveAsTextTextBlock.Text" xml:space="preserve">
+    <value>Save As Text</value>
+  </data>
   <data name="MainSaveTextBlock.Text" xml:space="preserve">
     <value>Save</value>
   </data>
@@ -294,7 +297,12 @@
     <value>What's New</value>
   </data>
   <data name="WhatsNewBody" xml:space="preserve">
-    <value>- We added a new mosaic type option "Ascii Art" for text based visual art. 
+    <value>v1.4
+- We added the option to save "Ascii Art" result as text file
+- We squashed some bugs and made some performance improvements
+
+v1.3
+- We added a new mosaic type option "Ascii Art" for text based visual art. 
 This graphic design technique will recreate your pictures with a set of printable characters pieced together.
 - We squashed some bugs and made some performance improvements</value>
   </data>

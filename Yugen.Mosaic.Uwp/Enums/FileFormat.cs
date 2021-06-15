@@ -20,6 +20,9 @@ namespace Yugen.Mosaic.Uwp.Enums
         Tiff,
 
         [Description(".gif")]
-        Gif
+        Gif,
+
+        [Description(".txt")]
+        Txt
     }
 }

@@ -23,10 +23,12 @@ namespace Yugen.Mosaic.Uwp.Services
             _progressService = progressService;
         }
 
+        public string Text { get; private set; }
+
         public Image<Rgba32> SearchAndReplace(Image<Rgba32> masterImage, int ratio = 5)
         {
-            var text = GenerateText(masterImage, ratio);
-            
+            Text = GenerateText(masterImage, ratio);
+
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasTextFormat textFormat = new CanvasTextFormat()
             {
@@ -36,16 +38,16 @@ namespace Yugen.Mosaic.Uwp.Services
                 VerticalAlignment = CanvasVerticalAlignment.Top,
                 WordWrapping = CanvasWordWrapping.NoWrap
             };
-            var textLayout = new CanvasTextLayout(device, text, textFormat, 100, 100);
+            var textLayout = new CanvasTextLayout(device, Text, textFormat, 100, 100);
 
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (float)textLayout.LayoutBounds.Width, 
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (float)textLayout.LayoutBounds.Width,
                 (float)textLayout.LayoutBounds.Height, 96);
 
             using (var ds = renderTarget.CreateDrawingSession())
             {
                 ds.Clear(Colors.White);
                 ds.DrawTextLayout(textLayout, 0, 0, Colors.Black);
-            }             
+            }
 
             return Generate(renderTarget).Result;
         }
