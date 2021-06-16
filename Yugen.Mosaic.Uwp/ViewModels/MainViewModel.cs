@@ -301,6 +301,8 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             {
                 StartProgressRing(true);
 
+                ResetSizes();
+
                 using (var inputStream = await masterFile.OpenReadAsync())
                 {
                     var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
@@ -531,9 +533,19 @@ namespace Yugen.Mosaic.Uwp.ViewModels
             MasterBpmSource = new BitmapImage();
             TileBmpCollection = new ObservableCollection<TileBmp>();
 
+            ResetSizes();
+
             GC.Collect();
 
             UpdateIsAddMasterUIVisible();
+        }
+
+        private void ResetSizes()
+        {
+            OutputHeight = 1000;
+            OutputWidth = 1000;
+            TileHeight = 25;
+            TileWidth = 25;
         }
 
         private void HelpCommandBehavior()
