@@ -311,10 +311,11 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                     {
                         var bmp = new BitmapImage
                         {
-                            DecodePixelHeight = 400
+                            DecodePixelHeight = 400,
+                            DecodePixelType = DecodePixelType.Logical
                         };
-                        await bmp.SetSourceAsync(inputStream);
                         MasterBpmSource = bmp;
+                        await bmp.SetSourceAsync(inputStream);
                     });
                 }
 
@@ -397,17 +398,24 @@ namespace Yugen.Mosaic.Uwp.ViewModels
                 {
                     try
                     {
-                        using (StorageItemThumbnail thumbnail = await file.GetThumbnailAsync(
-                               ThumbnailMode.SingleItem, 120, ThumbnailOptions.None))
+                        StorageItemThumbnail thumbnail = await file.GetThumbnailAsync(
+                               ThumbnailMode.SingleItem, 120, ThumbnailOptions.None);
+                        
+                        if(thumbnail.Type == ThumbnailType.Icon)
                         {
-                            await dispatcherQueue.EnqueueAsync(async () =>
-                            {
-                                BitmapImage bitmapImage = new BitmapImage();
-                                await bitmapImage.SetSourceAsync(thumbnail);
-
-                                TileBmpCollection.Add(new TileBmp(file.DisplayName, bitmapImage));
-                            });
+                            thumbnail.Dispose();
+                            thumbnail = await file.GetThumbnailAsync(
+                                ThumbnailMode.SingleItem, 120, ThumbnailOptions.None);
                         }
+
+                        await dispatcherQueue.EnqueueAsync(async () =>
+                        {
+                            BitmapImage bitmapImage = new BitmapImage();
+                            TileBmpCollection.Add(new TileBmp(file.DisplayName, bitmapImage));
+                            await bitmapImage.SetSourceAsync(thumbnail);
+                        });
+
+                        thumbnail.Dispose();
 
                         _mosaicService.AddTileImage(file.DisplayName, file);
                     }
