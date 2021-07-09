@@ -29,12 +29,16 @@ namespace Yugen.Mosaic.Uwp.Services
             {
                 case MosaicTypeEnum.AdjustHue:
                     return _adjusthue();
+
                 case MosaicTypeEnum.Classic:
                     return _classic();
+
                 case MosaicTypeEnum.PlainColor:
                     return _plainColor();
+
                 case MosaicTypeEnum.Random:
                     return _random();
+
                 default:
                     throw new InvalidOperationException();
             }

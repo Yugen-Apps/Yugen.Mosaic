@@ -1,5 +1,4 @@
-﻿using System;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Yugen.Mosaic.Uwp.Enums;
 using Yugen.Mosaic.Uwp.Models;
 using Yugen.Toolkit.Uwp.Helpers;

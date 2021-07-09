@@ -1,16 +1,16 @@
 ﻿<Page x:Class="Yugen.Mosaic.Uwp.Views.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
       xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-      xmlns:models="using:Yugen.Mosaic.Uwp.Models"
-      xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
-      xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
       xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:models="using:Yugen.Mosaic.Uwp.Models"
+      xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
+      xmlns:validation="using:Yugen.Toolkit.Uwp.Controls.Validation"
       mc:Ignorable="d"
       Background="{ThemeResource AppWorkBackgroundBrush}"
       Loaded="OnPageLoaded">
@@ -41,9 +41,7 @@
                     <TextBlock x:Uid="MainTitleTextBlock"
                                VerticalAlignment="Center"
                                Style="{StaticResource YugenBaseTextBlockStyle}" />
-
                 </StackPanel>
-
             </Grid>
 
             <Grid Grid.Row="1"
@@ -99,13 +97,9 @@
                                                TextWrapping="WrapWholeWords"
                                                TextAlignment="Center" />
                                 </StackPanel>
-
                             </Grid>
-
                         </Grid>
-
                     </Border>
-
                 </StackPanel>
 
                 <StackPanel Grid.Row="1"
@@ -136,7 +130,6 @@
                             <TextBlock x:Uid="MainAddTilesFolderTextBlock" />
                         </StackPanel>
                     </Button>
-
                 </StackPanel>
 
                 <toolkitControls:AdaptiveGridView Grid.Row="2"
@@ -150,10 +143,10 @@
                         <DataTemplate x:DataType="models:TileBmp">
                             <Border CornerRadius="4">
                                 <Grid>
-                                    <Image Height="80" 
+                                    <Image Height="80"
                                            Stretch="UniformToFill"
                                            Source="{x:Bind Image}"
-                                           VerticalAlignment="Top"/>
+                                           VerticalAlignment="Top" />
                                     <Border Background="{ThemeResource AppTransparentBackgroundBrush}"
                                             VerticalAlignment="Bottom">
                                         <TextBlock MaxLines="1"
@@ -167,9 +160,7 @@
                             </Border>
                         </DataTemplate>
                     </toolkitControls:AdaptiveGridView.ItemTemplate>
-
                 </toolkitControls:AdaptiveGridView>
-
             </Grid>
 
             <Viewbox Grid.Row="1"
@@ -185,8 +176,8 @@
                             Height="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
                             Width="{x:Bind ViewModel.OutputWidth, Mode=OneWay}">
 
-                            <Image Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
-                                   Stretch="Uniform" />
+                        <Image Source="{x:Bind ViewModel.OutputBmpSource, Mode=OneWay}"
+                               Stretch="Uniform" />
                     </Border>
 
                     <controls:AlignmentGrid Opacity="0.3"
@@ -197,7 +188,6 @@
                                             ContainerHeight="{x:Bind ViewModel.OutputHeight, Mode=OneWay}"
                                             Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
                 </Grid>
-
             </Viewbox>
 
             <Grid Background="{ThemeResource AppBackgroundBrush}"
@@ -252,7 +242,6 @@
                                                           MandatoryValidationMessage=""
                                                           IsMandatory="True"
                                                           IsRealTimeValidationEnabled="True" />
-
                         </Grid>
 
                         <Rectangle Height=".5"
@@ -308,7 +297,6 @@
                                                           MandatoryValidationMessage=""
                                                           IsMandatory="True"
                                                           IsRealTimeValidationEnabled="True" />
-
                         </Grid>
 
                         <Rectangle Height=".5"
@@ -363,7 +351,6 @@
                                     <TextBlock x:Uid="MainResetTextBlock" />
                                 </StackPanel>
                             </Button>
-
                         </Grid>
 
                         <Grid Margin="4,0,0,0">
@@ -379,7 +366,6 @@
                                     <TextBlock x:Uid="MainSaveAsTextTextBlock" />
                                 </StackPanel>
                             </Button>
-
                         </Grid>
 
                         <muxc:ProgressRing Background="DarkGoldenrod"
@@ -392,10 +378,8 @@
                                            Margin="2"
                                            Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
                                            Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" />
-                                           <!--Style="{StaticResource YugenProgressRingStyle}"-->
-
+                        <!--Style="{StaticResource YugenProgressRingStyle}"-->
                     </StackPanel>
-
                 </validation:ValidatingForm>
 
                 <Button Grid.Row="1"
@@ -410,7 +394,7 @@
                         <TextBlock x:Uid="MainWhatsNewTextBlock" />
                     </StackPanel>
                 </Button>
-                
+
                 <Button Grid.Row="2"
                         Command="{x:Bind ViewModel.HelpCommand}"
                         Height="36"
@@ -436,9 +420,7 @@
                         <TextBlock x:Uid="MainSettingsTextBlock" />
                     </StackPanel>
                 </Button>
-
             </Grid>
-
         </Grid>
 
         <muxc:TeachingTip x:Uid="MainTeachingTip"
@@ -458,7 +440,5 @@
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>-->
         </muxc:TeachingTip>
-
     </Grid>
-
 </Page>

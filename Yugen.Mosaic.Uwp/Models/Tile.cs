@@ -28,7 +28,7 @@ namespace Yugen.Mosaic.Uwp.Models
         {
             using (var stream = RandomAccessStream.AsStreamForRead())
             {
-                ResizedImage = Image.Load<Rgba32>(stream);                     
+                ResizedImage = Image.Load<Rgba32>(stream);
             }
             ResizedImage.Mutate(x => x.Resize(tileSize));
 

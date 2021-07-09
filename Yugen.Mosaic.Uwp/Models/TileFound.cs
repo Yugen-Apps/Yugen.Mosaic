@@ -9,6 +9,7 @@
         }
 
         public Tile Tile { get; set; }
+
         public int Difference { get; set; }
     }
 }
