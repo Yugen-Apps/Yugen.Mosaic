@@ -424,21 +424,19 @@
         </Grid>
 
         <muxc:TeachingTip x:Uid="MainTeachingTip"
-                          Closing="{x:Bind ViewModel.TeachingTip_Closing}"
-                          Closed="{x:Bind ViewModel.TeachingTip_Closed}"
                           IsOpen="{x:Bind ViewModel.IsTeachingTipOpen, Mode=OneWay}"
                           Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}"
                           Title="{x:Bind ViewModel.TeachingTipTitle, Mode=OneWay}"
                           Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
                           ActionButtonCommand="{x:Bind ViewModel.TeachingTipActionButtonCommand}">
-            <!--<interactivity:Interaction.Behaviors>
+            <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="Closed">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosedCommand}" />
                 </core:EventTriggerBehavior>
                 <core:EventTriggerBehavior EventName="Closing">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosingCommand}" />
                 </core:EventTriggerBehavior>
-            </interactivity:Interaction.Behaviors>-->
+            </interactivity:Interaction.Behaviors>
         </muxc:TeachingTip>
     </Grid>
 </Page>
