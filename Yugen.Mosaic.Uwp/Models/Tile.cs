@@ -40,7 +40,7 @@ namespace Yugen.Mosaic.Uwp.Models
 
         public void Dispose()
         {
-            ResizedImage.Dispose();
+            ResizedImage?.Dispose();
             ResizedImage = null;
         }
     }
