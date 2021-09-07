@@ -3,8 +3,8 @@ using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Threading.Tasks;
 using Windows.System;
-using Yugen.Mosaic.Uwp.Controls;
 using Yugen.Mosaic.Uwp.Interfaces;
+using Yugen.Mosaic.Uwp.Views.Dialogs;
 
 namespace Yugen.Mosaic.Uwp.Services
 {

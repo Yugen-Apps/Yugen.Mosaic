@@ -80,7 +80,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WhatsNewDialog.xaml.cs">
+    <Compile Include="Views\Dialogs\WhatsNewDialog.xaml.cs">
       <DependentUpon>WhatsNewDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums\FileFormat.cs" />
@@ -110,7 +110,7 @@
     <Compile Include="Services\SearchAndReplacePlainColorService.cs" />
     <Compile Include="Services\SearchAndReplaceRandomService.cs" />
     <Compile Include="Services\SearchAndReplaceService.cs" />
-    <Compile Include="Controls\SettingsDialog.xaml.cs">
+    <Compile Include="Views\Dialogs\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -183,7 +183,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\WhatsNewDialog.xaml">
+    <Page Include="Views\Dialogs\WhatsNewDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,7 +191,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SettingsDialog.xaml">
+    <Page Include="Views\Dialogs\SettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
