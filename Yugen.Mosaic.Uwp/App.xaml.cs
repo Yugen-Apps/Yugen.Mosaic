@@ -63,7 +63,7 @@ namespace Yugen.Mosaic.Uwp
 
                 // Initial UI styling
                 TitleBarHelper.ExpandViewIntoTitleBar();
-                //TitleBarHelper.StyleTitleBar(...);
+                TitleBarHelper.StyleTitleBar();
 
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
@@ -152,7 +152,7 @@ namespace Yugen.Mosaic.Uwp
 
         private async Task InitializeServices()
         {
-            await Services.GetService<IThemeSelectorService>().InitializeAsync(true);
+            await Services.GetService<IThemeSelectorService>().InitializeAsync();
         }
     }
 }

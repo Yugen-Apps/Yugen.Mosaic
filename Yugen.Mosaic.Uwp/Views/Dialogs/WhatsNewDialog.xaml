@@ -1,4 +1,4 @@
-﻿<dialogs:YugenDialog x:Class="Yugen.Mosaic.Uwp.Controls.WhatsNewDialog"
+﻿<dialogs:YugenDialog x:Class="Yugen.Mosaic.Uwp.Views.Dialogs.WhatsNewDialog"
                      x:Uid="WhatsNew"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

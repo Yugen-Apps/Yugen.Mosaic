@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Yugen.Mosaic.Uwp.ViewModels;
 
-namespace Yugen.Mosaic.Uwp.Controls
+namespace Yugen.Mosaic.Uwp.Views.Dialogs
 {
     public sealed partial class SettingsDialog
     {
