@@ -156,7 +156,10 @@
   <data name="MainHeightTextBlock.Text" xml:space="preserve">
     <value>H:</value>
   </data>
-  <data name="MainHelpTextBlock.Text" xml:space="preserve">
+  <data name="MainHelpTextBlock.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MainHelpTextBlock.AutomationProperties.Name" xml:space="preserve">
     <value>Help</value>
   </data>
   <data name="MainMasterImageTextBlock.Text" xml:space="preserve">
@@ -177,7 +180,10 @@
   <data name="MainSaveTextBlock.Text" xml:space="preserve">
     <value>Save</value>
   </data>
-  <data name="MainSettingsTextBlock.Text" xml:space="preserve">
+  <data name="MainSettingsTextBlock.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MainSettingsTextBlock.AutomationProperties.Name" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="MainShowGridCheckBox.Content" xml:space="preserve">
@@ -198,7 +204,10 @@
   <data name="MainTitleTextBlock.Text" xml:space="preserve">
     <value>Yugen Mosaic</value>
   </data>
-  <data name="MainWhatsNewTextBlock.Text" xml:space="preserve">
+  <data name="MainWhatsNewTextBlock.ToolTipService.ToolTip" xml:space="preserve">
+    <value>What's New</value>
+  </data>
+  <data name="MainWhatsNewTextBlock.AutomationProperties.Name" xml:space="preserve">
     <value>What's New</value>
   </data>
   <data name="MainWidthTextBlock.Text" xml:space="preserve">
