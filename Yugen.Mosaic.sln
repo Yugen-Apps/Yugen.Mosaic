@@ -1,18 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29418.71
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yugen.Mosaic.Uwp", "Yugen.Mosaic.Uwp\Yugen.Mosaic.Uwp.csproj", "{9401F9CD-F858-451C-9022-A4C1663587BB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{E44DE1EE-E0B3-4250-8CBE-F9B13C6DF19A}"
-	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
-		GitVersion.yml = GitVersion.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{6140E03F-4808-489A-B10F-6B8D5B9D64F1}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		.github\workflows\dotnet-desktop.yml = .github\workflows\dotnet-desktop.yml
+		GitVersion.yml = GitVersion.yml
 		README.md = README.md
 	EndProjectSection
 EndProject

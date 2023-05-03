@@ -1,5 +1,5 @@
 ﻿using Microsoft.AppCenter.Crashes;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
