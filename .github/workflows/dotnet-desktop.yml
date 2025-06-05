@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     uses: "./.github/workflows/build.yml"
+    secrets: inherit
     with:
       solution_name: "Yugen.Mosaic.sln"
       project_name: "Yugen.Mosaic.Uwp"
@@ -16,6 +17,7 @@ jobs:
   deploy:
     uses: "./.github/workflows/deploy.yml"
     needs: [build]
+    secrets: inherit
     with:
       store_app_id: 9PF0S24CX0D4
       major_minor_patch: ${{needs.build.outputs.major_minor_patch}}
@@ -23,6 +25,7 @@ jobs:
   deploy_new:
     uses: "./.github/workflows/deploy-new.yml"
     needs: [build]
+    secrets: inherit
     with:
       store_app_id: 9PF0S24CX0D4
       major_minor_patch: ${{needs.build.outputs.major_minor_patch}}
