@@ -43,7 +43,7 @@ jobs:
         uses: microsoft/store-submission@v1
         with:
           command: update
-          product-update: >-
+          product-update: >
             {
               "packages": [
                 {
