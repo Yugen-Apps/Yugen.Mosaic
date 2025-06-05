@@ -1,0 +1,92 @@
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        required: true
+        type: string
+      solution_name:
+        required: true
+        type: string
+    outputs:
+      major_minor_patch:
+        value: ${{ jobs.build.outputs.major_minor_patch }}
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    outputs:
+      major_minor_patch: ${{ steps.set_version.outputs.MajorMinorPatch }}
+
+    env:
+      appx_bundle: Always
+      appx_bundle_platforms: "x64|ARM64"
+      appx_package_build_mode: StoreUpload
+      appx_package_dir: '${{ github.workspace }}\AppxPackages'
+      appx_manifest: "Package.appxmanifest"
+      solution_configuration: "Release"
+      # ref_name: '${{ github.ref_name }}'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: set_version
+        id: set_version
+        run: |
+          $ref_name = "${{ github.ref_name }}"
+
+          # Select the last item from the array
+          $MajorMinorPatch = $ref_name.Split("/")[-1]
+          Write-Output "MajorMinorPatch=$($MajorMinorPatch)" >> $Env:GITHUB_OUTPUT
+
+          $MajorMinorPatchBuild = "${MajorMinorPatch}.0"
+          Write-Output "MajorMinorPatchBuild=$($MajorMinorPatchBuild)" >> $Env:GITHUB_OUTPUT
+
+      - name: print_version
+        run: |
+          Write-Host "${{ steps.set_version.outputs.MajorMinorPatch}}"
+          Write-Host "${{ steps.set_version.outputs.MajorMinorPatchBuild}}"
+
+      - name: Update manifest version
+        run: |
+          [xml]$manifest = get-content ".\${{ inputs.project_name }}\${{ env.appx_manifest }}"
+          $manifest.Package.Identity.Version = "${{ steps.set_version.outputs.MajorMinorPatchBuild }}"
+          $manifest.save(".\${{ inputs.project_name }}\${{ env.appx_manifest }}")
+
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v2
+
+      - name: Restore dependencies
+        run: nuget restore ${{ inputs.solution_name }}
+
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Create the app package
+        run: |
+          msbuild ${{ inputs.solution_name }} `
+            /p:AppxBundlePlatforms="${{ env.appx_bundle_platforms}}" `
+            /p:AppxPackageDir="${{ env.appx_package_dir }}" `
+            /p:AppxBundle=${{ env.appx_bundle }} `
+            /p:UapAppxPackageBuildMode=${{ env.appx_package_build_mode }} `
+            /p:AppxPackageSigningEnabled=false `
+            /p:Configuration=${{ env.solution_configuration }}
+
+      - name: Upload msixupload
+        uses: actions/upload-artifact@v4
+        with:
+          name: msixupload
+          path: ${{ env.appx_package_dir }}\**\*.msixupload

@@ -1,0 +1,66 @@
+on:
+  workflow_call:
+    inputs:
+      major_minor_patch:
+        required: true
+        type: string
+      store_app_id:
+        required: true
+        type: string
+
+jobs:
+  deploy_new:
+    runs-on: ubuntu-latest
+    environment: PROD_NEW
+
+    env:
+      ARTIFACT_DIRECTORY: artifact
+      STORE_ARCHITECTURES: >-
+        ["X64", "ARM64"]
+
+    steps:
+      - name: debug_version
+        run: |
+          echo "${{inputs.major_minor_patch}}"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: msixupload
+          path: ${{ env.ARTIFACT_DIRECTORY }}
+
+      - name: Configure Store Credentials
+        uses: microsoft/store-submission@v1
+        with:
+          command: configure
+          type: win32
+          seller-id: ${{ secrets.STORE_SELLER_ID }}
+          product-id: ${{ inputs.store_app_id }}
+          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+
+      - name: Update Draft Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: update
+          product-update: >-
+            {
+              "packages": [
+                {
+                  "packageUrl": "${{ env.ARTIFACT_DIRECTORY }}",
+                  "languages": ["en"],
+                  "architectures": ${{ env.STORE_ARCHITECTURES }},
+                  "isSilentInstall": true
+                }
+              ]
+            }
+
+      - name: Publish Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: publish
+
+      - uses: softprops/action-gh-release@v2
+        name: Release
+        with:
+          tag_name: ${{inputs.major_minor_patch}}

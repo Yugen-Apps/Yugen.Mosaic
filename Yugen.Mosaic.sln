@@ -7,9 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yugen.Mosaic.Uwp", "Yugen.M
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{6140E03F-4808-489A-B10F-6B8D5B9D64F1}"
 	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\deploy-new.yml = .github\workflows\deploy-new.yml
+		.github\workflows\deploy.yml = .github\workflows\deploy.yml
 		.github\workflows\dotnet-desktop.yml = .github\workflows\dotnet-desktop.yml
-		GitVersion.yml = GitVersion.yml
 		README.md = README.md
 	EndProjectSection
 EndProject

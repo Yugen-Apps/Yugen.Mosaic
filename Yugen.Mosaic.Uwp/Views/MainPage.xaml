@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Yugen.Toolkit.Uwp.Controls.UI"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -58,15 +57,15 @@
                         ui:FrameworkElementExtensions.Cursor="Hand"
                         CornerRadius="4">
                         <interactivity:Interaction.Behaviors>
-                            <core:EventTriggerBehavior EventName="Tapped">
-                                <core:InvokeCommandAction Command="{x:Bind ViewModel.AddMasterImageCommand}" />
-                            </core:EventTriggerBehavior>
-                            <core:EventTriggerBehavior EventName="PointerEntered">
-                                <core:InvokeCommandAction Command="{x:Bind ViewModel.PointerEnteredCommand}" />
-                            </core:EventTriggerBehavior>
-                            <core:EventTriggerBehavior EventName="PointerExited">
-                                <core:InvokeCommandAction Command="{x:Bind ViewModel.PointerExitedCommand}" />
-                            </core:EventTriggerBehavior>
+                            <interactivity:EventTriggerBehavior EventName="Tapped">
+                                <interactivity:InvokeCommandAction Command="{x:Bind ViewModel.AddMasterImageCommand}" />
+                            </interactivity:EventTriggerBehavior>
+                            <interactivity:EventTriggerBehavior EventName="PointerEntered">
+                                <interactivity:InvokeCommandAction Command="{x:Bind ViewModel.PointerEnteredCommand}" />
+                            </interactivity:EventTriggerBehavior>
+                            <interactivity:EventTriggerBehavior EventName="PointerExited">
+                                <interactivity:InvokeCommandAction Command="{x:Bind ViewModel.PointerExitedCommand}" />
+                            </interactivity:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>
 
                         <Grid.Background>
@@ -188,7 +187,6 @@
                             Visibility="{x:Bind ViewModel.IsAlignmentGridVisibile, Mode=OneWay}" />
                     </Grid>
                 </Viewbox>
-
             </Border>
 
             <!--  right toolbar  -->
@@ -440,12 +438,12 @@
             Subtitle="{x:Bind ViewModel.TeachingTipSubTitle, Mode=OneWay}"
             Target="{x:Bind ViewModel.TeachingTipTarget, Mode=OneWay}">
             <interactivity:Interaction.Behaviors>
-                <core:EventTriggerBehavior EventName="Closed">
-                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosedCommand}" />
-                </core:EventTriggerBehavior>
-                <core:EventTriggerBehavior EventName="Closing">
-                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosingCommand}" />
-                </core:EventTriggerBehavior>
+                <interactivity:EventTriggerBehavior EventName="Closed">
+                    <interactivity:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosedCommand}" />
+                </interactivity:EventTriggerBehavior>
+                <interactivity:EventTriggerBehavior EventName="Closing">
+                    <interactivity:InvokeCommandAction Command="{x:Bind ViewModel.TeachingTipClosingCommand}" />
+                </interactivity:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
         </muxc:TeachingTip>
     </Grid>
